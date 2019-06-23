@@ -6,6 +6,7 @@ import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.media.CamcorderProfile.*
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
@@ -172,7 +173,10 @@ class MainActivity : AppCompatActivity() {
         settings.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_item_screenshot -> arSceneView.screenshot()
-                R.id.menu_item_record -> videoRecorder.start()
+                R.id.menu_item_quality_2160p -> videoRecorder.start(get(QUALITY_2160P))
+                R.id.menu_item_quality_1080p -> videoRecorder.start(get(QUALITY_1080P))
+                R.id.menu_item_quality_720p -> videoRecorder.start(get(QUALITY_720P))
+                R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
                 R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node ->
                     (node as? Nodes)?.delete()
                 }
@@ -203,7 +207,12 @@ class MainActivity : AppCompatActivity() {
         moreImageView.setOnClickListener {
             settings.menu.apply {
                 findItem(R.id.menu_item_record).isVisible = !videoRecorder.isRecording
-                findItem(R.id.menu_item_clean_up_scene).isVisible = arSceneView.scene.findInHierarchy { it is Nodes } != null
+                findItem(R.id.menu_item_quality_2160p).isEnabled = hasProfile(QUALITY_2160P)
+                findItem(R.id.menu_item_quality_1080p).isEnabled = hasProfile(QUALITY_1080P)
+                findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
+                findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
+                findItem(R.id.menu_item_clean_up_scene).isVisible =
+                    arSceneView.scene.findInHierarchy { it is Nodes } != null
                 findItem(R.id.menu_item_sunlight).isChecked = Settings.Sunlight.get()
                 findItem(R.id.menu_item_shadows).isChecked = Settings.Shadows.get()
                 findItem(R.id.menu_item_plane_renderer).isChecked = Settings.Planes.get()

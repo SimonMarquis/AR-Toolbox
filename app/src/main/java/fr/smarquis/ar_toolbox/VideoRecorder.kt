@@ -25,11 +25,9 @@ class VideoRecorder(
 
     private val mediaRecorder: MediaRecorder = MediaRecorder()
 
-    private val profile: CamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH)
-
     private var file: File? = null
 
-    fun start() {
+    fun start(profile: CamcorderProfile) {
         if (isRecording) {
             return
         }
@@ -40,7 +38,7 @@ class VideoRecorder(
             mediaRecorder.setOutputFile(file!!.absolutePath)
             mediaRecorder.setVideoEncodingBitRate(profile.videoBitRate)
             mediaRecorder.setVideoFrameRate(profile.videoFrameRate)
-            mediaRecorder.setVideoSize(videoWidth(), videoHeight())
+            mediaRecorder.setVideoSize(profile.width(), profile.height())
             mediaRecorder.setVideoEncoder(profile.videoCodec)
             mediaRecorder.prepare()
             mediaRecorder.start()
@@ -48,7 +46,7 @@ class VideoRecorder(
             Log.e(TAG, "Exception starting recorder", e)
             return
         }
-        sceneView.startMirroringToSurface(mediaRecorder.surface, 0, 0, videoWidth(), videoHeight())
+        sceneView.startMirroringToSurface(mediaRecorder.surface, 0, 0, profile.width(), profile.height())
         isRecording = true
         onRecordingListener(true)
     }
@@ -75,8 +73,8 @@ class VideoRecorder(
 
     private fun isLandscape() = orientation() == ORIENTATION_LANDSCAPE
 
-    private fun videoWidth(): Int = if (isLandscape()) profile.videoFrameWidth else profile.videoFrameHeight
+    private fun CamcorderProfile.width(): Int = if (isLandscape()) videoFrameWidth else videoFrameHeight
 
-    private fun videoHeight(): Int = if (isLandscape()) profile.videoFrameHeight else profile.videoFrameWidth
+    private fun CamcorderProfile.height(): Int = if (isLandscape()) videoFrameHeight else videoFrameWidth
 
 }

@@ -7,7 +7,22 @@
             android:title="@string/menu_item_screenshot" />
         <item
             android:id="@+id/menu_item_record"
-            android:title="@string/menu_item_record" />
+            android:title="@string/menu_item_record">
+            <menu>
+                <item
+                    android:id="@+id/menu_item_quality_2160p"
+                    android:title="@string/menu_item_quality_2160p" />
+                <item
+                    android:id="@+id/menu_item_quality_1080p"
+                    android:title="@string/menu_item_quality_1080p" />
+                <item
+                    android:id="@+id/menu_item_quality_720p"
+                    android:title="@string/menu_item_quality_720p" />
+                <item
+                    android:id="@+id/menu_item_quality_480p"
+                    android:title="@string/menu_item_quality_480p" />
+            </menu>
+        </item>
         <item
             android:id="@+id/menu_item_clean_up_scene"
             android:title="@string/menu_item_clean_up_scene" />

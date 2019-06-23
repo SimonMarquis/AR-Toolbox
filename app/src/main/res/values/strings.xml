@@ -20,6 +20,10 @@
 
     <string name="menu_item_screenshot">Screen capture</string>
     <string name="menu_item_record">Screen record</string>
+    <string name="menu_item_quality_2160p">2160p</string>
+    <string name="menu_item_quality_1080p">1080p</string>
+    <string name="menu_item_quality_720p">720p</string>
+    <string name="menu_item_quality_480p">480p</string>
     <string name="menu_item_clean_up_scene">Clean up scene</string>
     <string name="menu_item_sunlight">Sunlight</string>
     <string name="menu_item_shadows">Shadows</string>
