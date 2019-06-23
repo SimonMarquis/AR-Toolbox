@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
+    android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingBottom="@dimen/material_unit_1"
+    tools:ignore="Overdraw"
+    tools:showIn="@layout/bottom_sheet_node">
+
+    <TextView
+        android:id="@+id/nodeColorLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_color_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeColorValue"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <fr.smarquis.ar_toolbox.ColorSeekBar
+        android:id="@+id/nodeColorValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/material_unit_1"
+        android:layout_marginRight="@dimen/material_unit_1"
+        app:colorSeeds="@array/colors"
+        app:layout_constraintBottom_toTopOf="@+id/nodeMetallicLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeColorLabel" />
+
+    <TextView
+        android:id="@+id/nodeMetallicLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_metallic_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeMetallicValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeColorValue" />
+
+    <SeekBar
+        android:id="@+id/nodeMetallicValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicLabel" />
+
+    <TextView
+        android:id="@+id/nodeRoughnessLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_roughness_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicValue" />
+
+    <SeekBar
+        android:id="@+id/nodeRoughnessValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="40"
+        app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessLabel" />
+
+    <TextView
+        android:id="@+id/nodeReflectanceLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_reflectance_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessValue" />
+
+    <SeekBar
+        android:id="@+id/nodeReflectanceValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="50"
+        app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceLabel" />
+
+
+    <TextView
+        android:id="@+id/nodePositionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_position_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodePositionValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceValue" />
+
+    <TextView
+        android:id="@+id/nodePositionValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/nodeRotationLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodePositionLabel" />
+
+    <TextView
+        android:id="@+id/nodeRotationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_rotation_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeRotationValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodePositionValue" />
+
+    <TextView
+        android:id="@+id/nodeRotationValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/nodeScaleLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeRotationLabel" />
+
+
+    <TextView
+        android:id="@+id/nodeScaleLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_scale_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeScaleValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeRotationValue" />
+
+    <TextView
+        android:id="@+id/nodeScaleValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nodeScaleLabel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

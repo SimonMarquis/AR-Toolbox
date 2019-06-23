@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <item name="match_parent" type="dimen">-1</item>
+    <item name="wrap_content" type="dimen" tools:ignore="UnusedResources">-2</item>
+
+    <dimen name="material_elevation">2dp</dimen>
+
+    <dimen name="material_unit_0_5">4dp</dimen>
+    <dimen name="material_unit_1">8dp</dimen>
+    <dimen name="material_unit_2">16dp</dimen>
+
+    <dimen name="bottom_sheet_width">@dimen/match_parent</dimen>
+    <dimen name="bottom_sheet_peek_height">64dp</dimen>
+    <dimen name="bottom_sheet_horizontal_padding">@dimen/material_unit_2</dimen>
+
+</resources>

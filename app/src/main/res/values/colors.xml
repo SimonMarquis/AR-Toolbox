@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorAccent">#000</color>
+    <color name="colorBackground">#FFF</color>
+
+    <color name="material_white">#FFFFFF</color>
+    <color name="material_red">#D50000</color>
+    <color name="material_pink">#C51162</color>
+    <color name="material_purple">#AA00FF</color>
+    <color name="material_deep_purple">#6200EA</color>
+    <color name="material_indigo">#304FFE</color>
+    <color name="material_blue">#2962FF</color>
+    <color name="material_light_blue">#0091EA</color>
+    <color name="material_cyan">#00B8D4</color>
+    <color name="material_teal">#00BFA5</color>
+    <color name="material_green">#00C853</color>
+    <color name="material_light_green">#64DD17</color>
+    <color name="material_lime">#AEEA00</color>
+    <color name="material_yellow">#FFD600</color>
+    <color name="material_amber">#FFAB00</color>
+    <color name="material_orange">#FF6D00</color>
+    <color name="material_deep_orange">#DD2C00</color>
+    <color name="material_brown">#3E2723</color>
+    <color name="material_gray">#212121</color>
+    <color name="material_black">#000000</color>
+
+    <array name="colors">
+        <item>@color/material_white</item>
+        <item>@color/material_red</item>
+        <item>@color/material_pink</item>
+        <item>@color/material_purple</item>
+        <item>@color/material_deep_purple</item>
+        <item>@color/material_indigo</item>
+        <item>@color/material_blue</item>
+        <item>@color/material_light_blue</item>
+        <item>@color/material_cyan</item>
+        <item>@color/material_teal</item>
+        <item>@color/material_green</item>
+        <item>@color/material_light_green</item>
+        <item>@color/material_lime</item>
+        <item>@color/material_yellow</item>
+        <item>@color/material_amber</item>
+        <item>@color/material_orange</item>
+        <item>@color/material_deep_orange</item>
+        <item>@color/material_brown</item>
+        <item>@color/material_gray</item>
+        <item>@color/material_black</item>
+    </array>
+</resources>

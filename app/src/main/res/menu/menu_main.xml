@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/menu_group_1">
+        <item
+            android:id="@+id/menu_item_screenshot"
+            android:title="@string/menu_item_screenshot" />
+        <item
+            android:id="@+id/menu_item_record"
+            android:title="@string/menu_item_record" />
+        <item
+            android:id="@+id/menu_item_clean_up_scene"
+            android:title="@string/menu_item_clean_up_scene" />
+    </group>
+    <group android:id="@+id/menu_group_2">
+        <item
+            android:id="@+id/menu_item_sunlight"
+            android:checkable="true"
+            android:title="@string/menu_item_sunlight" />
+        <item
+            android:id="@+id/menu_item_shadows"
+            android:checkable="true"
+            android:title="@string/menu_item_shadows" />
+        <item
+            android:id="@+id/menu_item_plane_renderer"
+            android:checkable="true"
+            android:title="@string/menu_item_plane_renderer" />
+        <item
+            android:id="@+id/menu_item_selection_visualizer"
+            android:checkable="true"
+            android:title="@string/menu_item_selection_visualizer" />
+    </group>
+</menu>

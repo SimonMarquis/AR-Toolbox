@@ -1,0 +1,52 @@
+<resources>
+
+    <string name="app_name">AR Toolbox</string>
+
+    <string name="format_pose_translation">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
+    <string name="format_pose_rotation">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
+    <string name="format_vector3">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
+    <string name="format_quaternion">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
+    <string name="format_session">[Anchors: %1$d, Planes: %2$d, Points: %3$d]</string>
+    <string name="format_distance_m">%.2f m</string>
+    <string name="format_distance_cm">%d cm</string>
+
+    <string name="tracking_success">Tracking</string>
+    <string name="tracking_stopped">Tracking stopped</string>
+    <string name="tracking_failure_none">Tracking paused</string>
+    <string name="tracking_failure_bad_state">Bad state</string>
+    <string name="tracking_failure_insufficient_light">Insufficient light</string>
+    <string name="tracking_failure_excessive_motion">Excessive motion</string>
+    <string name="tracking_failure_insufficient_features">Insufficient features</string>
+
+    <string name="menu_item_screenshot">Screen capture</string>
+    <string name="menu_item_record">Screen record</string>
+    <string name="menu_item_clean_up_scene">Clean up scene</string>
+    <string name="menu_item_sunlight">Sunlight</string>
+    <string name="menu_item_shadows">Shadows</string>
+    <string name="menu_item_plane_renderer">Plane renderer</string>
+    <string name="menu_item_selection_visualizer">Selection visualizer</string>
+
+    <string name="entry_position_label">Position</string>
+    <string name="entry_rotation_label">Rotation</string>
+    <string name="entry_scene_label">Scene</string>
+    <string name="entry_color_label">Color</string>
+    <string name="entry_metallic_label">Metallic</string>
+    <string name="entry_roughness_label">Roughness</string>
+    <string name="entry_reflectance_label">Reflectance</string>
+    <string name="entry_scale_label">Scale</string>
+
+    <string name="screenshot_saving">Saving screenshot…</string>
+    <string name="recording">Recording…</string>
+
+    <string name="model_link_default_uri">https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/FlightHelmet/glTF/FlightHelmet.gltf</string>
+    <string name="model_link_title">External 3D model</string>
+    <string name="model_link_hint">sfb, glTF, glb, …</string>
+    <string name="model_link_set">Set</string>
+
+    <string name="exception_arcore_not_installed">Please install ARCore</string>
+    <string name="exception_apk_too_old">Please update ARCore</string>
+    <string name="exception_sdk_too_old">Please update this app</string>
+    <string name="exception_device_not_compatible">This device does not support AR</string>
+    <string name="exception_unknown">Failed to create AR session</string>
+
+</resources>

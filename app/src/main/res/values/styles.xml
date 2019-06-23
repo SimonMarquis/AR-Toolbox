@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="PopupMenu" parent="Theme.MaterialComponents.Light">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="fr.smarquis.ar_toolbox">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera.ar" />
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App"
+        tools:ignore="GoogleAppIndexingWarning">
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="required" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="locked">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:scheme="https" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.sfb" />
+                <data android:pathPattern=".*\\..*\\.sfb" />
+                <data android:pathPattern=".*\\..*\\..*\\.sfb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.sfb" />
+                <data android:pathPattern=".*\\.glb" />
+                <data android:pathPattern=".*\\..*\\.glb" />
+                <data android:pathPattern=".*\\..*\\..*\\.glb" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.glb" />
+                <data android:pathPattern=".*\\.gltf" />
+                <data android:pathPattern=".*\\..*\\.gltf" />
+                <data android:pathPattern=".*\\..*\\..*\\.gltf" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.gltf" />
+            </intent-filter>
+
+        </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths" />
+        </provider>
+    </application>
+
+</manifest>

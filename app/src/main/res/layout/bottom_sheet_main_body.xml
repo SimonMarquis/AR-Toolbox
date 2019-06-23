@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackground"
+    android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingTop="@dimen/material_unit_1"
+    android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingBottom="@dimen/material_unit_1"
+    tools:ignore="Overdraw"
+    tools:showIn="@layout/bottom_sheet_main">
+
+    <ImageView
+        android:id="@+id/modelSphere"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintEnd_toStartOf="@+id/modelCylinder"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_model_sphere"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/modelCylinder"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelSphere"
+        app:layout_constraintEnd_toStartOf="@+id/modelCube"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelSphere"
+        app:layout_constraintTop_toTopOf="@+id/modelSphere"
+        app:srcCompat="@drawable/ic_model_cylinder"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/modelCube"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelCylinder"
+        app:layout_constraintEnd_toStartOf="@+id/modelView"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelCylinder"
+        app:layout_constraintTop_toTopOf="@+id/modelCylinder"
+        app:srcCompat="@drawable/ic_model_cube"
+        tools:ignore="ContentDescription" />
+
+
+    <ImageView
+        android:id="@+id/modelView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelCube"
+        app:layout_constraintEnd_toStartOf="@+id/modelAndy"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelCube"
+        app:layout_constraintTop_toTopOf="@+id/modelCube"
+        app:srcCompat="@drawable/ic_model_layout"
+        tools:ignore="ContentDescription" />
+
+
+    <ImageView
+        android:id="@+id/modelAndy"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelView"
+        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelView"
+        app:layout_constraintTop_toTopOf="@+id/modelView"
+        app:srcCompat="@drawable/ic_model_andy"
+        tools:ignore="ContentDescription" />
+
+
+    <ImageView
+        android:id="@+id/modelLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelAndy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelAndy"
+        app:layout_constraintTop_toTopOf="@+id/modelAndy"
+        app:srcCompat="@drawable/ic_model_link"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/poseTranslationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_position_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/poseTranslationValue"
+        app:layout_constraintTop_toBottomOf="@+id/modelSphere" />
+
+    <TextView
+        android:id="@+id/poseTranslationValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/poseRotationLabel"
+        app:layout_constraintTop_toBottomOf="@+id/poseTranslationLabel" />
+
+    <TextView
+        android:id="@+id/poseRotationLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_rotation_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/poseRotationValue"
+        app:layout_constraintTop_toBottomOf="@+id/poseTranslationValue" />
+
+    <TextView
+        android:id="@+id/poseRotationValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/sceneLabel"
+        app:layout_constraintTop_toBottomOf="@+id/poseRotationLabel" />
+
+    <TextView
+        android:id="@+id/sceneLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_scene_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/sceneValue"
+        app:layout_constraintTop_toBottomOf="@+id/poseRotationValue" />
+
+    <TextView
+        android:id="@+id/sceneValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintTop_toBottomOf="@+id/sceneLabel" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nodeHeader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_sheet_peek_height"
+    android:background="@drawable/bottom_sheet_background"
+    android:divider="@drawable/material_divider_1"
+    android:elevation="@dimen/material_elevation"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="horizontal"
+    android:outlineProvider="background"
+    android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
+    android:showDividers="middle"
+    tools:showIn="@layout/bottom_sheet_node">
+
+    <ImageView
+        android:id="@+id/nodeStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/material_unit_1"
+        tools:ignore="ContentDescription"
+        tools:src="@android:drawable/presence_online" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/nodeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            tools:text="Sphere #1" />
+
+        <TextView
+            android:id="@+id/nodeDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@drawable/ic_distance"
+            android:drawablePadding="@dimen/material_unit_0_5"
+            android:drawableTint="?android:attr/textColorSecondary"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            tools:ignore="RtlHardcoded"
+            tools:text="1.23 m" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/nodeDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        app:srcCompat="@drawable/ic_delete_node"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>
