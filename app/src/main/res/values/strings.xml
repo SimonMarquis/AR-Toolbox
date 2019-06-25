@@ -42,7 +42,7 @@
     <string name="screenshot_saving">Saving screenshot…</string>
     <string name="recording">Recording…</string>
 
-    <string name="model_link_default_uri">https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/FlightHelmet/glTF/FlightHelmet.gltf</string>
+    <string name="model_link_default_uri">https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BarramundiFish/glTF/BarramundiFish.gltf</string>
     <string name="model_link_title">External 3D model</string>
     <string name="model_link_hint">sfb, glTF, glb, …</string>
     <string name="model_link_set">Set</string>
