@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val model: MainViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
+    private var restoreMainBottomSheetExpandedState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -485,6 +486,10 @@ class MainActivity : AppCompatActivity() {
         old?.onNodeUpdate = null
         if (new == null) {
             nodeBottomSheetBehavior.state = STATE_HIDDEN
+            if (restoreMainBottomSheetExpandedState) {
+                restoreMainBottomSheetExpandedState = false
+                mainBottomSheetBehavior.state = STATE_EXPANDED
+            }
         } else {
             nodeName.text = new.name
             if (new is Shape) {
@@ -507,7 +512,10 @@ class MainActivity : AppCompatActivity() {
                 it.visibility = visibility
             }
             nodeBottomSheetBehavior.state = STATE_EXPANDED
-            mainBottomSheetBehavior.state = STATE_COLLAPSED
+            if (mainBottomSheetBehavior.state == STATE_EXPANDED) {
+                mainBottomSheetBehavior.state = STATE_COLLAPSED
+                restoreMainBottomSheetExpandedState = true
+            }
             new.onNodeUpdate = ::onNodeUpdate
         }
     }
