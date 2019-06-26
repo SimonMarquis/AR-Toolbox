@@ -263,7 +263,13 @@ class MainActivity : AppCompatActivity() {
             }
         })
         nodeBottomSheetBehavior.state = STATE_HIDDEN
-        nodeHeader.setOnClickListener { nodeBottomSheetBehavior.state = STATE_HIDDEN }
+        nodeHeader.setOnClickListener {
+            if (coordinator.selectedNode == null) {
+                nodeBottomSheetBehavior.state = STATE_HIDDEN
+            } else {
+                coordinator.selectNode(null)
+            }
+        }
         nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.delete() }
         nodeColorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
             override fun onColorChangeListener(color: Int) {
