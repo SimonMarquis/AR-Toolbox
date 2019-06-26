@@ -295,6 +295,10 @@ class MainActivity : AppCompatActivity() {
             }
             recordImageView.visibility = if (isRecording) VISIBLE else GONE
         }
+        Settings.Sunlight.update(arSceneView)
+        Settings.Shadows.update(arSceneView)
+        Settings.Planes.update(arSceneView)
+        Settings.Selection.update(coordinator.selectionVisualizer)
     }
 
     private fun initArSession() {
