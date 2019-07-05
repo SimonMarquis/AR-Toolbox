@@ -73,7 +73,6 @@
         app:srcCompat="@drawable/ic_model_layout"
         tools:ignore="ContentDescription" />
 
-
     <ImageView
         android:id="@+id/modelAndy"
         android:layout_width="wrap_content"
@@ -88,7 +87,6 @@
         app:layout_constraintTop_toTopOf="@+id/modelView"
         app:srcCompat="@drawable/ic_model_andy"
         tools:ignore="ContentDescription" />
-
 
     <ImageView
         android:id="@+id/modelLink"
@@ -106,6 +104,26 @@
         tools:ignore="ContentDescription" />
 
     <TextView
+        android:id="@+id/colorLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_color_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/colorValue"
+        app:layout_constraintTop_toBottomOf="@+id/modelLink" />
+
+    <fr.smarquis.ar_toolbox.ColorSeekBar
+        android:id="@+id/colorValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/material_unit_1"
+        android:layout_marginRight="@dimen/material_unit_1"
+        app:colorSeeds="@array/colors"
+        app:layout_constraintBottom_toTopOf="@+id/poseTranslationLabel"
+        app:layout_constraintTop_toBottomOf="@+id/colorLabel" />
+
+    <TextView
         android:id="@+id/poseTranslationLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -113,7 +131,7 @@
         android:text="@string/entry_position_label"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/poseTranslationValue"
-        app:layout_constraintTop_toBottomOf="@+id/modelSphere" />
+        app:layout_constraintTop_toBottomOf="@+id/colorValue" />
 
     <TextView
         android:id="@+id/poseTranslationValue"
@@ -156,6 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sceneLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

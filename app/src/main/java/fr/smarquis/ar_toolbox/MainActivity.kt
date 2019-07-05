@@ -240,6 +240,13 @@ class MainActivity : AppCompatActivity() {
             model.selection.value = Link::class
             promptLink()
         }
+        colorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
+            override fun onColorChangeListener(color: Int) {
+                arSceneView.planeRenderer.material?.thenAccept {
+                    it.setFloat3(PlaneRenderer.MATERIAL_COLOR, com.google.ar.sceneform.rendering.Color(color))
+                }
+            }
+        })
     }
 
     private fun Nodes.delete() {
@@ -274,9 +281,6 @@ class MainActivity : AppCompatActivity() {
         nodeColorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
             override fun onColorChangeListener(color: Int) {
                 (coordinator.selectedNode as? Shape)?.color = color
-                arSceneView.planeRenderer.material?.thenAccept {
-                    it.setFloat3(PlaneRenderer.MATERIAL_COLOR, com.google.ar.sceneform.rendering.Color(color))
-                }
             }
         })
         nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener {
@@ -399,7 +403,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNodeAndAddToScene(anchor: Anchor, select: Boolean = true) {
-        val color = nodeColorValue.getColor()
+        val color = colorValue.getColor()
         val metallic = nodeMetallicValue.progress
         val roughness = nodeRoughnessValue.progress
         val reflectance = nodeReflectanceValue.progress
