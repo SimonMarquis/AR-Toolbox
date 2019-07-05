@@ -57,15 +57,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nodeBottomSheetBehavior: BottomSheetBehavior<out View>
     private lateinit var videoRecorder: VideoRecorder
 
-    private val coordinator: Coordinator by lazy {
-        Coordinator(
-            this,
-            onArTap = ::onArTap,
-            onNodeSelected = ::onNodeSelected
-        )
-    }
+    private val coordinator by lazy { Coordinator(this, onArTap = ::onArTap, onNodeSelected = ::onNodeSelected) }
+    private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
-    private val model: MainViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
     private var restoreMainBottomSheetExpandedState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -212,8 +206,7 @@ class MainActivity : AppCompatActivity() {
                 findItem(R.id.menu_item_quality_1080p).isEnabled = hasProfile(QUALITY_1080P)
                 findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
                 findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
-                findItem(R.id.menu_item_clean_up_scene).isVisible =
-                    arSceneView.scene.findInHierarchy { it is Nodes } != null
+                findItem(R.id.menu_item_clean_up_scene).isVisible = arSceneView.scene.findInHierarchy { it is Nodes } != null
                 findItem(R.id.menu_item_sunlight).isChecked = Settings.Sunlight.get()
                 findItem(R.id.menu_item_shadows).isChecked = Settings.Shadows.get()
                 findItem(R.id.menu_item_plane_renderer).isChecked = Settings.Planes.get()
@@ -533,5 +526,4 @@ class MainActivity : AppCompatActivity() {
             new.onNodeUpdate = ::onNodeUpdate
         }
     }
-
 }
