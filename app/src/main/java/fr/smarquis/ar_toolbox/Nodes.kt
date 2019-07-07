@@ -12,22 +12,24 @@ import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLB
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLTF2
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
+import com.google.ar.sceneform.rendering.MaterialFactory.*
 import com.google.ar.sceneform.rendering.Renderable.RENDER_PRIORITY_FIRST
 import com.google.ar.sceneform.ux.TransformableNode
-import com.google.ar.sceneform.ux.TransformationSystem
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.reflect.KClass
 
 sealed class Nodes(
     name: String,
-    renderable: Renderable,
-    system: TransformationSystem
-) : TransformableNode(system) {
+    renderable: Renderable?,
+    coordinator: Coordinator
+) : TransformableNode(coordinator) {
 
     companion object {
+
         private val IDS: MutableMap<KClass<*>, AtomicLong> = mutableMapOf()
-        fun Any.newId(): Long =
-            IDS.getOrElse(this::class, { AtomicLong().also { IDS[this::class] = it } }).incrementAndGet()
+
+        fun Any.newId(): Long = IDS.getOrElse(this::class, { AtomicLong().also { IDS[this::class] = it } }).incrementAndGet()
+
     }
 
     init {
@@ -41,51 +43,60 @@ sealed class Nodes(
 
     var onNodeUpdate: ((Nodes) -> Any)? = null
 
+    override fun setRenderable(renderable: Renderable?) {
+        super.setRenderable(renderable?.apply {
+            isShadowCaster = Settings.Shadows.get()
+            isShadowReceiver = Settings.Shadows.get()
+        })
+    }
+
     override fun onUpdate(frameTime: FrameTime) {
         onNodeUpdate?.invoke(this)
     }
 
 }
 
-sealed class Shape(
+sealed class MaterialNode(
     name: String,
-    system: TransformationSystem,
-    model: Renderable,
-    color: Int,
-    metallic: Int,
-    roughness: Int,
-    reflectance: Int
-) : Nodes(name, model, system) {
+    renderable: Renderable?,
+    properties: MaterialProperties,
+    coordinator: Coordinator
+) : Nodes(name, renderable, coordinator) {
 
     @ColorInt
-    var color: Int = color
+    var color: Int = properties.color
         set(value) {
             field = value
-            renderable?.material?.setFloat3(MaterialFactory.MATERIAL_COLOR, Color(color))
+            renderable?.material?.setFloat3(MATERIAL_COLOR, color.toArColor())
         }
 
     @IntRange(from = 0, to = 100)
-    var metallic: Int = metallic
+    var metallic: Int = properties.metallic
         set(value) {
             field = value
-            renderable?.material?.setFloat(MaterialFactory.MATERIAL_METALLIC, value / 100F)
+            renderable?.material?.setFloat(MATERIAL_METALLIC, value / 100F)
         }
 
     @IntRange(from = 0, to = 100)
-    var roughness: Int = roughness
+    var roughness: Int = properties.roughness
         set(value) {
             field = value
-            renderable?.material?.setFloat(MaterialFactory.MATERIAL_ROUGHNESS, value / 100F)
+            renderable?.material?.setFloat(MATERIAL_ROUGHNESS, value / 100F)
         }
 
     @IntRange(from = 0, to = 100)
-    var reflectance: Int = reflectance
+    var reflectance: Int = properties.reflectance
         set(value) {
             field = value
-            renderable?.material?.setFloat(MaterialFactory.MATERIAL_REFLECTANCE, value / 100F)
+            renderable?.material?.setFloat(MATERIAL_REFLECTANCE, value / 100F)
         }
 
     init {
+        applyMaterialProperties()
+    }
+
+    internal fun applyMaterialProperties() {
+        this.color = color
         this.metallic = metallic
         this.roughness = roughness
         this.reflectance = reflectance
@@ -93,67 +104,31 @@ sealed class Shape(
 
 }
 
-
 class Sphere(
-    system: TransformationSystem,
     material: Material,
-    color: Int,
-    metallic: Int,
-    roughness: Int,
-    reflectance: Int
-) :
-    Shape(
-        "Sphere",
-        system,
-        ShapeFactory.makeSphere(RADIUS, CENTER, material),
-        color,
-        metallic,
-        roughness,
-        reflectance
-    ) {
+    properties: MaterialProperties,
+    coordinator: Coordinator
+) : MaterialNode("Sphere", ShapeFactory.makeSphere(RADIUS, CENTER, material), properties, coordinator) {
 
     companion object {
 
         private const val RADIUS = 0.05F
         private val CENTER = Vector3(0F, RADIUS, 0F)
 
-        fun create(
-            context: Context,
-            transformationSystem: TransformationSystem,
-            color: Int,
-            metallic: Int,
-            roughness: Int,
-            reflectance: Int,
-            block: (Sphere) -> Unit
-        ) {
-            MaterialFactory.makeOpaqueWithColor(context, Color(color)).thenAccept { material ->
-                block(Sphere(transformationSystem, material, color, metallic, roughness, reflectance))
+        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Sphere) -> Unit) {
+            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
+                block(Sphere(material, properties, coordinator))
             }
         }
     }
 
 }
 
-
 class Cylinder(
-    system: TransformationSystem, material: Material, color: Int,
-    metallic: Int,
-    roughness: Int,
-    reflectance: Int
-) :
-    Shape(
-        "Cylinder",
-        system,
-        ShapeFactory.makeCylinder(
-            RADIUS,
-            HEIGHT,
-            CENTER, material
-        ),
-        color,
-        metallic,
-        roughness,
-        reflectance
-    ) {
+    material: Material,
+    properties: MaterialProperties,
+    coordinator: Coordinator
+) : MaterialNode("Cylinder", ShapeFactory.makeCylinder(RADIUS, HEIGHT, CENTER, material), properties, coordinator) {
 
     companion object {
 
@@ -161,58 +136,28 @@ class Cylinder(
         const val HEIGHT = RADIUS * 2
         val CENTER = Vector3(0F, HEIGHT / 2, 0F)
 
-        fun create(
-            context: Context,
-            transformationSystem: TransformationSystem,
-            color: Int,
-            metallic: Int,
-            roughness: Int,
-            reflectance: Int,
-            block: (Cylinder) -> Unit
-        ) {
-            MaterialFactory.makeOpaqueWithColor(context, Color(color)).thenAccept { material ->
-                block(Cylinder(transformationSystem, material, color, metallic, roughness, reflectance))
+        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Cylinder) -> Unit) {
+            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
+                block(Cylinder(material, properties, coordinator))
             }
         }
     }
 }
 
 class Cube(
-    system: TransformationSystem,
     material: Material,
-    color: Int,
-    metallic: Int,
-    roughness: Int,
-    reflectance: Int
-) :
-    Shape(
-        "Cube",
-        system,
-        ShapeFactory.makeCube(
-            Vector3.one().scaled(SIZE),
-            CENTER, material
-        ),
-        color,
-        metallic,
-        roughness,
-        reflectance
-    ) {
+    properties: MaterialProperties,
+    coordinator: Coordinator
+) : MaterialNode("Cube", ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, material), properties, coordinator) {
 
     companion object {
+
         private const val SIZE = 0.1F
         private val CENTER = Vector3(0F, SIZE / 2, 0F)
 
-        fun create(
-            context: Context,
-            transformationSystem: TransformationSystem,
-            color: Int,
-            metallic: Int,
-            roughness: Int,
-            reflectance: Int,
-            block: (Cube) -> Unit
-        ) {
-            MaterialFactory.makeOpaqueWithColor(context, Color(color)).thenAccept { material ->
-                block(Cube(transformationSystem, material, color, metallic, roughness, reflectance))
+        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Cube) -> Unit) {
+            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
+                block(Cube(material, properties, coordinator))
             }
         }
     }
@@ -220,48 +165,41 @@ class Cube(
 }
 
 class Layout(
-    system: TransformationSystem,
-    model: ViewRenderable
-) : Nodes(
-    "Layout",
-    model,
-    system
-) {
+    renderable: ViewRenderable,
+    coordinator: Coordinator
+) : Nodes("Layout", renderable, coordinator) {
     companion object {
-        fun create(context: Context, transformationSystem: TransformationSystem, block: (Layout) -> Unit) {
-            ViewRenderable.builder().setView(context, R.layout.view_renderable_layout).build().thenAccept {
-                block(Layout(transformationSystem, it))
-            }
+
+        private const val HEIGHT = 0.3F
+
+        fun create(context: Context, coordinator: Coordinator, block: (Layout) -> Unit) {
+            ViewRenderable.builder()
+                .setView(context, R.layout.view_renderable_layout)
+                .setSizer(FixedHeightViewSizer(HEIGHT))
+                .build().thenAccept { block(Layout(it, coordinator)) }
         }
+
     }
 }
 
 class Andy(
-    system: TransformationSystem,
-    model: ModelRenderable
-) : Nodes(
-    "Andy",
-    model,
-    system
-) {
+    renderable: ModelRenderable,
+    coordinator: Coordinator
+) : Nodes("Andy", renderable, coordinator) {
     companion object {
-        fun create(context: Context, transformationSystem: TransformationSystem, block: (Andy) -> Unit) {
+        fun create(context: Context, coordinator: Coordinator, block: (Andy) -> Unit) {
             ModelRenderable.builder().setSource(context, R.raw.andy).build().thenAccept {
                 it.renderPriority = RENDER_PRIORITY_FIRST
-                block(Andy(transformationSystem, it))
+                block(Andy(it, coordinator))
             }
         }
     }
 }
 
 class Link(
-    system: TransformationSystem,
-    model: ModelRenderable
-) : Nodes(
-    "Link",
-    model,
-    system
-) {
+    renderable: ModelRenderable,
+    coordinator: Coordinator
+) : Nodes("Link", renderable, coordinator) {
 
     companion object {
 
@@ -286,8 +224,8 @@ class Link(
                 }
         }
 
-        fun create(context: Context, uri: Uri, transformationSystem: TransformationSystem, block: (Link) -> Unit) {
-            warmup(context, uri).thenAccept { block(Link(it, transformationSystem)) }
+        fun create(context: Context, uri: Uri, coordinator: Coordinator, block: (Link) -> Unit) {
+            warmup(context, uri).thenAccept { block(Link(it, coordinator)) }
         }
     }
 }

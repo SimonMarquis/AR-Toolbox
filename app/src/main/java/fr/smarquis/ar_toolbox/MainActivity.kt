@@ -36,9 +36,7 @@ import com.google.ar.core.TrackingState.*
 import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
-import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
-import com.google.ar.sceneform.ux.TransformableNode
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main_body.*
@@ -153,12 +151,8 @@ class MainActivity : AppCompatActivity() {
             if (session == null || camera.trackingState != TRACKING) {
                 return@setOnClickListener
             }
-            val pose = camera.displayOrientedPose
-                .compose(Pose.makeTranslation(0F, 0F, -1F))
-                .extractTranslation()
-            session.createAnchor(pose)?.let {
-                createNodeAndAddToScene(it, false)
-            }
+            val createAnchor = { session.createAnchor(camera.displayOrientedPose.compose(Pose.makeTranslation(0F, 0F, -1F)).extractTranslation()) }
+            createNodeAndAddToScene(anchor = createAnchor, select = false)
         }
 
         val settings = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)
@@ -231,21 +225,12 @@ class MainActivity : AppCompatActivity() {
         modelLink.setOnClickListener {
             promptExternalModel()
         }
-        colorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
-            override fun onColorChangeListener(color: Int) {
-                arSceneView.planeRenderer.material?.thenAccept {
-                    it.setFloat3(PlaneRenderer.MATERIAL_COLOR, com.google.ar.sceneform.rendering.Color(color))
-                }
+        colorValue.setOnColorChangeListener { color ->
+            arSceneView.planeRenderer.material?.thenAccept {
+                it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
             }
-        })
-    }
-
-    private fun Nodes.delete() {
-        if (this == coordinator.selectedNode) {
-            coordinator.selectNode(null)
         }
-        (parent as? AnchorNode)?.anchor?.detach()
-        setParent(null)
+        colorValue.post { colorValue.setColor(MaterialProperties.DEFAULT.color) }
     }
 
     private fun initNodeBottomSheet() {
@@ -269,21 +254,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
         nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.delete() }
-        nodeColorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
-            override fun onColorChangeListener(color: Int) {
-                (coordinator.selectedNode as? Shape)?.color = color
-            }
-        })
-        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener {
-            (coordinator.selectedNode as? Shape)?.metallic = it
-        })
-        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener {
-            (coordinator.selectedNode as? Shape)?.roughness = it
-        })
-        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener {
-            (coordinator.selectedNode as? Shape)?.reflectance = it
-        })
+
+        nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.color = it }
+        nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
+        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.metallic = it })
+        nodeRoughnessValue.progress = MaterialProperties.DEFAULT.roughness
+        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.roughness = it })
+        nodeReflectanceValue.progress = MaterialProperties.DEFAULT.reflectance
+        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.reflectance = it })
     }
+
+    private fun selectedMaterialNode() = (coordinator.selectedNode as? MaterialNode)
+
+    private fun materialProperties() = MaterialProperties(
+        colorValue.getColor(),
+        nodeMetallicValue.progress,
+        nodeRoughnessValue.progress,
+        nodeReflectanceValue.progress
+    )
 
     private fun initAr() {
         arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
@@ -408,41 +396,24 @@ class MainActivity : AppCompatActivity() {
                 trackable is Point -> true
                 else -> false
             }
-        }?.let {
-            createNodeAndAddToScene(it.createAnchor())
-        }
+        }?.let { createNodeAndAddToScene(anchor = { it.createAnchor() }) }
     }
 
-    private fun createNodeAndAddToScene(anchor: Anchor, select: Boolean = true) {
-        val color = colorValue.getColor()
-        val metallic = nodeMetallicValue.progress
-        val roughness = nodeRoughnessValue.progress
-        val reflectance = nodeReflectanceValue.progress
-        val add: (Nodes) -> Unit = { addToScene(anchor, it, select) }
+    private fun createNodeAndAddToScene(anchor: () -> Anchor, select: Boolean = true) {
+        val add: (Nodes) -> Unit = { addToScene(anchor(), it, select) }
         when (model.selection.value) {
-            Sphere::class -> Sphere.create(this, coordinator, color, metallic, roughness, reflectance, add)
-            Cylinder::class -> Cylinder.create(this, coordinator, color, metallic, roughness, reflectance, add)
-            Cube::class -> Cube.create(this, coordinator, color, metallic, roughness, reflectance, add)
+            Sphere::class -> Sphere.create(this, materialProperties(), coordinator, add)
+            Cylinder::class -> Cylinder.create(this, materialProperties(), coordinator, add)
+            Cube::class -> Cube.create(this, materialProperties(), coordinator, add)
             Layout::class -> Layout.create(this, coordinator, add)
             Andy::class -> Andy.create(this, coordinator, add)
-            Link::class -> Link.create(this, coordinator, model.externalModelUri.value.orEmpty().toUri(), add)
+            Link::class -> Link.create(this, model.externalModelUri.value.orEmpty().toUri(), coordinator, add)
         }
     }
 
-    private fun addToScene(anchor: Anchor, transformableNode: TransformableNode, select: Boolean = true) {
-        val anchorNode = AnchorNode(anchor)
-        anchorNode.setParent(arSceneView.scene)
-        transformableNode.apply {
-            renderable?.apply {
-                isShadowCaster = Settings.Shadows.get()
-                isShadowReceiver = Settings.Shadows.get()
-            }
-            setParent(anchorNode)
-            if (select) {
-                coordinator.selectNode(this)
-            }
-            setOnTapListener { _: HitTestResult, _: MotionEvent -> coordinator.selectNode(this) }
-        }
+    private fun addToScene(anchor: Anchor, node: Nodes, select: Boolean = true) {
+        node.anchorToScene(anchor, arSceneView.scene)
+        if (select) coordinator.selectNode(node)
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
@@ -517,13 +488,12 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             nodeName.text = new.name
-            if (new is Shape) {
+            if (new is MaterialNode) {
                 nodeColorValue.setColor(new.color)
                 nodeMetallicValue.progress = new.metallic
                 nodeRoughnessValue.progress = new.roughness
                 nodeReflectanceValue.progress = new.reflectance
             }
-            val visibility = if (new is Shape) VISIBLE else GONE
             setOf(
                 nodeColorValue,
                 nodeColorLabel,
@@ -536,6 +506,7 @@ class MainActivity : AppCompatActivity() {
             ).forEach {
                 it.visibility = visibility
             }
+            val visibility = if (new is MaterialNode) VISIBLE else GONE
             nodeBottomSheetBehavior.state = STATE_EXPANDED
             if (mainBottomSheetBehavior.state == STATE_EXPANDED) {
                 mainBottomSheetBehavior.state = STATE_COLLAPSED

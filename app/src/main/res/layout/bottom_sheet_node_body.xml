@@ -48,9 +48,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        android:progress="0"
         app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicLabel"
+        tools:progress="0" />
 
     <TextView
         android:id="@+id/nodeRoughnessLabel"
@@ -68,9 +68,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        android:progress="40"
         app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessLabel"
+        tools:progress="40" />
 
     <TextView
         android:id="@+id/nodeReflectanceLabel"
@@ -88,9 +88,9 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        android:progress="50"
         app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceLabel"
+        tools:progress="50" />
 
 
     <TextView

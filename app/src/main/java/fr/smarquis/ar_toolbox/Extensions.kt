@@ -13,11 +13,10 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.google.ar.core.Plane
-import com.google.ar.core.Point
-import com.google.ar.core.Pose
-import com.google.ar.core.Session
+import com.google.ar.core.*
+import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import java.io.File
@@ -106,4 +105,19 @@ fun viewOrShare(data: Uri, mime: String): Intent {
     return Intent.createChooser(Intent(), null).apply {
         putExtra(Intent.EXTRA_INITIAL_INTENTS, arrayOf(view, share))
     }
+}
+
+fun @receiver:ColorInt Int.toArColor(): Color = Color(this)
+
+
+fun Nodes.delete() {
+    if (this == transformationSystem.selectedNode) {
+        transformationSystem.selectNode(null)
+    }
+    (parent as? AnchorNode)?.anchor?.detach()
+    setParent(null)
+}
+
+fun Nodes.anchorToScene(anchor: Anchor, scene: Scene) {
+    setParent(AnchorNode(anchor).apply { setParent(scene) })
 }

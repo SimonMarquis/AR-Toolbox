@@ -44,7 +44,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
     private var barCornerRadius: Float = 8f
     private var oldThumbRadius = thumbRadius
     private var oldThumbBorderRadius = thumbBorderRadius
-    private var colorChangeListener: OnColorChangeListener? = null
+    private var colorChangeListener: ((Int) -> Unit)? = null
 
     init {
         attributeSet.let {
@@ -164,7 +164,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
                 thumbRadius = (oldThumbRadius * 1.5).toFloat()
                 thumbX = event.x
                 invalidate()
-                post { colorChangeListener?.onColorChangeListener(getColor()) }
+                post { colorChangeListener?.invoke(getColor()) }
             }
             MotionEvent.ACTION_UP -> {
                 thumbBorderRadius = oldThumbBorderRadius
@@ -197,7 +197,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         thumbPaint.color = pickColor(resultIndex.toFloat(), measuredWidth)
 
         invalidate()
-        post { colorChangeListener?.onColorChangeListener(getColor()) }
+        post { colorChangeListener?.invoke(getColor()) }
     }
 
     private fun colorDistance(c1: Int, c2: Int): Int {
@@ -209,11 +209,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
 
     fun getColor() = thumbPaint.color
 
-    fun setOnColorChangeListener(onColorChangeListener: OnColorChangeListener) {
-        this.colorChangeListener = onColorChangeListener
-    }
-
-    interface OnColorChangeListener {
-        fun onColorChangeListener(color: Int)
+    fun setOnColorChangeListener(listener: ((Int) -> Unit)?) {
+        this.colorChangeListener = listener
     }
 }
