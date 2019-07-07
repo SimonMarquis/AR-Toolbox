@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBackground"
+    android:clickable="true"
     android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
     android:paddingTop="@dimen/material_unit_1"
     android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
     android:paddingBottom="@dimen/material_unit_1"
-    tools:ignore="Overdraw"
+    tools:ignore="KeyboardInaccessibleWidget,Overdraw"
     tools:showIn="@layout/bottom_sheet_main">
 
     <ImageView
