@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Handler
 import android.os.HandlerThread
-import android.os.Looper
 import android.provider.Settings
 import android.view.PixelCopy
 import android.widget.SeekBar
@@ -24,9 +23,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
-
-
-val uiHandler = Handler(Looper.getMainLooper())
 
 val screenshotHandler = HandlerThread("screenshot")
     .also { it.start() }

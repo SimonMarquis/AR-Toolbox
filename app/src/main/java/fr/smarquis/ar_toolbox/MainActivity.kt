@@ -58,6 +58,15 @@ class MainActivity : AppCompatActivity() {
     private val coordinator by lazy { Coordinator(this, onArTap = ::onArTap, onNodeSelected = ::onNodeSelected) }
     private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
 
+    private val setOfMaterialViews by lazy {
+        setOf(
+            nodeColorValue, nodeColorLabel,
+            nodeMetallicValue, nodeMetallicLabel,
+            nodeRoughnessValue, nodeRoughnessLabel,
+            nodeReflectanceValue, nodeReflectanceLabel
+        )
+    }
+
     private var restoreMainBottomSheetExpandedState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -417,7 +426,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
-        addImageView.isEnabled = arSceneView.arFrame?.camera?.trackingState == TRACKING
         val camera = arSceneView.arFrame?.camera
         val state = camera?.trackingState
         val reason = camera?.trackingFailureReason
@@ -462,6 +470,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        addImageView.isEnabled = state == TRACKING
     }
 
     private fun onNodeUpdate(node: Nodes) {
@@ -494,21 +503,10 @@ class MainActivity : AppCompatActivity() {
                 nodeRoughnessValue.progress = new.roughness
                 nodeReflectanceValue.progress = new.reflectance
             }
-            setOf(
-                nodeColorValue,
-                nodeColorLabel,
-                nodeMetallicValue,
-                nodeMetallicLabel,
-                nodeRoughnessValue,
-                nodeRoughnessLabel,
-                nodeReflectanceValue,
-                nodeReflectanceLabel
-            ).forEach {
-                it.visibility = visibility
-            }
             val visibility = if (new is MaterialNode) VISIBLE else GONE
+            setOfMaterialViews.forEach { it.visibility = visibility }
             nodeBottomSheetBehavior.state = STATE_EXPANDED
-            if (mainBottomSheetBehavior.state == STATE_EXPANDED) {
+            if (mainBottomSheetBehavior.state != STATE_COLLAPSED) {
                 mainBottomSheetBehavior.state = STATE_COLLAPSED
                 restoreMainBottomSheetExpandedState = true
             }
