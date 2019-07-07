@@ -19,6 +19,7 @@
 - [Sceneform](https://github.com/google-ar/sceneform-android-sdk)
 - [ColorSeekBar](https://github.com/divyanshub024/ColorSeekBar)
 - [glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models)
+- [Poly](https://poly.google.com/)
 
 ## License
 

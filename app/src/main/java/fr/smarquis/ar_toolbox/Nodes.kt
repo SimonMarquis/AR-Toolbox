@@ -265,13 +265,8 @@ class Link(
 
     companion object {
 
-        fun create(
-            context: Context,
-            transformationSystem: TransformationSystem,
-            uri: Uri,
-            block: (Link) -> Unit
-        ) {
-            ModelRenderable.builder().apply {
+        fun warmup(context: Context, uri: Uri): CompletableFuture<ModelRenderable> {
+            return ModelRenderable.builder().apply {
                 when {
                     uri.toString().endsWith("GLTF", ignoreCase = true) -> {
                         setSource(context, RenderableSource.builder().setSource(context, uri, GLTF2).build())
@@ -279,21 +274,20 @@ class Link(
                     uri.toString().endsWith("GLB", ignoreCase = true) -> {
                         setSource(context, RenderableSource.builder().setSource(context, uri, GLB).build())
                     }
-                    else -> {
-                        setSource(context, uri)
-                    }
+                    else -> setSource(context, uri)
                 }
             }
                 .setRegistryId(uri.toString())
                 .build()
-                .thenAccept {
-                    block(Link(transformationSystem, it))
-                }
                 .exceptionally {
                     Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
                     Log.e("Link", "create", it)
                     null
                 }
+        }
+
+        fun create(context: Context, uri: Uri, transformationSystem: TransformationSystem, block: (Link) -> Unit) {
+            warmup(context, uri).thenAccept { block(Link(it, transformationSystem)) }
         }
     }
 }

@@ -80,8 +80,7 @@ class MainActivity : AppCompatActivity() {
         if (intent?.action != Intent.ACTION_VIEW) return
         intent.data?.let {
             Toast.makeText(this, it.toString(), Toast.LENGTH_SHORT).show()
-            model.sfbUri.value = it.toString()
-            model.selection.value = Link::class
+            selectExternalModel(it.toString())
             this.intent = null
         }
     }
@@ -230,8 +229,7 @@ class MainActivity : AppCompatActivity() {
         modelView.setOnClickListener { model.selection.value = Layout::class }
         modelAndy.setOnClickListener { model.selection.value = Andy::class }
         modelLink.setOnClickListener {
-            model.selection.value = Link::class
-            promptLink()
+            promptExternalModel()
         }
         colorValue.setOnColorChangeListener(object : ColorSeekBar.OnColorChangeListener {
             override fun onColorChangeListener(color: Int) {
@@ -360,20 +358,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun promptLink() {
-        val editText = AppCompatEditText(this)
+    private fun promptExternalModel() {
+        AlertDialog.Builder(ContextThemeWrapper(this, R.style.AlertDialog))
+            .setItems(R.array.models_labels) { _, i ->
+                if (i == 0) {
+                    promptExternalModelUri()
+                } else {
+                    selectExternalModel(resources.getStringArray(R.array.models_uris)[i])
+                }
+            }
+            .create()
+            .show()
+    }
+
+    private fun promptExternalModelUri() {
+        val context = ContextThemeWrapper(this, R.style.AlertDialog)
+        val editText = AppCompatEditText(context)
         editText.inputType = InputType.TYPE_TEXT_VARIATION_URI
-        editText.setText(model.sfbUri.value)
-        editText.setHint(R.string.model_link_hint)
-        AlertDialog.Builder(this)
-            .setTitle(R.string.model_link_title)
+        editText.setText(model.externalModelUri.value.takeUnless { it in resources.getStringArray(R.array.models_uris) })
+        editText.setHint(R.string.model_link_custom_hint)
+        AlertDialog.Builder(context)
+            .setTitle(R.string.model_link_custom_title)
             .setView(editText)
-            .setPositiveButton(R.string.model_link_set) { _, _ -> model.sfbUri.value = editText.text.toString() }
+            .setPositiveButton(android.R.string.ok) { _, _ -> selectExternalModel(editText.text.toString()) }
             .show()
         val layoutParams = editText.layoutParams as ViewGroup.MarginLayoutParams
         val margin = resources.getDimensionPixelSize(R.dimen.material_unit_2)
         layoutParams.setMargins(margin, margin, margin, 0)
         editText.requestLayout()
+    }
+
+    private fun selectExternalModel(value: String) {
+        model.externalModelUri.value = value
+        model.selection.value = Link::class
+        Link.warmup(this, value.toUri())
     }
 
     private fun onArTap(motionEvent: MotionEvent) {
@@ -407,7 +425,7 @@ class MainActivity : AppCompatActivity() {
             Cube::class -> Cube.create(this, coordinator, color, metallic, roughness, reflectance, add)
             Layout::class -> Layout.create(this, coordinator, add)
             Andy::class -> Andy.create(this, coordinator, add)
-            Link::class -> Link.create(this, coordinator, model.sfbUri.value.orEmpty().toUri(), add)
+            Link::class -> Link.create(this, coordinator, model.externalModelUri.value.orEmpty().toUri(), add)
         }
     }
 

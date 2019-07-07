@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="models_labels">
+        <item>Custom 3D model\n<small><i>Provide your own uri</i></small></item>
+        <item>Astronaut\n<small><i>Google <small>(Poly)</small></i></small></item>
+        <item>Barramundi Fish\n<small><i>Microsoft <small>(KhronosGroup)</small></i></small></item>
+        <item>Camp Site\n<small><i>Linus Ekenstam <small>(Poly)</small></i></small></item>
+        <item>Cat\n<small><i>Google <small>(Poly)</small></i></small></item>
+        <item>Cesium Milk Truck\n<small><i>Cesium <small>(KhronosGroup)</small></i></small></item>
+        <item>Damaged Helmet\n<small><i>theblueturtle_ <small>(KhronosGroup)</small></i></small></item>
+        <item>Fish Tank\n<small><i>Chris Ross <small>(Poly)</small></i></small></item>
+        <item>Flight Helmet\n<small><i>Microsoft <small>(KhronosGroup)</small></i></small></item>
+        <item>Forest\n<small><i>Google <small>(Poly)</small></i></small></item>
+        <item>House plants\n<small><i>Google <small>(Poly)</small></i></small></item>
+        <item>Little Fox\n<small><i>Rachael Hosein <small>(Poly)</small></i></small></item>
+        <item>Monster\n<small><i>3drt.com <small>(KhronosGroup)</small></i></small></item>
+        <item>My Super G\n<small><i>3Donimus <small>(Poly)</small></i></small></item>
+        <item>Sci Fi Helmet\n<small><i>Michael Pavlovic <small>(KhronosGroup)</small></i></small></item>
+        <item>Wishing Well\n<small><i>Don Carson <small>(Poly)</small></i></small></item>
+    </array>
+
+    <array name="models_uris">
+        <item />
+        <item>https://poly.googleapis.com/downloads/fp/1562493657287824/dLHpzNdygsg/f4d6EEz_n3N/Astronaut.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BarramundiFish/glTF/BarramundiFish.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562406024837676/4PazXqve8xz/0Tp45e2sTOw/model.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562347577417127/6dM1J6f6pm9/dRweVaOyd4o/Mesh_Cat.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumMilkTruck/glTF/CesiumMilkTruck.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF/DamagedHelmet.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562491911874189/2Rb9zxgkDEM/fmliWRcNvkX/model.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/FlightHelmet/glTF/FlightHelmet.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562492167258466/2_fv3tn3NG_/bgzvKIn8TVI/PUSHILIN_forest.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562356087647116/2aH4y6SWnXz/bq7hOavFHMM/HousePlant_433.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562493391047856/biJQtyo7j-r/7jOBcQGOzJ0/model.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Monster/glTF/Monster.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562491358690977/0zNYf6YzV9g/dJ2IWNPAN-A/model.gltf</item>
+        <item>https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/SciFiHelmet/glTF/SciFiHelmet.gltf</item>
+        <item>https://poly.googleapis.com/downloads/fp/1562492257738876/4H4zAj62ulP/dU05T2mNgNE/model.gltf</item>
+    </array>
+
+</resources>

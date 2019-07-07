@@ -42,10 +42,8 @@
     <string name="screenshot_saving">Saving screenshot…</string>
     <string name="recording">Recording…</string>
 
-    <string name="model_link_default_uri">https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BarramundiFish/glTF/BarramundiFish.gltf</string>
-    <string name="model_link_title">External 3D model</string>
-    <string name="model_link_hint">sfb, glTF, glb, …</string>
-    <string name="model_link_set">Set</string>
+    <string name="model_link_custom_title">3D model URI</string>
+    <string name="model_link_custom_hint">sfb, glTF, glb, …</string>
 
     <string name="exception_arcore_not_installed">Please install ARCore</string>
     <string name="exception_apk_too_old">Please update ARCore</string>
