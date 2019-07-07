@@ -10,8 +10,8 @@ android {
         applicationId "fr.smarquis.ar_toolbox"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 110
-        versionName "1.1"
+        versionCode 120
+        versionName "1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
