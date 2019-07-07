@@ -10,6 +10,7 @@ import android.provider.Settings
 import android.view.PixelCopy
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.google.ar.core.*
@@ -18,6 +19,7 @@ import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.Color
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -105,6 +107,9 @@ fun viewOrShare(data: Uri, mime: String): Intent {
 
 fun @receiver:ColorInt Int.toArColor(): Color = Color(this)
 
+fun Pose.translation() = Vector3(tx(), ty(), tz())
+
+fun Pose.rotation() = Quaternion(qx(), qy(), qz(), qw())
 
 fun Nodes.delete() {
     if (this == transformationSystem.selectedNode) {

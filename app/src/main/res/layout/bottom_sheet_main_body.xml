@@ -82,11 +82,26 @@
         android:padding="@dimen/material_unit_1"
         android:tint="@color/ic_model_tint"
         app:layout_constraintBottom_toBottomOf="@+id/modelView"
-        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintEnd_toStartOf="@+id/modelDrawing"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/modelView"
         app:layout_constraintTop_toTopOf="@+id/modelView"
         app:srcCompat="@drawable/ic_model_andy"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/modelDrawing"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelAndy"
+        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelAndy"
+        app:layout_constraintTop_toTopOf="@+id/modelAndy"
+        app:srcCompat="@drawable/ic_model_drawing"
         tools:ignore="ContentDescription" />
 
     <ImageView
@@ -96,11 +111,11 @@
         android:background="?selectableItemBackgroundBorderless"
         android:padding="@dimen/material_unit_1"
         android:tint="@color/ic_model_tint"
-        app:layout_constraintBottom_toBottomOf="@+id/modelAndy"
+        app:layout_constraintBottom_toBottomOf="@+id/modelDrawing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelAndy"
-        app:layout_constraintTop_toTopOf="@+id/modelAndy"
+        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
+        app:layout_constraintTop_toTopOf="@+id/modelDrawing"
         app:srcCompat="@drawable/ic_model_link"
         tools:ignore="ContentDescription" />
 

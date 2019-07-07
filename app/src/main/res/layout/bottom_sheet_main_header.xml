@@ -48,7 +48,7 @@
         app:srcCompat="@drawable/ic_recording"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <fr.smarquis.ar_toolbox.ImageViewPreventScroll
         android:id="@+id/addImageView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

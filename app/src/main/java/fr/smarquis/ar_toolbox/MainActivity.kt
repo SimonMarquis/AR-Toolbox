@@ -36,6 +36,7 @@ import com.google.ar.core.TrackingState.*
 import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main.*
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private var drawing: Drawing? = null
     private var restoreMainBottomSheetExpandedState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -223,13 +225,16 @@ class MainActivity : AppCompatActivity() {
             modelCube.isSelected = it == Cube::class
             modelView.isSelected = it == Layout::class
             modelAndy.isSelected = it == Andy::class
+            modelDrawing.isSelected = it == Drawing::class
             modelLink.isSelected = it == Link::class
+            addImageView.requestDisallowInterceptTouchEvent = it == Drawing::class
         })
 
         modelSphere.setOnClickListener { model.selection.value = Sphere::class }
         modelCylinder.setOnClickListener { model.selection.value = Cylinder::class }
         modelCube.setOnClickListener { model.selection.value = Cube::class }
         modelView.setOnClickListener { model.selection.value = Layout::class }
+        modelDrawing.setOnClickListener { model.selection.value = Drawing::class }
         modelAndy.setOnClickListener { model.selection.value = Andy::class }
         modelLink.setOnClickListener {
             promptExternalModel()
@@ -276,7 +281,7 @@ class MainActivity : AppCompatActivity() {
     private fun selectedMaterialNode() = (coordinator.selectedNode as? MaterialNode)
 
     private fun materialProperties() = MaterialProperties(
-        colorValue.getColor(),
+        if (selectedMaterialNode() != null) nodeColorValue.getColor() else colorValue.getColor(),
         nodeMetallicValue.progress,
         nodeRoughnessValue.progress,
         nodeReflectanceValue.progress
@@ -285,7 +290,17 @@ class MainActivity : AppCompatActivity() {
     private fun initAr() {
         arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
             coordinator.onTouch(hitTestResult, motionEvent)
+            if (shouldHandleDrawing(motionEvent, hitTestResult)) {
+                val x = motionEvent.x
+                val y = motionEvent.y
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_DOWN -> drawing = Drawing.create(x, y, true, materialProperties(), arSceneView, coordinator)
+                    MotionEvent.ACTION_MOVE -> drawing?.extend(x, y)
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> drawing = drawing?.deleteIfEmpty().let { null }
+                }
+            }
         }
+
         arSceneView.scene.addOnUpdateListener(::onArUpdate)
         videoRecorder = VideoRecorder(this, arSceneView) { isRecording ->
             if (isRecording) {
@@ -297,6 +312,14 @@ class MainActivity : AppCompatActivity() {
         Settings.Shadows.update(arSceneView)
         Settings.Planes.update(arSceneView)
         Settings.Selection.update(coordinator.selectionVisualizer)
+    }
+
+    private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {
+        if (model.selection.value != Drawing::class) return false
+        if (coordinator.selectedNode?.isTransforming == true) return false
+        if (arSceneView.arFrame?.camera?.trackingState != TRACKING) return false
+        if (motionEvent?.action == MotionEvent.ACTION_DOWN && hitTestResult?.node != null) return false
+        return true
     }
 
     private fun initArSession() {
@@ -417,6 +440,7 @@ class MainActivity : AppCompatActivity() {
             Layout::class -> Layout.create(this, coordinator, add)
             Andy::class -> Andy.create(this, coordinator, add)
             Link::class -> Link.create(this, model.externalModelUri.value.orEmpty().toUri(), coordinator, add)
+            else -> Unit
         }
     }
 
@@ -471,6 +495,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         addImageView.isEnabled = state == TRACKING
+
+        if (shouldHandleDrawing()) {
+            val x = arSceneView.width / 2F
+            val y = arSceneView.height / 2F
+            val pressed = addImageView.isPressed
+            when {
+                pressed && drawing == null -> drawing = Drawing.create(x, y, false, materialProperties(), arSceneView, coordinator)
+                pressed && drawing?.isFromTouch == false -> drawing?.extend(x, y)
+                !pressed && drawing?.isFromTouch == false -> drawing = drawing?.deleteIfEmpty().let { null }
+                else -> Unit
+            }
+        }
     }
 
     private fun onNodeUpdate(node: Nodes) {
