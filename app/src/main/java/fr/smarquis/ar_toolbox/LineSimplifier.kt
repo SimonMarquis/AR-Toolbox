@@ -73,8 +73,8 @@ class LineSimplifier {
     }
 
     companion object {
-        private const val MINIMUM_DISTANCE_BETWEEN_POINTS = 0.005F
+        private const val MINIMUM_DISTANCE_BETWEEN_POINTS = 0.001F
         private const val MAXIMUM_SMOOTHING_DISTANCE = 0.005f
-        private const val POINT_SMOOTHING_INTERVAL = 10
+        private const val POINT_SMOOTHING_INTERVAL = 5
     }
 }
