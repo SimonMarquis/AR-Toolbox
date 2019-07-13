@@ -159,11 +159,8 @@ class MainActivity : AppCompatActivity() {
         addImageView.setOnClickListener {
             val session = arSceneView.session
             val camera = arSceneView.arFrame?.camera ?: return@setOnClickListener
-            if (session == null || camera.trackingState != TRACKING) {
-                return@setOnClickListener
-            }
-            val createAnchor = { session.createAnchor(camera.displayOrientedPose.compose(Pose.makeTranslation(0F, 0F, -1F)).extractTranslation()) }
-            createNodeAndAddToScene(anchor = createAnchor, select = false)
+            if (session == null || camera.trackingState != TRACKING) return@setOnClickListener
+            createNodeAndAddToScene(anchor = { session.createAnchor(Nodes.defaultPose(arSceneView)) }, select = false)
         }
 
         val settings = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)

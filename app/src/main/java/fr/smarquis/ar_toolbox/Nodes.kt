@@ -31,10 +31,25 @@ sealed class Nodes(
 
     companion object {
 
+        private const val PLANE_ANCHORING_DISTANCE = 2F
+        private const val DEFAULT_POSE_DISTANCE = 2F
+
         private val IDS: MutableMap<KClass<*>, AtomicLong> = mutableMapOf()
 
         fun Any.newId(): Long = IDS.getOrElse(this::class, { AtomicLong().also { IDS[this::class] = it } }).incrementAndGet()
 
+        fun defaultPose(ar: ArSceneView): Pose {
+            val centerX = ar.width / 2F
+            val centerY = ar.height / 2F
+            val hits = ar.arFrame?.hitTest(centerX, centerY)
+            val planeHitPose = hits?.firstOrNull {
+                (it.trackable as? Plane)?.isPoseInPolygon(it.hitPose) == true && it.distance <= PLANE_ANCHORING_DISTANCE
+            }?.hitPose
+            if (planeHitPose != null) return planeHitPose
+            val ray = ar.scene.camera.screenPointToRay(centerX, centerY)
+            val point = ray.getPoint(DEFAULT_POSE_DISTANCE)
+            return Pose.makeTranslation(point.x, point.y, point.z)
+        }
     }
 
     init {
