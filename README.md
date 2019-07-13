@@ -13,6 +13,15 @@
 |---|---|---|
 | ![](art/screenshot_scene.png) | ![](art/screenshot_settings.png) | ![](art/screenshot_models.png) |
 
+### Features
+
+- **Scene debug**: Camera position, Camera rotation, Anchors, Planes, Points
+- **Scene configuration**: Sunlight, Shadows, Plane renderer, Selection visualizer
+- **3D models**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF
+- **Material properties**: Color, Metallic, Roughness, Reflectance
+- **Gestures**: Drag, Rotate, Scale
+- **Screen capture & recording**: 480p, 720p, 1080p, 2160p
+
 ## Credits
 
 - [ARCore](https://github.com/google-ar/arcore-android-sdk)
