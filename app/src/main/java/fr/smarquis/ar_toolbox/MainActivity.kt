@@ -269,13 +269,13 @@ class MainActivity : AppCompatActivity() {
         }
         nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.delete() }
 
-        nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.color = it }
+        nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.update { color = it } }
         nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
-        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.metallic = it })
+        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { metallic = it } })
         nodeRoughnessValue.progress = MaterialProperties.DEFAULT.roughness
-        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.roughness = it })
+        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { roughness = it } })
         nodeReflectanceValue.progress = MaterialProperties.DEFAULT.reflectance
-        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.reflectance = it })
+        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { reflectance = it } })
     }
 
     private fun selectedMaterialNode() = (coordinator.selectedNode as? MaterialNode)
@@ -533,11 +533,11 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             nodeName.text = new.name
-            if (new is MaterialNode) {
-                nodeColorValue.setColor(new.color)
-                nodeMetallicValue.progress = new.metallic
-                nodeRoughnessValue.progress = new.roughness
-                nodeReflectanceValue.progress = new.reflectance
+            (new as? MaterialNode)?.properties?.run {
+                nodeColorValue.setColor(color)
+                nodeMetallicValue.progress = metallic
+                nodeRoughnessValue.progress = roughness
+                nodeReflectanceValue.progress = reflectance
             }
             val visibility = if (new is MaterialNode) VISIBLE else GONE
             setOfMaterialViews.forEach { it.visibility = visibility }

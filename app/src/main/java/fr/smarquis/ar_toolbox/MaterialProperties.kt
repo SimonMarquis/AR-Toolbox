@@ -3,12 +3,14 @@ package fr.smarquis.ar_toolbox
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
+import com.google.ar.sceneform.rendering.Material
+import com.google.ar.sceneform.rendering.MaterialFactory.*
 
 class MaterialProperties(
-    @ColorInt val color: Int = DEFAULT_COLOR,
-    @IntRange(from = 0, to = 100) val metallic: Int = DEFAULT_METALLIC,
-    @IntRange(from = 0, to = 100) val roughness: Int = DEFAULT_ROUGHNESS,
-    @IntRange(from = 0, to = 100) val reflectance: Int = DEFAULT_REFLECTANCE
+    @field:ColorInt var color: Int = DEFAULT_COLOR,
+    @field:IntRange(from = 0, to = 100) var metallic: Int = DEFAULT_METALLIC,
+    @field:IntRange(from = 0, to = 100) var roughness: Int = DEFAULT_ROUGHNESS,
+    @field:IntRange(from = 0, to = 100) var reflectance: Int = DEFAULT_REFLECTANCE
 ) {
     companion object {
 
@@ -19,5 +21,14 @@ class MaterialProperties(
 
         val DEFAULT = MaterialProperties()
 
+    }
+
+    fun applyTo(material: Material) {
+        material.apply {
+            setFloat3(MATERIAL_COLOR, color.toArColor())
+            setFloat(MATERIAL_METALLIC, metallic / 100F)
+            setFloat(MATERIAL_ROUGHNESS, roughness / 100F)
+            setFloat(MATERIAL_REFLECTANCE, reflectance / 100F)
+        }
     }
 }

@@ -4,8 +4,6 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.ColorInt
-import androidx.annotation.IntRange
 import com.google.ar.core.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.ArSceneView
@@ -18,7 +16,7 @@ import com.google.ar.sceneform.collision.RayHit
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
-import com.google.ar.sceneform.rendering.MaterialFactory.*
+import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
 import com.google.ar.sceneform.rendering.Renderable.RENDER_PRIORITY_FIRST
 import com.google.ar.sceneform.ux.TransformableNode
 import java.util.concurrent.CompletableFuture
@@ -66,47 +64,17 @@ sealed class Nodes(
 sealed class MaterialNode(
     name: String,
     renderable: Renderable?,
-    properties: MaterialProperties,
+    val properties: MaterialProperties,
     coordinator: Coordinator
 ) : Nodes(name, renderable, coordinator) {
 
-    @ColorInt
-    var color: Int = properties.color
-        set(value) {
-            field = value
-            renderable?.material?.setFloat3(MATERIAL_COLOR, color.toArColor())
-        }
-
-    @IntRange(from = 0, to = 100)
-    var metallic: Int = properties.metallic
-        set(value) {
-            field = value
-            renderable?.material?.setFloat(MATERIAL_METALLIC, value / 100F)
-        }
-
-    @IntRange(from = 0, to = 100)
-    var roughness: Int = properties.roughness
-        set(value) {
-            field = value
-            renderable?.material?.setFloat(MATERIAL_ROUGHNESS, value / 100F)
-        }
-
-    @IntRange(from = 0, to = 100)
-    var reflectance: Int = properties.reflectance
-        set(value) {
-            field = value
-            renderable?.material?.setFloat(MATERIAL_REFLECTANCE, value / 100F)
-        }
-
     init {
-        applyMaterialProperties()
+        update()
     }
 
-    internal fun applyMaterialProperties() {
-        this.color = color
-        this.metallic = metallic
-        this.roughness = roughness
-        this.reflectance = reflectance
+    fun update(block: (MaterialProperties.() -> Unit) = {}) {
+        block(properties)
+        properties.applyTo(renderable?.material ?: return)
     }
 
 }
@@ -261,7 +229,7 @@ class Drawing(
     private val line = LineSimplifier()
     private var material: Material? = null
         set(value) {
-            field = value
+            field = value?.apply { properties.applyTo(this) }
             render()
         }
 
@@ -278,7 +246,6 @@ class Drawing(
         } else {
             renderable?.updateFromDefinition(definition)
         }
-        applyMaterialProperties()
     }
 
     fun extend(x: Float, y: Float) {
