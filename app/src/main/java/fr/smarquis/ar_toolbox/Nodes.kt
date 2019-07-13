@@ -203,9 +203,11 @@ class Andy(
     }
 }
 
+typealias CollisionPlane = com.google.ar.sceneform.collision.Plane
+
 class Drawing(
     val isFromTouch: Boolean,
-    private val reference: Any?,
+    private val plane: CollisionPlane?,
     properties: MaterialProperties,
     coordinator: Coordinator
 ) : MaterialNode("Drawing", null, properties, coordinator) {
@@ -213,35 +215,26 @@ class Drawing(
     companion object {
 
         private const val RADIUS = 0.005F
+        private const val PLANE_ANCHORING_DISTANCE = 2F
         private const val DEFAULT_DRAWING_DISTANCE = 0.5F
 
         private fun hit(frame: Frame, x: Float, y: Float): HitResult? {
             return frame.hitTest(x, y).firstOrNull {
-                val trackable = it.trackable
-                when {
-                    trackable is Plane && trackable.isPoseInPolygon(it.hitPose) -> true
-                    trackable is Point -> true
-                    else -> false
-                }
+                (it.trackable as? Plane)?.isPoseInPolygon(it.hitPose) == true && it.distance <= PLANE_ANCHORING_DISTANCE
             }
         }
 
-        private fun pose(hit: HitResult?, camera: Camera, x: Float, y: Float): Pose {
-            if (hit != null) return hit.hitPose
+        private fun pose(camera: Camera, x: Float, y: Float): Pose {
             val ray = camera.screenPointToRay(x, y)
             val point = ray.getPoint(DEFAULT_DRAWING_DISTANCE)
             return Pose.makeTranslation(point.x, point.y, point.z)
         }
 
-        private fun reference(hitResult: HitResult?): Any {
-            return when (val trackable = hitResult?.trackable) {
-                is Plane -> {
-                    val pose = trackable.centerPose
-                    val normal = Quaternion.rotateVector(pose.rotation(), Vector3.up())
-                    com.google.ar.sceneform.collision.Plane(pose.translation(), normal)
-                }
-                is Point -> hitResult.distance
-                else -> DEFAULT_DRAWING_DISTANCE
+        private fun plane(hitResult: HitResult?): CollisionPlane? {
+            return (hitResult?.trackable as? Plane)?.let {
+                val pose = it.centerPose
+                val normal = Quaternion.rotateVector(pose.rotation(), Vector3.up())
+                CollisionPlane(pose.translation(), normal)
             }
         }
 
@@ -253,14 +246,14 @@ class Drawing(
             if (frame.camera.trackingState != TrackingState.TRACKING) return null
 
             val hit = hit(frame, x, y)
-            val pose = pose(hit, scene.camera, x, y)
-            val reference = reference(hit)
+            val pose = hit?.hitPose ?: pose(scene.camera, x, y)
+            val plane = plane(hit)
             val anchor = hit?.createAnchor() ?: session.createAnchor(pose)
 
-            return Drawing(fromTouch, reference, properties, coordinator).apply {
+            return Drawing(fromTouch, plane, properties, coordinator).apply {
                 makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material = it }
                 anchorToScene(anchor, scene)
-                append(pose.translation())
+                extend(x, y)
             }
         }
     }
@@ -290,15 +283,13 @@ class Drawing(
 
     fun extend(x: Float, y: Float) {
         val ray = scene?.camera?.screenPointToRay(x, y) ?: return
-        when (reference) {
-            is com.google.ar.sceneform.collision.Plane -> {
-                val rayHit = RayHit()
-                if (reference.rayIntersection(ray, rayHit)) {
-                    append(rayHit.point)
-                }
+        if (plane != null) {
+            val rayHit = RayHit()
+            if (plane.rayIntersection(ray, rayHit)) {
+                append(rayHit.point)
             }
-            is Float -> append(ray.getPoint(reference))
-            else -> append(ray.getPoint(DEFAULT_DRAWING_DISTANCE))
+        } else {
+            append(ray.getPoint(DEFAULT_DRAWING_DISTANCE))
         }
     }
 
