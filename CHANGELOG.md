@@ -4,12 +4,20 @@
 
 <!-- MarkdownTOC -->
 
+- [1.2.1](#121)
 - [1.2.0](#120)
 - [1.1.0](#110)
 - [1.0.0](#100)
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.2.1
+> 2019.07.13
+
+- 🐛 Fix freehand drawing initial path
+- 🔬 Increase freehand drawing precision
+- 🔧 Refactor algorithm for initial anchoring of nodes
 
 ## 1.2.0
 > 2019.07.07
