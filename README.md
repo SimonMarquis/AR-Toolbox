@@ -1,10 +1,11 @@
 <div align="center">
   <img src="art/ic_launcher-web.png" alt="" width="96px" height="96px">
 </div>
+<p align="center"><img src="https://travis-ci.com/SimonMarquis/AR-Toolbox.svg?branch=master" alt="Build Status"></p>
 <h3 align="center">AR Toolbox</h3>
 <p align="center">
   ARCore & Sceneform Playground<br>
-  <img src="https://travis-ci.com/SimonMarquis/AR-Toolbox.svg?branch=master" alt="Build Status">
+  <a href='https://play.google.com/store/apps/details?id=fr.smarquis.ar_toolbox'><img alt='Get it on Google Play' src='art/google-play-badge.png'/></a>
 </p>
 
 <br>
