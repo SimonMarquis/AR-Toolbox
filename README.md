@@ -21,6 +21,7 @@
 - **3D models**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF
 - **Material properties**: Color, Metallic, Roughness, Reflectance
 - **Gestures**: Drag, Rotate, Scale
+- **Augmented images**: Tracks the application logo
 - **Screen capture & recording**: 480p, 720p, 1080p, 2160p
 
 ## Credits

@@ -13,11 +13,11 @@ import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import com.google.ar.core.*
-import com.google.ar.sceneform.AnchorNode
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.Pose
+import com.google.ar.core.Session
 import com.google.ar.sceneform.ArSceneView
-import com.google.ar.sceneform.Node
-import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.Color
@@ -112,14 +112,3 @@ fun Pose.translation() = Vector3(tx(), ty(), tz())
 
 fun Pose.rotation() = Quaternion(qx(), qy(), qz(), qw())
 
-fun Nodes.delete() {
-    if (this == transformationSystem.selectedNode) {
-        transformationSystem.selectNode(null)
-    }
-    (parent as? AnchorNode)?.anchor?.detach()
-    setParent(null)
-}
-
-fun Node.anchorToScene(anchor: Anchor, scene: Scene) {
-    setParent(AnchorNode(anchor).apply { setParent(scene) })
-}

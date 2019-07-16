@@ -142,7 +142,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun initMainBottomSheet() {
         mainBottomSheetBehavior = from(mainBottomSheet).apply {
             state = STATE_HIDDEN
@@ -174,7 +173,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_quality_720p -> videoRecorder.start(get(QUALITY_720P))
                 R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
                 R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node ->
-                    (node as? Nodes)?.delete()
+                    (node as? Nodes)?.detach()
                 }
                 R.id.menu_item_sunlight -> Settings.Sunlight.apply {
                     toggle()
@@ -264,7 +263,7 @@ class MainActivity : AppCompatActivity() {
                 coordinator.selectNode(null)
             }
         }
-        nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.delete() }
+        nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.detach() }
 
         nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.update { color = it } }
         nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
@@ -344,6 +343,9 @@ class MainActivity : AppCompatActivity() {
                 planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
                 updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
                 cloudAnchorMode = Config.CloudAnchorMode.DISABLED
+                augmentedImageDatabase = AugmentedImageDatabase(session).apply {
+                    Augmented.target(this@MainActivity)?.let { addImage("augmented", it) }
+                }
                 augmentedFaceMode = Config.AugmentedFaceMode.DISABLED
                 focusMode = Config.FocusMode.AUTO
             })
@@ -437,10 +439,7 @@ class MainActivity : AppCompatActivity() {
             Andy::class -> Andy(this, coordinator)
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
             else -> null
-        }?.let {
-            it.anchorToScene(anchor(), arSceneView.scene)
-            if (select) coordinator.selectNode(it)
-        }
+        }?.attach(anchor(), arSceneView.scene, select)
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
@@ -499,6 +498,12 @@ class MainActivity : AppCompatActivity() {
                 pressed && drawing?.isFromTouch == false -> drawing?.extend(x, y)
                 !pressed && drawing?.isFromTouch == false -> drawing = drawing?.deleteIfEmpty().let { null }
                 else -> Unit
+            }
+        }
+
+        arSceneView.arFrame?.getUpdatedTrackables(AugmentedImage::class.java)?.forEach {
+            Augmented.update(this, it, coordinator)?.apply {
+                attach(it.createAnchor(it.centerPose), arSceneView.scene)
             }
         }
     }

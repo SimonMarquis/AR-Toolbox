@@ -55,3 +55,8 @@ sceneform.asset('sampledata/andy/andy.obj',
         'default',
         'sampledata/models/andy.sfa',
         'src/main/res/raw/andy')
+
+sceneform.asset('sampledata/rocket/rocket.obj',
+        'default',
+        'sampledata/rocket/rocket.sfa',
+        'src/main/res/raw/rocket')

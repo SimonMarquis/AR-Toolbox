@@ -1,10 +1,13 @@
 package fr.smarquis.ar_toolbox
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.google.ar.core.*
+import com.google.ar.core.AugmentedImage.TrackingMethod.FULL_TRACKING
+import com.google.ar.core.TrackingState.*
 import com.google.ar.sceneform.*
 import com.google.ar.sceneform.Camera
 import com.google.ar.sceneform.assets.RenderableSource
@@ -67,6 +70,19 @@ sealed class Nodes(
 
     override fun onUpdate(frameTime: FrameTime) {
         onNodeUpdate?.invoke(this)
+    }
+
+    open fun attach(anchor: Anchor, scene: Scene, select: Boolean = false) {
+        setParent(AnchorNode(anchor).apply { setParent(scene) })
+        if (select) transformationSystem.selectNode(this)
+    }
+
+    open fun detach() {
+        if (this == transformationSystem.selectedNode) {
+            transformationSystem.selectNode(null)
+        }
+        (parent as? AnchorNode)?.anchor?.detach()
+        setParent(null)
     }
 
 }
@@ -218,7 +234,7 @@ class Drawing(
             val session = ar.session ?: return null
             val scene = ar.scene ?: return null
             val frame = ar.arFrame ?: return null
-            if (frame.camera.trackingState != TrackingState.TRACKING) return null
+            if (frame.camera.trackingState != TRACKING) return null
 
             val hit = hit(frame, x, y)
             val pose = hit?.hitPose ?: pose(scene.camera, x, y)
@@ -227,7 +243,7 @@ class Drawing(
 
             return Drawing(fromTouch, plane, properties, coordinator).apply {
                 makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material = it }
-                anchorToScene(anchor, scene)
+                attach(anchor, scene)
                 extend(x, y)
             }
         }
@@ -267,7 +283,7 @@ class Drawing(
         }
     }
 
-    fun deleteIfEmpty() = if (line.points.size < 2) delete() else Unit
+    fun deleteIfEmpty() = if (line.points.size < 2) detach() else Unit
 
 }
 
@@ -305,4 +321,56 @@ class Link(
     init {
         warmup(context, uri).thenAccept { renderable = it }
     }
+}
+
+class Augmented(
+    context: Context,
+    private val image: AugmentedImage,
+    coordinator: Coordinator
+) : Nodes("Augmented image", coordinator) {
+
+    companion object {
+
+        private val references: MutableMap<AugmentedImage, Nodes> = mutableMapOf()
+
+        fun target(context: Context) = try {
+            context.assets.open("augmented_image_target.png")
+        } catch (e: Exception) {
+            null
+        }?.let { BitmapFactory.decodeStream(it) }
+
+        fun update(context: Context, image: AugmentedImage, coordinator: Coordinator): Augmented? {
+            val node = references[image]
+            when (image.trackingState) {
+                TRACKING -> if (node == null && image.trackingMethod == FULL_TRACKING) {
+                    return Augmented(context, image, coordinator)
+                }
+                STOPPED -> node?.detach()
+                PAUSED -> Unit
+                else -> Unit
+            }
+            return null
+        }
+
+    }
+
+    init {
+        ModelRenderable.builder()
+            .setSource(context, R.raw.rocket)
+            .build()
+            .thenAccept {
+                renderable = it
+            }
+    }
+
+    override fun attach(anchor: Anchor, scene: Scene, select: Boolean) {
+        super.attach(anchor, scene, select)
+        references[image] = this
+    }
+
+    override fun detach() {
+        super.detach()
+        references.remove(image)
+    }
+
 }
