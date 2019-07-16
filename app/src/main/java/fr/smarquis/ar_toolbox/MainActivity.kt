@@ -429,21 +429,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNodeAndAddToScene(anchor: () -> Anchor, select: Boolean = true) {
-        val add: (Nodes) -> Unit = { addToScene(anchor(), it, select) }
         when (model.selection.value) {
-            Sphere::class -> Sphere.create(this, materialProperties(), coordinator, add)
-            Cylinder::class -> Cylinder.create(this, materialProperties(), coordinator, add)
-            Cube::class -> Cube.create(this, materialProperties(), coordinator, add)
-            Layout::class -> Layout.create(this, coordinator, add)
-            Andy::class -> Andy.create(this, coordinator, add)
-            Link::class -> Link.create(this, model.externalModelUri.value.orEmpty().toUri(), coordinator, add)
-            else -> Unit
+            Sphere::class -> Sphere(this, materialProperties(), coordinator)
+            Cylinder::class -> Cylinder(this, materialProperties(), coordinator)
+            Cube::class -> Cube(this, materialProperties(), coordinator)
+            Layout::class -> Layout(this, coordinator)
+            Andy::class -> Andy(this, coordinator)
+            Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
+            else -> null
+        }?.let {
+            it.anchorToScene(anchor(), arSceneView.scene)
+            if (select) coordinator.selectNode(it)
         }
-    }
-
-    private fun addToScene(anchor: Anchor, node: Nodes, select: Boolean = true) {
-        node.anchorToScene(anchor, arSceneView.scene)
-        if (select) coordinator.selectNode(node)
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {

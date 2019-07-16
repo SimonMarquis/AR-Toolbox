@@ -16,6 +16,7 @@ import androidx.core.content.FileProvider
 import com.google.ar.core.*
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
@@ -119,6 +120,6 @@ fun Nodes.delete() {
     setParent(null)
 }
 
-fun Nodes.anchorToScene(anchor: Anchor, scene: Scene) {
+fun Node.anchorToScene(anchor: Anchor, scene: Scene) {
     setParent(AnchorNode(anchor).apply { setParent(scene) })
 }

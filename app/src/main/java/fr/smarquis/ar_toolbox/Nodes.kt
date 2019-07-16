@@ -5,10 +5,8 @@ import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import com.google.ar.core.*
-import com.google.ar.sceneform.AnchorNode
-import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.*
 import com.google.ar.sceneform.Camera
-import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLB
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLTF2
@@ -17,7 +15,6 @@ import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
-import com.google.ar.sceneform.rendering.Renderable.RENDER_PRIORITY_FIRST
 import com.google.ar.sceneform.ux.TransformableNode
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicLong
@@ -25,7 +22,6 @@ import kotlin.reflect.KClass
 
 sealed class Nodes(
     name: String,
-    renderable: Renderable?,
     coordinator: Coordinator
 ) : TransformableNode(coordinator) {
 
@@ -54,7 +50,6 @@ sealed class Nodes(
 
     init {
         this.name = "$name #${newId()}"
-        this.renderable = renderable
         scaleController.apply {
             minScale = 0.25F
             maxScale = 5F
@@ -78,10 +73,9 @@ sealed class Nodes(
 
 sealed class MaterialNode(
     name: String,
-    renderable: Renderable?,
     val properties: MaterialProperties,
     coordinator: Coordinator
-) : Nodes(name, renderable, coordinator) {
+) : Nodes(name, coordinator) {
 
     init {
         update()
@@ -95,95 +89,93 @@ sealed class MaterialNode(
 }
 
 class Sphere(
-    material: Material,
+    context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator
-) : MaterialNode("Sphere", ShapeFactory.makeSphere(RADIUS, CENTER, material), properties, coordinator) {
+) : MaterialNode("Sphere", properties, coordinator) {
 
     companion object {
-
         private const val RADIUS = 0.05F
         private val CENTER = Vector3(0F, RADIUS, 0F)
+    }
 
-        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Sphere) -> Unit) {
-            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
-                block(Sphere(material, properties, coordinator))
-            }
-        }
+    init {
+        val color = properties.color.toArColor()
+        makeOpaqueWithColor(context, color)
+            .thenAccept { renderable = ShapeFactory.makeSphere(RADIUS, CENTER, it) }
     }
 
 }
 
 class Cylinder(
-    material: Material,
+    context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator
-) : MaterialNode("Cylinder", ShapeFactory.makeCylinder(RADIUS, HEIGHT, CENTER, material), properties, coordinator) {
+) : MaterialNode("Cylinder", properties, coordinator) {
 
     companion object {
-
         const val RADIUS = 0.05F
         const val HEIGHT = RADIUS * 2
         val CENTER = Vector3(0F, HEIGHT / 2, 0F)
-
-        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Cylinder) -> Unit) {
-            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
-                block(Cylinder(material, properties, coordinator))
-            }
-        }
     }
+
+    init {
+        val color = properties.color.toArColor()
+        makeOpaqueWithColor(context, color)
+            .thenAccept { renderable = ShapeFactory.makeCylinder(RADIUS, HEIGHT, CENTER, it) }
+    }
+
 }
 
 class Cube(
-    material: Material,
+    context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator
-) : MaterialNode("Cube", ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, material), properties, coordinator) {
+) : MaterialNode("Cube", properties, coordinator) {
 
     companion object {
-
         private const val SIZE = 0.1F
         private val CENTER = Vector3(0F, SIZE / 2, 0F)
+    }
 
-        fun create(context: Context, properties: MaterialProperties, coordinator: Coordinator, block: (Cube) -> Unit) {
-            makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material ->
-                block(Cube(material, properties, coordinator))
-            }
-        }
+    init {
+        val color = properties.color.toArColor()
+        makeOpaqueWithColor(context, color)
+            .thenAccept { ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
     }
 
 }
 
 class Layout(
-    renderable: ViewRenderable,
+    context: Context,
     coordinator: Coordinator
-) : Nodes("Layout", renderable, coordinator) {
+) : Nodes("Layout", coordinator) {
+
     companion object {
-
         private const val HEIGHT = 0.3F
-
-        fun create(context: Context, coordinator: Coordinator, block: (Layout) -> Unit) {
-            ViewRenderable.builder()
-                .setView(context, R.layout.view_renderable_layout)
-                .setSizer(FixedHeightViewSizer(HEIGHT))
-                .build().thenAccept { block(Layout(it, coordinator)) }
-        }
-
     }
+
+    init {
+        ViewRenderable.builder()
+            .setView(context, R.layout.view_renderable_layout)
+            .setSizer(FixedHeightViewSizer(HEIGHT)).build()
+            .thenAccept { renderable = it }
+    }
+
 }
 
 class Andy(
-    renderable: ModelRenderable,
+    context: Context,
     coordinator: Coordinator
-) : Nodes("Andy", renderable, coordinator) {
-    companion object {
-        fun create(context: Context, coordinator: Coordinator, block: (Andy) -> Unit) {
-            ModelRenderable.builder().setSource(context, R.raw.andy).build().thenAccept {
-                it.renderPriority = RENDER_PRIORITY_FIRST
-                block(Andy(it, coordinator))
-            }
-        }
+) : Nodes("Andy", coordinator) {
+
+    init {
+        ModelRenderable.builder()
+            .setSource(context, R.raw.andy)
+            .build()
+            .thenAccept { renderable = it }
     }
+
 }
 
 typealias CollisionPlane = com.google.ar.sceneform.collision.Plane
@@ -193,7 +185,7 @@ class Drawing(
     private val plane: CollisionPlane?,
     properties: MaterialProperties,
     coordinator: Coordinator
-) : MaterialNode("Drawing", null, properties, coordinator) {
+) : MaterialNode("Drawing", properties, coordinator) {
 
     companion object {
 
@@ -280,13 +272,15 @@ class Drawing(
 }
 
 class Link(
-    renderable: ModelRenderable,
+    context: Context,
+    uri: Uri,
     coordinator: Coordinator
-) : Nodes("Link", renderable, coordinator) {
+) : Nodes("Link", coordinator) {
 
     companion object {
 
-        fun warmup(context: Context, uri: Uri): CompletableFuture<ModelRenderable> {
+        fun warmup(_context: Context, uri: Uri): CompletableFuture<ModelRenderable> {
+            val context = _context.applicationContext
             return ModelRenderable.builder().apply {
                 when {
                     uri.toString().endsWith("GLTF", ignoreCase = true) -> {
@@ -306,9 +300,9 @@ class Link(
                     null
                 }
         }
+    }
 
-        fun create(context: Context, uri: Uri, coordinator: Coordinator, block: (Link) -> Unit) {
-            warmup(context, uri).thenAccept { block(Link(it, coordinator)) }
-        }
+    init {
+        warmup(context, uri).thenAccept { renderable = it }
     }
 }
