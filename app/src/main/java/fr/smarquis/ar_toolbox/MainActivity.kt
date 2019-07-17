@@ -337,7 +337,7 @@ class MainActivity : AppCompatActivity() {
                 return
             }
             model.installRequested = false
-            val session = Session(this, emptySet())
+            val session = Session(applicationContext, emptySet())
             session.configure(Config(session).apply {
                 lightEstimationMode = Config.LightEstimationMode.AMBIENT_INTENSITY
                 planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
