@@ -40,7 +40,7 @@
   },
   samplers: [
     {
-      file: 'sampledata/andy\\andy.png',
+      file: 'sampledata/andy/andy.png',
       name: 'andy',
       pipeline_name: 'andy.png',
     },
