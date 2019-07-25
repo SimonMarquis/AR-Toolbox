@@ -42,7 +42,6 @@
     <string name="screenshot_saving">Saving screenshot…</string>
     <string name="recording">Recording…</string>
 
-    <string name="model_link_custom_title">3D model URI</string>
     <string name="model_link_custom_hint">sfb, glTF, glb, …</string>
 
     <string name="exception_arcore_not_installed">Please install ARCore</string>

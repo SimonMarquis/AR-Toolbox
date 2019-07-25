@@ -12,16 +12,15 @@ import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.View.*
-import android.view.ViewGroup
 import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.net.toUri
@@ -29,6 +28,8 @@ import androidx.core.view.MenuCompat
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.ar.core.*
 import com.google.ar.core.ArCoreApk.InstallStatus.INSTALL_REQUESTED
 import com.google.ar.core.TrackingFailureReason.*
@@ -392,19 +393,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun promptExternalModelUri() {
         val context = ContextThemeWrapper(this, R.style.AlertDialog)
-        val editText = AppCompatEditText(context)
-        editText.inputType = InputType.TYPE_TEXT_VARIATION_URI
-        editText.setText(model.externalModelUri.value.takeUnless { it in resources.getStringArray(R.array.models_uris) })
-        editText.setHint(R.string.model_link_custom_hint)
+        val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
+        view.findViewById<TextInputLayout>(R.id.dialog_input_layout).hint = getText(R.string.model_link_custom_hint)
+        val input = view.findViewById<TextInputEditText>(R.id.dialog_input_value)
+        input.inputType = InputType.TYPE_TEXT_VARIATION_URI
+        input.setText(model.externalModelUri.value.takeUnless { it in resources.getStringArray(R.array.models_uris) })
         AlertDialog.Builder(context)
-            .setTitle(R.string.model_link_custom_title)
-            .setView(editText)
-            .setPositiveButton(android.R.string.ok) { _, _ -> selectExternalModel(editText.text.toString()) }
+            .setView(view)
+            .setPositiveButton(android.R.string.ok) { _, _ -> selectExternalModel(input.text.toString()) }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .setCancelable(false)
             .show()
-        val layoutParams = editText.layoutParams as ViewGroup.MarginLayoutParams
-        val margin = resources.getDimensionPixelSize(R.dimen.material_unit_2)
-        layoutParams.setMargins(margin, margin, margin, 0)
-        editText.requestLayout()
+        input.requestFocus()
     }
 
     private fun selectExternalModel(value: String) {
