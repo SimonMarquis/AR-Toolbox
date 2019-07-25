@@ -65,6 +65,7 @@
         android:layout_height="match_parent"
         android:background="?selectableItemBackgroundBorderless"
         android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_delete_node"
         tools:ignore="ContentDescription" />
 
