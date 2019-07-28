@@ -173,9 +173,17 @@ class Layout(
 
     init {
         ViewRenderable.builder()
-            .setView(context, R.layout.view_renderable_layout)
+            .setView(context.applicationContext, R.layout.view_renderable_layout)
             .setSizer(FixedHeightViewSizer(HEIGHT)).build()
             .thenAccept { renderable = it }
+    }
+
+    override fun setRenderable(renderable: Renderable?) {
+        super.setRenderable(renderable)
+        renderable?.apply {
+            isShadowCaster = false
+            isShadowReceiver = false
+        }
     }
 
 }
