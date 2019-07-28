@@ -1,6 +1,7 @@
 package fr.smarquis.ar_toolbox
 
 import android.Manifest.permission.CAMERA
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -393,6 +394,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun promptExternalModelUri() {
         val context = ContextThemeWrapper(this, R.style.AlertDialog)
+        @SuppressLint("InflateParams")
         val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
         view.findViewById<TextInputLayout>(R.id.dialog_input_layout).hint = getText(R.string.model_link_custom_hint)
         val input = view.findViewById<TextInputEditText>(R.id.dialog_input_value)
