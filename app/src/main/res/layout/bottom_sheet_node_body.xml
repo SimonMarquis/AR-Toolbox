@@ -129,7 +129,6 @@
         app:layout_constraintBottom_toTopOf="@+id/nodeScaleLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeRotationLabel" />
 
-
     <TextView
         android:id="@+id/nodeScaleLabel"
         android:layout_width="match_parent"

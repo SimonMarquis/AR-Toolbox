@@ -438,8 +438,8 @@ class MainActivity : AppCompatActivity() {
             Layout::class -> Layout(this, coordinator)
             Andy::class -> Andy(this, coordinator)
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
-            else -> null
-        }?.attach(anchor(), arSceneView.scene, select)
+            else -> return
+        }.attach(anchor(), arSceneView.scene, select)
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
@@ -511,9 +511,9 @@ class MainActivity : AppCompatActivity() {
     private fun onNodeUpdate(node: Nodes) {
         when (nodeBottomSheetBehavior.state) {
             STATE_HIDDEN -> Unit
-            else -> arSceneView.arFrame?.camera?.pose?.let {
+            else -> {
                 nodeStatus.setImageResource(node.statusIcon())
-                nodeDistance.text = formatDistance(this, it, node.worldPosition)
+                nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
                 nodeDelete.isEnabled = !node.isTransforming
                 nodePositionValue.text = node.worldPosition.format(this)
                 nodeRotationValue.text = node.worldRotation.format(this)
@@ -548,4 +548,5 @@ class MainActivity : AppCompatActivity() {
             new.onNodeUpdate = ::onNodeUpdate
         }
     }
+
 }

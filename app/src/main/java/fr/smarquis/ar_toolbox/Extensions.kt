@@ -42,7 +42,8 @@ fun Session.format(context: Context) = context.getString(
     getAllTrackables(Point::class.java).count()
 )
 
-fun formatDistance(context: Context, pose: Pose, vector3: Vector3): String {
+fun formatDistance(context: Context, pose: Pose?, vector3: Vector3): String {
+    if (pose == null) return "?"
     val x = pose.tx() - vector3.x
     val y = pose.ty() - vector3.y
     val z = pose.tz() - vector3.z
