@@ -17,12 +17,12 @@
 ### Features
 
 - **Scene debug**: Camera position, Camera rotation, Anchors, Planes, Points
-- **Scene configuration**: Sunlight, Shadows, Plane renderer, Selection visualizer
-- **3D models**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF
-- **Material properties**: Color, Metallic, Roughness, Reflectance
-- **Gestures**: Drag, Rotate, Scale
-- **Augmented images**: Tracks the application logo
-- **Screen capture & recording**: 480p, 720p, 1080p, 2160p
+- **[Scene configuration](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Sunlight, Shadows, Plane renderer, Selection visualizer
+- **[3D models](https://developers.google.com/ar/develop/java/sceneform/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF
+- **[Material properties](https://developers.google.com/ar/develop/java/sceneform/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
+- **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
+- **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
+- **[Screen capture & recording](https://developers.google.com/ar/develop/java/sceneform/video-recording)**: 480p, 720p, 1080p, 2160p
 
 ## Credits
 
