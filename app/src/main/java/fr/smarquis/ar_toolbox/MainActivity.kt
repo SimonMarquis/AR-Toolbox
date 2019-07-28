@@ -2,6 +2,7 @@ package fr.smarquis.ar_toolbox
 
 import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.content.res.Configuration.ORIENTATION_LANDSCAPE
@@ -11,7 +12,9 @@ import android.media.CamcorderProfile.*
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -36,7 +39,6 @@ import com.google.ar.core.ArCoreApk.InstallStatus.INSTALL_REQUESTED
 import com.google.ar.core.TrackingFailureReason.*
 import com.google.ar.core.TrackingState.*
 import com.google.ar.core.exceptions.*
-import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
@@ -67,6 +69,12 @@ class MainActivity : AppCompatActivity() {
             nodeMetallicValue, nodeMetallicLabel,
             nodeRoughnessValue, nodeRoughnessLabel,
             nodeReflectanceValue, nodeReflectanceLabel
+        )
+    }
+    private val setOfCloudAnchorViews by lazy {
+        setOf(
+            nodeCloudAnchorStateLabel, nodeCloudAnchorStateValue,
+            nodeCloudAnchorIdLabel, nodeCloudAnchorIdValue
         )
     }
 
@@ -174,6 +182,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_quality_1080p -> videoRecorder.start(get(QUALITY_1080P))
                 R.id.menu_item_quality_720p -> videoRecorder.start(get(QUALITY_720P))
                 R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
+                R.id.menu_item_resolve_cloud_anchor -> promptCloudAnchorId()
                 R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node ->
                     (node as? Nodes)?.detach()
                 }
@@ -225,6 +234,7 @@ class MainActivity : AppCompatActivity() {
             modelAndy.isSelected = it == Andy::class
             modelDrawing.isSelected = it == Drawing::class
             modelLink.isSelected = it == Link::class
+            modelCloudAnchor.isSelected = it == CloudAnchor::class
             addImageView.requestDisallowInterceptTouchEvent = it == Drawing::class
         })
 
@@ -237,6 +247,8 @@ class MainActivity : AppCompatActivity() {
         modelLink.setOnClickListener {
             promptExternalModel()
         }
+        modelCloudAnchor.setOnClickListener { model.selection.value = CloudAnchor::class }
+        modelCloudAnchor.setOnLongClickListener { promptCloudAnchorId().let { true } }
         colorValue.setOnColorChangeListener { color ->
             arSceneView.planeRenderer.material?.thenAccept {
                 it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
@@ -265,6 +277,7 @@ class MainActivity : AppCompatActivity() {
                 coordinator.selectNode(null)
             }
         }
+        nodeCopy.setOnClickListener { (coordinator.selectedNode as? CloudAnchor)?.copyToClipboard(this) }
         nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.detach() }
 
         nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.update { color = it } }
@@ -344,7 +357,7 @@ class MainActivity : AppCompatActivity() {
                 lightEstimationMode = Config.LightEstimationMode.AMBIENT_INTENSITY
                 planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
                 updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
-                cloudAnchorMode = Config.CloudAnchorMode.DISABLED
+                cloudAnchorMode = Config.CloudAnchorMode.ENABLED
                 augmentedImageDatabase = AugmentedImageDatabase(session).apply {
                     Augmented.target(this@MainActivity)?.let { addImage("augmented", it) }
                 }
@@ -415,6 +428,35 @@ class MainActivity : AppCompatActivity() {
         Link.warmup(this, value.toUri())
     }
 
+    private fun promptCloudAnchorId() {
+        val context = ContextThemeWrapper(this, R.style.AlertDialog)
+        @SuppressLint("InflateParams")
+        val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
+        view.findViewById<TextInputLayout>(R.id.dialog_input_layout).hint = getText(R.string.cloud_anchor_id_hint)
+        val input = view.findViewById<TextInputEditText>(R.id.dialog_input_value)
+        input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        val dialog = AlertDialog.Builder(context)
+            .setView(view)
+            .setPositiveButton(R.string.cloud_anchor_id_resolve) { _, _ ->
+                CloudAnchor.resolve(input.text.toString(), this, arSceneView, coordinator)?.also {
+                    coordinator.selectNode(it)
+                }
+            }
+            .setNegativeButton(android.R.string.cancel) { _, _ -> }
+            .setCancelable(false)
+            .show()
+        input.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                dialog.getButton(DialogInterface.BUTTON_POSITIVE)?.isEnabled = !s.isNullOrBlank()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+        input.text = input.text
+        input.requestFocus()
+    }
+
     private fun onArTap(motionEvent: MotionEvent) {
         val frame = arSceneView.arFrame ?: return
         if (frame.camera.trackingState != TRACKING) {
@@ -440,6 +482,7 @@ class MainActivity : AppCompatActivity() {
             Layout::class -> Layout(this, coordinator)
             Andy::class -> Andy(this, coordinator)
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
+            CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator)
             else -> return
         }.attach(anchor(), arSceneView.scene, select)
     }
@@ -516,10 +559,13 @@ class MainActivity : AppCompatActivity() {
             else -> {
                 nodeStatus.setImageResource(node.statusIcon())
                 nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
+                nodeCopy.isEnabled = (node as? CloudAnchor)?.id() != null
                 nodeDelete.isEnabled = !node.isTransforming
                 nodePositionValue.text = node.worldPosition.format(this)
                 nodeRotationValue.text = node.worldRotation.format(this)
                 nodeScaleValue.text = node.worldScale.format(this)
+                nodeCloudAnchorStateValue.text = (node as? CloudAnchor)?.state()?.name
+                nodeCloudAnchorIdValue.text = (node as? CloudAnchor)?.let { it.id() ?: "…" }
             }
         }
     }
@@ -534,14 +580,17 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             nodeName.text = new.name
+            nodeCopy.visibility = if (new is CloudAnchor) VISIBLE else GONE
             (new as? MaterialNode)?.properties?.run {
                 nodeColorValue.setColor(color)
                 nodeMetallicValue.progress = metallic
                 nodeRoughnessValue.progress = roughness
                 nodeReflectanceValue.progress = reflectance
             }
-            val visibility = if (new is MaterialNode) VISIBLE else GONE
-            setOfMaterialViews.forEach { it.visibility = visibility }
+            val materialVisibility = if (new is MaterialNode) VISIBLE else GONE
+            setOfMaterialViews.forEach { it.visibility = materialVisibility }
+            val cloudAnchorVisibility = if (new is CloudAnchor) VISIBLE else GONE
+            setOfCloudAnchorViews.forEach { it.visibility = cloudAnchorVisibility }
             nodeBottomSheetBehavior.state = STATE_EXPANDED
             if (mainBottomSheetBehavior.state != STATE_COLLAPSED) {
                 mainBottomSheetBehavior.state = STATE_COLLAPSED

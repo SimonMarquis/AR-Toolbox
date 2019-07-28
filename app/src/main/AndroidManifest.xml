@@ -18,6 +18,9 @@
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
+        <meta-data
+            android:name="com.google.android.ar.API_KEY"
+            android:value="AIzaSyDR3gYtb0FbQG_5LcvxeKUke5bwgXjQVlI"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

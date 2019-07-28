@@ -24,6 +24,9 @@
             </menu>
         </item>
         <item
+            android:id="@+id/menu_item_resolve_cloud_anchor"
+            android:title="@string/menu_item_resolve_cloud_anchor" />
+        <item
             android:id="@+id/menu_item_clean_up_scene"
             android:title="@string/menu_item_clean_up_scene" />
     </group>

@@ -92,6 +92,41 @@
         app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceLabel"
         tools:progress="50" />
 
+    <TextView
+        android:id="@+id/nodeCloudAnchorIdLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_cloud_anchor_id_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorIdValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceValue" />
+
+    <TextView
+        android:id="@+id/nodeCloudAnchorIdValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdLabel" />
+
+    <TextView
+        android:id="@+id/nodeCloudAnchorStateLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_cloud_anchor_state_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdValue" />
+
+    <TextView
+        android:id="@+id/nodeCloudAnchorStateValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateLabel" />
 
     <TextView
         android:id="@+id/nodePositionLabel"
@@ -101,7 +136,7 @@
         android:text="@string/entry_position_label"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodePositionValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceValue" />
+        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateValue" />
 
     <TextView
         android:id="@+id/nodePositionValue"

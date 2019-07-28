@@ -1,11 +1,21 @@
 package fr.smarquis.ar_toolbox
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.text.Layout
+import android.text.style.AlignmentSpan
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.content.getSystemService
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import com.google.ar.core.*
+import com.google.ar.core.Anchor.CloudAnchorState.*
 import com.google.ar.core.AugmentedImage.TrackingMethod.FULL_TRACKING
 import com.google.ar.core.TrackingState.*
 import com.google.ar.sceneform.*
@@ -60,6 +70,8 @@ sealed class Nodes(
     }
 
     var onNodeUpdate: ((Nodes) -> Any)? = null
+
+    internal fun anchor(): Anchor? = (parent as? AnchorNode)?.anchor
 
     override fun setRenderable(renderable: Renderable?) {
         super.setRenderable(renderable?.apply {
@@ -384,6 +396,102 @@ class Augmented(
     override fun detach() {
         super.detach()
         references.remove(image)
+    }
+
+}
+
+class CloudAnchor(
+    context: Context,
+    private val session: Session,
+    coordinator: Coordinator
+) : Nodes("Cloud Anchor", coordinator) {
+
+    private var lastState: Anchor.CloudAnchorState? = null
+
+    companion object {
+
+        fun resolve(id: String, context: Context, ar: ArSceneView, coordinator: Coordinator): CloudAnchor? {
+            if (ar.arFrame?.camera?.trackingState != TRACKING) return null
+            val session = ar.session ?: return null
+            val anchor = session.resolveCloudAnchor(id)
+            return CloudAnchor(context, session, coordinator).also { it.attach(anchor, ar.scene) }
+        }
+
+    }
+
+    init {
+        translationController.isEnabled = false
+        rotationController.isEnabled = false
+        scaleController.isEnabled = false
+
+        ViewRenderable.builder()
+            .setView(context.applicationContext, R.layout.view_renderable_cloud_anchor)
+            .build()
+            .thenAccept { renderable = it }
+    }
+
+    fun id(): String? = anchor()?.cloudAnchorId.takeUnless { it.isNullOrBlank() }
+
+    fun state() = anchor()?.cloudAnchorState
+
+    override fun attach(anchor: Anchor, scene: Scene, select: Boolean) {
+        super.attach(anchor, scene, select)
+        if (anchor.cloudAnchorState == NONE) {
+            (parent as? AnchorNode)?.apply {
+                this.anchor?.detach()
+                this.anchor = session.hostCloudAnchor(anchor)
+            }
+        }
+    }
+
+    override fun onUpdate(frameTime: FrameTime) {
+        super.onUpdate(frameTime)
+        state()?.let {
+            if (it != lastState) {
+                lastState = it
+                update(renderable)
+            }
+        }
+    }
+
+    override fun setRenderable(renderable: Renderable?) {
+        super.setRenderable(renderable)
+        renderable?.apply {
+            update(this)
+            isShadowCaster = false
+            isShadowReceiver = false
+        }
+    }
+
+    private fun update(renderable: Renderable?) {
+        ((renderable as? ViewRenderable)?.view as? ImageView)?.setImageResource(state().icon())
+    }
+
+    override fun statusIcon(): Int = when (val state = state()) {
+        NONE -> android.R.drawable.presence_invisible
+        TASK_IN_PROGRESS -> android.R.drawable.presence_away
+        SUCCESS -> super.statusIcon()
+        else -> if (state?.isError == true) android.R.drawable.presence_busy else android.R.drawable.presence_invisible
+    }
+
+    private fun Anchor.CloudAnchorState?.icon(): Int = when (this) {
+        NONE -> R.drawable.ic_cloud_anchor
+        TASK_IN_PROGRESS -> R.drawable.ic_cloud_anchor_sync
+        SUCCESS -> R.drawable.ic_cloud_anchor_success
+        else -> if (this?.isError == true) R.drawable.ic_cloud_anchor_error else R.drawable.ic_cloud_anchor_unknown
+    }
+
+    fun copyToClipboard(context: Context) {
+        val clip = ClipData.newPlainText(context.getString(R.string.cloud_anchor_id_label), id() ?: return)
+        context.getSystemService<ClipboardManager>()?.setPrimaryClip(clip)
+        val message = buildSpannedString {
+            inSpans(AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER)) {
+                append(context.getText(R.string.cloud_anchor_id_copied_to_clipboard))
+                append("\n")
+                bold { append(id()) }
+            }
+        }
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
 }

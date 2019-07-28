@@ -24,6 +24,7 @@
     <string name="menu_item_quality_1080p">1080p</string>
     <string name="menu_item_quality_720p">720p</string>
     <string name="menu_item_quality_480p">480p</string>
+    <string name="menu_item_resolve_cloud_anchor">Resolve Cloud Anchor</string>
     <string name="menu_item_clean_up_scene">Clean up scene</string>
     <string name="menu_item_sunlight">Sunlight</string>
     <string name="menu_item_shadows">Shadows</string>
@@ -34,6 +35,8 @@
     <string name="entry_rotation_label">Rotation</string>
     <string name="entry_scene_label">Scene</string>
     <string name="entry_color_label">Color</string>
+    <string name="entry_cloud_anchor_id_label">ID</string>
+    <string name="entry_cloud_anchor_state_label">State</string>
     <string name="entry_metallic_label">Metallic</string>
     <string name="entry_roughness_label">Roughness</string>
     <string name="entry_reflectance_label">Reflectance</string>
@@ -49,5 +52,10 @@
     <string name="exception_sdk_too_old">Please update this app</string>
     <string name="exception_device_not_compatible">This device does not support AR</string>
     <string name="exception_unknown">Failed to create AR session</string>
+
+    <string name="cloud_anchor_id_hint">Cloud Anchor ID</string>
+    <string name="cloud_anchor_id_resolve">Resolve</string>
+    <string name="cloud_anchor_id_label">Cloud Anchor ID</string>
+    <string name="cloud_anchor_id_copied_to_clipboard">Cloud Anchor ID copied to clipboard!</string>
 
 </resources>

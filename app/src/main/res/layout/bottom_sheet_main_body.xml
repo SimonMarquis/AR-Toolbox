@@ -105,7 +105,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/modelLink"
+        android:id="@+id/modelCloudAnchor"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?selectableItemBackgroundBorderless"
@@ -114,8 +114,23 @@
         app:layout_constraintBottom_toBottomOf="@+id/modelDrawing"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
+        app:layout_constraintStart_toEndOf="@+id/modelLink"
         app:layout_constraintTop_toTopOf="@+id/modelDrawing"
+        app:srcCompat="@drawable/ic_model_cloud_anchor"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/modelLink"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        app:layout_constraintBottom_toBottomOf="@+id/modelCloudAnchor"
+        app:layout_constraintEnd_toStartOf="@+id/modelCloudAnchor"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
+        app:layout_constraintTop_toTopOf="@+id/modelCloudAnchor"
         app:srcCompat="@drawable/ic_model_link"
         tools:ignore="ContentDescription" />
 
