@@ -512,7 +512,7 @@ class MainActivity : AppCompatActivity() {
         when (nodeBottomSheetBehavior.state) {
             STATE_HIDDEN -> Unit
             else -> arSceneView.arFrame?.camera?.pose?.let {
-                nodeStatus.setImageResource(if (node.isActive && node.isEnabled && (node.parent as? AnchorNode)?.isTracking == true) android.R.drawable.presence_online else android.R.drawable.presence_invisible)
+                nodeStatus.setImageResource(node.statusIcon())
                 nodeDistance.text = formatDistance(this, it, node.worldPosition)
                 nodeDelete.isEnabled = !node.isTransforming
                 nodePositionValue.text = node.worldPosition.format(this)

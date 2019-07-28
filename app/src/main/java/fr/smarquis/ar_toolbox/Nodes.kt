@@ -85,6 +85,11 @@ sealed class Nodes(
         setParent(null)
     }
 
+    open fun statusIcon(): Int = if (isActive && isEnabled && (parent as? AnchorNode)?.isTracking == true)
+        android.R.drawable.presence_online
+    else
+        android.R.drawable.presence_invisible
+
 }
 
 sealed class MaterialNode(
