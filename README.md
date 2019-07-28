@@ -22,6 +22,7 @@
 - **[Material properties](https://developers.google.com/ar/develop/java/sceneform/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
 - **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
+- **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
 - **[Screen capture & recording](https://developers.google.com/ar/develop/java/sceneform/video-recording)**: 480p, 720p, 1080p, 2160p
 
 ## Credits
