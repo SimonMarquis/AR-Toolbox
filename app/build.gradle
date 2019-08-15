@@ -4,6 +4,14 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: VersioningPlugin
+
+versioning {
+    major = 1
+    minor = 4
+    patch = 0
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -11,8 +19,8 @@ android {
         applicationId "fr.smarquis.ar_toolbox"
         minSdkVersion 24
         targetSdkVersion 29
-        versionCode 140
-        versionName "1.4.0"
+        versionCode versioning.code()
+        versionName versioning.name()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
