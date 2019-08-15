@@ -206,6 +206,14 @@ class Layout(
         }
     }
 
+    override fun onUpdate(frameTime: FrameTime) {
+        super.onUpdate(frameTime)
+        // Always face the user
+        val camera = scene?.camera ?: return
+        val direction = Vector3.subtract(camera.worldPosition, worldPosition)
+        worldRotation = Quaternion.lookRotation(direction, Vector3.up())
+    }
+
 }
 
 class Andy(
