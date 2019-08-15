@@ -176,7 +176,7 @@ class Cube(
     init {
         val color = properties.color.toArColor()
         makeOpaqueWithColor(context, color)
-            .thenAccept { ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
+            .thenAccept { renderable = ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
     }
 
 }
