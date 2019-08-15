@@ -11,7 +11,8 @@ import com.google.ar.sceneform.ux.TransformationSystem
 class Coordinator(
     context: Context,
     private val onArTap: (MotionEvent) -> Unit,
-    private val onNodeSelected: (old: Nodes?, new: Nodes?) -> Unit
+    private val onNodeSelected: (old: Nodes?, new: Nodes?) -> Unit,
+    private val onNodeFocused: (nodes: Nodes?) -> Unit
 ) : TransformationSystem(
     context.resources.displayMetrics, Footprint(context)
 ) {
@@ -47,16 +48,29 @@ class Coordinator(
                 return super.selectNode(node).also { selected ->
                     if (selected) {
                         onNodeSelected(old, node)
+                        /*transfer current focus*/
+                        if (old != null && old == focusedNode) focusNode(node)
                     }
                 }
             }
             null -> {
-                return super.selectNode(node).also {
-                    onNodeSelected(old, node)
+                return super.selectNode(null).also {
+                    focusNode(null)
+                    onNodeSelected(old, null)
                 }
             }
         }
         return false
+    }
+
+    var focusedNode: Nodes? = null
+        private set
+
+    fun focusNode(node: Nodes?) {
+        if (focusedNode == node) return /*ignored*/
+        if (selectedNode != node) selectNode(node)
+        focusedNode = node
+        onNodeFocused(node)
     }
 
 }

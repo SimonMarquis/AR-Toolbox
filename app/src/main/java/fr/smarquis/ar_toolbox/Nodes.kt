@@ -9,6 +9,7 @@ import android.text.Layout
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.ContextThemeWrapper
+import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.getSystemService
@@ -87,9 +88,11 @@ sealed class Nodes(
         onNodeUpdate?.invoke(this)
     }
 
-    open fun attach(anchor: Anchor, scene: Scene, select: Boolean = false) {
+    open fun attach(anchor: Anchor, scene: Scene, focus: Boolean = false) {
         setParent(AnchorNode(anchor).apply { setParent(scene) })
-        if (select) transformationSystem.selectNode(this)
+        if (focus) {
+            transformationSystem.focusNode(this)
+        }
     }
 
     open fun detach() {
@@ -105,6 +108,11 @@ sealed class Nodes(
     else
         android.R.drawable.presence_invisible
 
+    override fun onTap(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
+        super.onTap(hitTestResult, motionEvent)
+        if (isTransforming) return // ignored when dragging over a small distance
+        transformationSystem.focusNode(this)
+    }
 }
 
 sealed class MaterialNode(
@@ -399,8 +407,8 @@ class Augmented(
             }
     }
 
-    override fun attach(anchor: Anchor, scene: Scene, select: Boolean) {
-        super.attach(anchor, scene, select)
+    override fun attach(anchor: Anchor, scene: Scene, focus: Boolean) {
+        super.attach(anchor, scene, focus)
         references[image] = this
     }
 
@@ -445,8 +453,8 @@ class CloudAnchor(
 
     fun state() = anchor()?.cloudAnchorState
 
-    override fun attach(anchor: Anchor, scene: Scene, select: Boolean) {
-        super.attach(anchor, scene, select)
+    override fun attach(anchor: Anchor, scene: Scene, focus: Boolean) {
+        super.attach(anchor, scene, focus)
         if (anchor.cloudAnchorState == NONE) {
             (parent as? AnchorNode)?.apply {
                 this.anchor?.detach()

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var nodeBottomSheetBehavior: BottomSheetBehavior<out View>
     private lateinit var videoRecorder: VideoRecorder
 
-    private val coordinator by lazy { Coordinator(this, onArTap = ::onArTap, onNodeSelected = ::onNodeSelected) }
+    private val coordinator by lazy { Coordinator(this, ::onArTap, ::onNodeSelected, ::onNodeFocused) }
     private val model: MainViewModel by viewModels()
 
     private val setOfMaterialViews by lazy {
@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity() {
             val session = arSceneView.session
             val camera = arSceneView.arFrame?.camera ?: return@setOnClickListener
             if (session == null || camera.trackingState != TRACKING) return@setOnClickListener
-            createNodeAndAddToScene(anchor = { session.createAnchor(Nodes.defaultPose(arSceneView)) }, select = false)
+            createNodeAndAddToScene(anchor = { session.createAnchor(Nodes.defaultPose(arSceneView)) }, focus = false)
         }
 
         val settings = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)
@@ -439,7 +439,7 @@ class MainActivity : AppCompatActivity() {
             .setView(view)
             .setPositiveButton(R.string.cloud_anchor_id_resolve) { _, _ ->
                 CloudAnchor.resolve(input.text.toString(), this, arSceneView, coordinator)?.also {
-                    coordinator.selectNode(it)
+                    coordinator.focusNode(it)
                 }
             }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
@@ -474,7 +474,7 @@ class MainActivity : AppCompatActivity() {
         }?.let { createNodeAndAddToScene(anchor = { it.createAnchor() }) }
     }
 
-    private fun createNodeAndAddToScene(anchor: () -> Anchor, select: Boolean = true) {
+    private fun createNodeAndAddToScene(anchor: () -> Anchor, focus: Boolean = true) {
         when (model.selection.value) {
             Sphere::class -> Sphere(this, materialProperties(), coordinator)
             Cylinder::class -> Cylinder(this, materialProperties(), coordinator)
@@ -484,7 +484,7 @@ class MainActivity : AppCompatActivity() {
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
             CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator)
             else -> return
-        }.attach(anchor(), arSceneView.scene, select)
+        }.attach(anchor(), arSceneView.scene, focus)
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
@@ -554,8 +554,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNodeUpdate(node: Nodes) {
-        when (nodeBottomSheetBehavior.state) {
-            STATE_HIDDEN -> Unit
+        when {
+            node != coordinator.selectedNode || node != coordinator.focusedNode || nodeBottomSheetBehavior.state == STATE_HIDDEN -> Unit
             else -> {
                 nodeStatus.setImageResource(node.statusIcon())
                 nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
@@ -570,33 +570,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun onNodeSelected(old: Nodes?, new: Nodes?) {
+    private fun onNodeSelected(old: Nodes? = coordinator.selectedNode, new: Nodes?) {
         old?.onNodeUpdate = null
-        if (new == null) {
+        new?.onNodeUpdate = ::onNodeUpdate
+    }
+
+    private fun onNodeFocused(node: Nodes?) {
+        if (node == null) {
             nodeBottomSheetBehavior.state = STATE_HIDDEN
             if (restoreMainBottomSheetExpandedState) {
                 restoreMainBottomSheetExpandedState = false
                 mainBottomSheetBehavior.state = STATE_EXPANDED
             }
-        } else {
-            nodeName.text = new.name
-            nodeCopy.visibility = if (new is CloudAnchor) VISIBLE else GONE
-            (new as? MaterialNode)?.properties?.run {
+        } else if (node == coordinator.selectedNode) {
+            nodeName.text = node.name
+            nodeCopy.visibility = if (node is CloudAnchor) VISIBLE else GONE
+            (node as? MaterialNode)?.properties?.run {
                 nodeColorValue.setColor(color)
                 nodeMetallicValue.progress = metallic
                 nodeRoughnessValue.progress = roughness
                 nodeReflectanceValue.progress = reflectance
             }
-            val materialVisibility = if (new is MaterialNode) VISIBLE else GONE
+            val materialVisibility = if (node is MaterialNode) VISIBLE else GONE
             setOfMaterialViews.forEach { it.visibility = materialVisibility }
-            val cloudAnchorVisibility = if (new is CloudAnchor) VISIBLE else GONE
+            val cloudAnchorVisibility = if (node is CloudAnchor) VISIBLE else GONE
             setOfCloudAnchorViews.forEach { it.visibility = cloudAnchorVisibility }
             nodeBottomSheetBehavior.state = STATE_EXPANDED
             if (mainBottomSheetBehavior.state != STATE_COLLAPSED) {
                 mainBottomSheetBehavior.state = STATE_COLLAPSED
                 restoreMainBottomSheetExpandedState = true
             }
-            new.onNodeUpdate = ::onNodeUpdate
         }
     }
 
