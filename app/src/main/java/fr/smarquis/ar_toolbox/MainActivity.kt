@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         nodeCopy.setOnClickListener { (coordinator.selectedNode as? CloudAnchor)?.copyToClipboard(this) }
-        nodeDelete.setOnClickListener { (coordinator.selectedNode as? Nodes)?.detach() }
+        nodeDelete.setOnClickListener { coordinator.selectedNode?.detach() }
 
         nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.update { color = it } }
         nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic

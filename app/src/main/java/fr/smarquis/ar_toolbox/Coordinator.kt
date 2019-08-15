@@ -16,6 +16,8 @@ class Coordinator(
     context.resources.displayMetrics, Footprint(context)
 ) {
 
+    override fun getSelectedNode(): Nodes? = super.getSelectedNode() as? Nodes
+
     private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
         override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
             onArTap(motionEvent)
@@ -39,7 +41,7 @@ class Coordinator(
     }
 
     override fun selectNode(node: BaseTransformableNode?): Boolean {
-        val old = selectedNode as Nodes?
+        val old = selectedNode
         when (node) {
             is Nodes -> {
                 return super.selectNode(node).also { selected ->

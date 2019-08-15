@@ -73,6 +73,8 @@ sealed class Nodes(
 
     internal fun anchor(): Anchor? = (parent as? AnchorNode)?.anchor
 
+    override fun getTransformationSystem(): Coordinator = super.getTransformationSystem() as Coordinator
+
     override fun setRenderable(renderable: Renderable?) {
         super.setRenderable(renderable?.apply {
             isShadowCaster = Settings.Shadows.get()
