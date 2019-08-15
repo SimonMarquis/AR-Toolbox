@@ -8,6 +8,7 @@ import android.net.Uri
 import android.text.Layout
 import android.text.style.AlignmentSpan
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.getSystemService
@@ -192,7 +193,7 @@ class Layout(
 
     init {
         ViewRenderable.builder()
-            .setView(context.applicationContext, R.layout.view_renderable_layout)
+            .setView(ContextThemeWrapper(context.applicationContext, R.style.Theme_MaterialComponents), R.layout.view_renderable_layout)
             .setSizer(FixedHeightViewSizer(HEIGHT)).build()
             .thenAccept { renderable = it }
     }
