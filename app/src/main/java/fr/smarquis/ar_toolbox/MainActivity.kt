@@ -22,6 +22,7 @@ import android.view.View
 import android.view.View.*
 import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -29,7 +30,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
-import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.textfield.TextInputEditText
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var videoRecorder: VideoRecorder
 
     private val coordinator by lazy { Coordinator(this, onArTap = ::onArTap, onNodeSelected = ::onNodeSelected) }
-    private val model by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
+    private val model: MainViewModel by viewModels()
 
     private val setOfMaterialViews by lazy {
         setOf(
