@@ -217,6 +217,8 @@ class Layout(
     override fun onUpdate(frameTime: FrameTime) {
         super.onUpdate(frameTime)
         // Always face the user
+        // Buggy when dragging because TranslationController already handles it's own rotation on each update.
+        if (isTransforming) return /*Prevent infinite loop*/
         val camera = scene?.camera ?: return
         val direction = Vector3.subtract(camera.worldPosition, worldPosition)
         worldRotation = Quaternion.lookRotation(direction, Vector3.up())
