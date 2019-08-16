@@ -44,13 +44,13 @@ class Coordinator(
     override fun selectNode(node: BaseTransformableNode?): Boolean {
         val old = selectedNode
         when (node) {
+            selectedNode -> return true /*ignored*/
             is Nodes -> {
                 return super.selectNode(node).also { selected ->
-                    if (selected) {
-                        onNodeSelected(old, node)
-                        /*transfer current focus*/
-                        if (old != null && old == focusedNode) focusNode(node)
-                    }
+                    if (!selected) return@also
+                    onNodeSelected(old, node)
+                    /*transfer current focus*/
+                    if (old != null && old == focusedNode) focusNode(node)
                 }
             }
             null -> {
@@ -67,9 +67,9 @@ class Coordinator(
         private set
 
     fun focusNode(node: Nodes?) {
-        if (focusedNode == node) return /*ignored*/
-        if (selectedNode != node) selectNode(node)
+        if (node == focusedNode) return /*ignored*/
         focusedNode = node
+        if (node != null && node != selectedNode) selectNode(node)
         onNodeFocused(node)
     }
 

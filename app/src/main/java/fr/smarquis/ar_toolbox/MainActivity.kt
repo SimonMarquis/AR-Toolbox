@@ -270,29 +270,23 @@ class MainActivity : AppCompatActivity() {
             }
         })
         nodeBottomSheetBehavior.state = STATE_HIDDEN
-        nodeHeader.setOnClickListener {
-            if (coordinator.selectedNode == null) {
-                nodeBottomSheetBehavior.state = STATE_HIDDEN
-            } else {
-                coordinator.selectNode(null)
-            }
-        }
-        nodeCopy.setOnClickListener { (coordinator.selectedNode as? CloudAnchor)?.copyToClipboard(this) }
-        nodeDelete.setOnClickListener { coordinator.selectedNode?.detach() }
+        nodeHeader.setOnClickListener { coordinator.selectNode(null) }
+        nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
+        nodeDelete.setOnClickListener { coordinator.focusedNode?.detach() }
 
-        nodeColorValue.setOnColorChangeListener { selectedMaterialNode()?.update { color = it } }
+        nodeColorValue.setOnColorChangeListener { focusedMaterialNode()?.update { color = it } }
         nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
-        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { metallic = it } })
+        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { metallic = it } })
         nodeRoughnessValue.progress = MaterialProperties.DEFAULT.roughness
-        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { roughness = it } })
+        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { roughness = it } })
         nodeReflectanceValue.progress = MaterialProperties.DEFAULT.reflectance
-        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { selectedMaterialNode()?.update { reflectance = it } })
+        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { reflectance = it } })
     }
 
-    private fun selectedMaterialNode() = (coordinator.selectedNode as? MaterialNode)
+    private fun focusedMaterialNode() = (coordinator.focusedNode as? MaterialNode)
 
     private fun materialProperties() = MaterialProperties(
-        if (selectedMaterialNode() != null) nodeColorValue.getColor() else colorValue.getColor(),
+        if (focusedMaterialNode() != null) nodeColorValue.getColor() else colorValue.getColor(),
         nodeMetallicValue.progress,
         nodeRoughnessValue.progress,
         nodeReflectanceValue.progress
