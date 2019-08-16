@@ -193,7 +193,7 @@ class Cube(
 class Layout(
     context: Context,
     coordinator: Coordinator
-) : Nodes("Layout", coordinator) {
+) : Nodes("Layout", coordinator), Footprint.Invisible {
 
     companion object {
         private const val HEIGHT = 0.3F

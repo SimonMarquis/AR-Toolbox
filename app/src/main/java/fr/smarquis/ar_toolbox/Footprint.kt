@@ -8,6 +8,8 @@ import com.google.ar.sceneform.ux.SelectionVisualizer
 
 class Footprint(context: Context) : SelectionVisualizer {
 
+    interface Invisible
+
     private val node: Node = Node()
 
     var isEnabled: Boolean
@@ -27,10 +29,16 @@ class Footprint(context: Context) : SelectionVisualizer {
     }
 
     override fun applySelectionVisual(node: BaseTransformableNode) {
-        this.node.setParent(node)
+        when (node) {
+            is Invisible -> return
+            else -> this.node.setParent(node)
+        }
     }
 
     override fun removeSelectionVisual(node: BaseTransformableNode) {
-        this.node.setParent(null)
+        when (node) {
+            is Invisible -> return
+            else -> this.node.setParent(null)
+        }
     }
 }
