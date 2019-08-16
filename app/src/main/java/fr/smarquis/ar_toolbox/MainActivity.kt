@@ -471,7 +471,7 @@ class MainActivity : AppCompatActivity() {
                 trackable is Point -> true
                 else -> false
             }
-        }?.let { createNodeAndAddToScene(anchor = { it.createAnchor() }) }
+        }?.let { createNodeAndAddToScene(anchor = { it.createAnchor() }) } ?: coordinator.selectNode(null)
     }
 
     private fun createNodeAndAddToScene(anchor: () -> Anchor, focus: Boolean = true) {
