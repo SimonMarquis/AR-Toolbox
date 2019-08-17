@@ -69,7 +69,7 @@ apply plugin: 'com.google.ar.sceneform.plugin'
 
 sceneform.asset('sampledata/andy/andy.obj',
         'default',
-        'sampledata/models/andy.sfa',
+        'sampledata/andy/andy.sfa',
         'src/main/res/raw/andy')
 
 sceneform.asset('sampledata/rocket/rocket.obj',
