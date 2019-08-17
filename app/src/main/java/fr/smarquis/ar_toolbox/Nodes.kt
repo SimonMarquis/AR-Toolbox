@@ -40,6 +40,8 @@ sealed class Nodes(
     coordinator: Coordinator
 ) : TransformableNode(coordinator) {
 
+    interface FacingCamera
+
     companion object {
 
         private const val PLANE_ANCHORING_DISTANCE = 2F
@@ -69,6 +71,7 @@ sealed class Nodes(
             minScale = 0.25F
             maxScale = 5F
         }
+        if (this is FacingCamera) rotationController.isEnabled = false
     }
 
     var onNodeUpdate: ((Nodes) -> Any)? = null
@@ -86,6 +89,17 @@ sealed class Nodes(
 
     override fun onUpdate(frameTime: FrameTime) {
         onNodeUpdate?.invoke(this)
+        if (this is FacingCamera) {
+            facingCamera()
+        }
+    }
+
+    private fun facingCamera() {
+        // Buggy when dragging because TranslationController already handles it's own rotation on each update.
+        if (isTransforming) return /*Prevent infinite loop*/
+        val camera = scene?.camera ?: return
+        val direction = Vector3.subtract(camera.worldPosition, worldPosition)
+        worldRotation = Quaternion.lookRotation(direction, Vector3.up())
     }
 
     open fun attach(anchor: Anchor, scene: Scene, focus: Boolean = false) {
@@ -193,7 +207,7 @@ class Cube(
 class Layout(
     context: Context,
     coordinator: Coordinator
-) : Nodes("Layout", coordinator), Footprint.Invisible {
+) : Nodes("Layout", coordinator), Footprint.Invisible, Nodes.FacingCamera {
 
     companion object {
         private const val HEIGHT = 0.3F
@@ -212,16 +226,6 @@ class Layout(
             isShadowCaster = false
             isShadowReceiver = false
         }
-    }
-
-    override fun onUpdate(frameTime: FrameTime) {
-        super.onUpdate(frameTime)
-        // Always face the user
-        // Buggy when dragging because TranslationController already handles it's own rotation on each update.
-        if (isTransforming) return /*Prevent infinite loop*/
-        val camera = scene?.camera ?: return
-        val direction = Vector3.subtract(camera.worldPosition, worldPosition)
-        worldRotation = Quaternion.lookRotation(direction, Vector3.up())
     }
 
 }
