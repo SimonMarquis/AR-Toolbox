@@ -145,7 +145,7 @@ class Sphere(
 
     init {
         val color = properties.color.toArColor()
-        makeOpaqueWithColor(context, color)
+        makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeSphere(RADIUS, CENTER, it) }
     }
 
@@ -165,7 +165,7 @@ class Cylinder(
 
     init {
         val color = properties.color.toArColor()
-        makeOpaqueWithColor(context, color)
+        makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeCylinder(RADIUS, HEIGHT, CENTER, it) }
     }
 
@@ -184,7 +184,7 @@ class Cube(
 
     init {
         val color = properties.color.toArColor()
-        makeOpaqueWithColor(context, color)
+        makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
     }
 
@@ -233,7 +233,7 @@ class Andy(
 
     init {
         ModelRenderable.builder()
-            .setSource(context, R.raw.andy)
+            .setSource(context.applicationContext, R.raw.andy)
             .build()
             .thenAccept { renderable = it }
     }
@@ -288,7 +288,7 @@ class Drawing(
             val anchor = hit?.createAnchor() ?: session.createAnchor(pose)
 
             return Drawing(fromTouch, plane, properties, coordinator).apply {
-                makeOpaqueWithColor(context, properties.color.toArColor()).thenAccept { material = it }
+                makeOpaqueWithColor(context.applicationContext, properties.color.toArColor()).thenAccept { material = it }
                 attach(anchor, scene)
                 extend(x, y)
             }
@@ -380,7 +380,7 @@ class Augmented(
         private val references: MutableMap<AugmentedImage, Nodes> = mutableMapOf()
 
         fun target(context: Context) = try {
-            context.assets.open("augmented_image_target.png")
+            context.applicationContext.assets.open("augmented_image_target.png")
         } catch (e: Exception) {
             null
         }?.let { BitmapFactory.decodeStream(it) }
@@ -389,7 +389,7 @@ class Augmented(
             val node = references[image]
             when (image.trackingState) {
                 TRACKING -> if (node == null && image.trackingMethod == FULL_TRACKING) {
-                    return Augmented(context, image, coordinator)
+                    return Augmented(context.applicationContext, image, coordinator)
                 }
                 STOPPED -> node?.detach()
                 PAUSED -> Unit
@@ -402,7 +402,7 @@ class Augmented(
 
     init {
         ModelRenderable.builder()
-            .setSource(context, R.raw.rocket)
+            .setSource(context.applicationContext, R.raw.rocket)
             .build()
             .thenAccept {
                 renderable = it
@@ -435,7 +435,7 @@ class CloudAnchor(
             if (ar.arFrame?.camera?.trackingState != TRACKING) return null
             val session = ar.session ?: return null
             val anchor = session.resolveCloudAnchor(id)
-            return CloudAnchor(context, session, coordinator).also { it.attach(anchor, ar.scene) }
+            return CloudAnchor(context.applicationContext, session, coordinator).also { it.attach(anchor, ar.scene) }
         }
 
     }
