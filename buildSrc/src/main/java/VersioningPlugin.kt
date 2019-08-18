@@ -106,9 +106,10 @@ class VersioningPlugin : Plugin<Project> {
             val renamingTask = project.tasks.register("${bundleTask.name}Renaming") { task ->
                 task.doLast {
                     val directory = "${project.buildDir}/outputs/bundle/${variant.name}"
-                    val aab = project.file("$directory/${variant.applicationId}-${version.name()}-${variant.baseName}.aab")
-                    project.fileTree(directory) { it.include("*.aab") }.first().renameTo(aab)
-                    project.logger.lifecycle(aab.name)
+                    val aab = project.fileTree(directory) { it.include("*.aab") }.firstOrNull() ?: return@doLast
+                    val filename = "${variant.applicationId}-${version.name()}-${variant.baseName}.aab"
+                    aab.renameTo(project.file("$directory/$filename"))
+                    project.logger.lifecycle(filename)
                 }
             }
             bundleTask.finalizedBy(renamingTask)
