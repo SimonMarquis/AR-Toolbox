@@ -4,6 +4,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.net.Uri
 import android.text.Layout
 import android.text.style.AlignmentSpan
@@ -71,6 +72,7 @@ sealed class Nodes(
             minScale = 0.25F
             maxScale = 5F
         }
+        @Suppress("LeakingThis")
         if (this is FacingCamera) rotationController.isEnabled = false
     }
 
@@ -517,6 +519,62 @@ class CloudAnchor(
             }
         }
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+}
+
+class Video(
+    val context: Context,
+    coordinator: Coordinator
+) : Nodes("Video", coordinator), MediaPlayer.OnVideoSizeChangedListener {
+
+    private var mediaPlayer: MediaPlayer? = null
+    private val texture = ExternalTexture()
+    /* Use a child node to keep the video dimensions independent of scaling */
+    private val video: Node = Node().apply { setParent(this@Video) }
+
+    init {
+        ModelRenderable.builder()
+            .setSource(context.applicationContext, R.raw.chroma_key_video)
+            .build()
+            .thenAccept {
+                it.material.setExternalTexture("videoTexture", texture)
+                it.material.setFloat4("keyColor", Color(0.1843f, 1.0f, 0.098f))
+                video.renderable = it
+            }
+    }
+
+    override fun onActivate() {
+        mediaPlayer = MediaPlayer.create(context.applicationContext, R.raw.video).apply {
+            isLooping = true
+            setSurface(texture.surface)
+            setOnVideoSizeChangedListener(this@Video)
+            start()
+        }
+    }
+
+    fun isPlaying(): Boolean = mediaPlayer?.isPlaying ?: false
+
+    fun toggle() {
+        mediaPlayer?.let {
+            if (it.isPlaying) it.pause() else it.start()
+        }
+    }
+
+    override fun onDeactivate() {
+        mediaPlayer?.setOnVideoSizeChangedListener(null)
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    override fun onVideoSizeChanged(mp: MediaPlayer, width: Int, height: Int) {
+        if (width == 0 || height == 0) return
+        mp.setOnVideoSizeChangedListener(null)
+        video.localScale = when {
+            width > height -> Vector3(1F, height / width.toFloat(), 1F)
+            width < height -> Vector3(width / height.toFloat(), 1F, 1F)
+            else -> Vector3.one()
+        }
     }
 
 }

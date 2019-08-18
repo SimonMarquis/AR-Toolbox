@@ -1,0 +1,38 @@
+{
+  materials: [
+    {
+      name: 'DefaultMaterial',
+      parameters: [
+        {
+          videoTexture: {
+            external_path: 'MISSING_PATH',
+          },
+        },
+        {
+          keyColor: [
+            0,
+            0,
+            0,
+            0,
+          ],
+        },
+        {
+          disableChromaKey: false,
+        },
+      ],
+      source: 'sampledata/chroma_key_video/chroma_key_video_material.mat',
+    },
+  ],
+  model: {
+    attributes: [
+      'Position',
+      'TexCoord',
+      'Orientation',
+    ],
+    collision: {},
+    file: 'sampledata/chroma_key_video/chroma_key_video.obj',
+    name: 'chroma_key_video',
+    recenter: 'root',
+  },
+  version: '0.54:2',
+}

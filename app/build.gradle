@@ -76,3 +76,8 @@ sceneform.asset('sampledata/rocket/rocket.obj',
         'default',
         'sampledata/rocket/rocket.sfa',
         'src/main/res/raw/rocket')
+
+sceneform.asset('sampledata/chroma_key_video/chroma_key_video.obj',
+        'sampledata/chroma_key_video/chroma_key_video_material.mat',
+        'sampledata/chroma_key_video/chroma_key_video.sfa',
+        'src/main/res/raw/chroma_key_video')

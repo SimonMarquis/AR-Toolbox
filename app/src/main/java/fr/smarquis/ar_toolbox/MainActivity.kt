@@ -232,6 +232,7 @@ class MainActivity : AppCompatActivity() {
             modelCube.isSelected = it == Cube::class
             modelView.isSelected = it == Layout::class
             modelAndy.isSelected = it == Andy::class
+            modelVideo.isSelected = it == Video::class
             modelDrawing.isSelected = it == Drawing::class
             modelLink.isSelected = it == Link::class
             modelCloudAnchor.isSelected = it == CloudAnchor::class
@@ -244,6 +245,7 @@ class MainActivity : AppCompatActivity() {
         modelView.setOnClickListener { model.selection.value = Layout::class }
         modelDrawing.setOnClickListener { model.selection.value = Drawing::class }
         modelAndy.setOnClickListener { model.selection.value = Andy::class }
+        modelVideo.setOnClickListener { model.selection.value = Video::class }
         modelLink.setOnClickListener {
             promptExternalModel()
         }
@@ -272,6 +274,7 @@ class MainActivity : AppCompatActivity() {
         nodeBottomSheetBehavior.state = STATE_HIDDEN
         nodeHeader.setOnClickListener { coordinator.selectNode(null) }
         nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
+        nodePlayPause.setOnClickListener { (coordinator.focusedNode as? Video)?.toggle() }
         nodeDelete.setOnClickListener { coordinator.focusedNode?.detach() }
 
         nodeColorValue.setOnColorChangeListener { focusedMaterialNode()?.update { color = it } }
@@ -475,6 +478,7 @@ class MainActivity : AppCompatActivity() {
             Cube::class -> Cube(this, materialProperties(), coordinator)
             Layout::class -> Layout(this, coordinator)
             Andy::class -> Andy(this, coordinator)
+            Video::class -> Video(this, coordinator)
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
             CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator)
             else -> return
@@ -554,6 +558,7 @@ class MainActivity : AppCompatActivity() {
                 nodeStatus.setImageResource(node.statusIcon())
                 nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
                 nodeCopy.isEnabled = (node as? CloudAnchor)?.id() != null
+                nodePlayPause.isActivated = (node as? Video)?.isPlaying() == true
                 nodeDelete.isEnabled = !node.isTransforming
                 nodePositionValue.text = node.worldPosition.format(this)
                 nodeRotationValue.text = node.worldRotation.format(this)
@@ -579,6 +584,7 @@ class MainActivity : AppCompatActivity() {
         } else if (node == coordinator.selectedNode) {
             nodeName.text = node.name
             nodeCopy.visibility = if (node is CloudAnchor) VISIBLE else GONE
+            nodePlayPause.visibility = if (node is Video) VISIBLE else GONE
             (node as? MaterialNode)?.properties?.run {
                 nodeColorValue.setColor(color)
                 nodeMetallicValue.progress = metallic
