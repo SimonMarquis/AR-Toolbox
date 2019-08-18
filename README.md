@@ -18,7 +18,7 @@
 
 - **Scene debug**: Camera position, Camera rotation, Anchors, Planes, Points
 - **[Scene configuration](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Sunlight, Shadows, Plane renderer, Selection visualizer
-- **[3D models](https://developers.google.com/ar/develop/java/sceneform/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF
+- **[3D models](https://developers.google.com/ar/develop/java/sceneform/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF, Video
 - **[Material properties](https://developers.google.com/ar/develop/java/sceneform/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
 - **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
