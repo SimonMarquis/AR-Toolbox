@@ -18,6 +18,14 @@
 ## 1.5.0
 > 2019.08.18
 
+- 📦 Update arcore & sceneform 1.11.0
+- ⚡ 60 Hz rendering on supported devices
+- 🎞️ Video node with chroma keying
+- 🛠️ Improve gesture handling and bottomsheet display
+- 👆 Tap outside to deselect a node
+- 👁️ Layout node always facing the camera
+- 🐛 Fix Layout node crash and invisible Cube node 
+
 ## 1.4.0
 > 2019.07.28
 
