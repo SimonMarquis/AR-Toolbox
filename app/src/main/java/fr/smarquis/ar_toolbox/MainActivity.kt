@@ -341,7 +341,7 @@ class MainActivity : AppCompatActivity() {
             model.installRequested = false
             val session = Session(applicationContext, emptySet())
             session.configure(Config(session).apply {
-                lightEstimationMode = Config.LightEstimationMode.AMBIENT_INTENSITY
+                lightEstimationMode = Config.LightEstimationMode.DISABLED
                 planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
                 updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
                 cloudAnchorMode = Config.CloudAnchorMode.ENABLED
