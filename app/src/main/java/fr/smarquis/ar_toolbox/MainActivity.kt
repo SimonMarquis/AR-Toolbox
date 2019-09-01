@@ -476,9 +476,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
-        val camera = arSceneView.arFrame?.camera
+        val frame = arSceneView.arFrame
+        val camera = frame?.camera
         val state = camera?.trackingState
         val reason = camera?.trackingFailureReason
+
+        onArUpdateStatusText(state, reason)
+        onArUpdateStatusIcon(state, reason)
+        onArUpdateBottomSheet(state)
+        onArUpdateDrawing()
+        onArUpdateAugmentedImages()
+    }
+
+    private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) {
         trackingTextView.setText(
             when (state) {
                 TRACKING -> R.string.tracking_success
@@ -494,6 +504,9 @@ class MainActivity : AppCompatActivity() {
                 null -> 0
             }
         )
+    }
+
+    private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) {
         trackingImageView.setImageResource(
             when (state) {
                 TRACKING -> android.R.drawable.presence_online
@@ -507,8 +520,10 @@ class MainActivity : AppCompatActivity() {
                 null -> 0
             }
         )
+    }
 
-
+    private fun onArUpdateBottomSheet(state: TrackingState?) {
+        addImageView.isEnabled = state == TRACKING
         when (mainBottomSheetBehavior.state) {
             STATE_HIDDEN, STATE_COLLAPSED -> Unit
             else -> {
@@ -519,9 +534,9 @@ class MainActivity : AppCompatActivity() {
                 sceneValue.text = arSceneView.session?.format(this)
             }
         }
+    }
 
-        addImageView.isEnabled = state == TRACKING
-
+    private fun onArUpdateDrawing() {
         if (shouldHandleDrawing()) {
             val x = arSceneView.width / 2F
             val y = arSceneView.height / 2F
@@ -533,7 +548,9 @@ class MainActivity : AppCompatActivity() {
                 else -> Unit
             }
         }
+    }
 
+    private fun onArUpdateAugmentedImages() {
         arSceneView.arFrame?.getUpdatedTrackables(AugmentedImage::class.java)?.forEach {
             Augmented.update(this, it, coordinator, settings)?.apply {
                 attach(it.createAnchor(it.centerPose), arSceneView.scene)
