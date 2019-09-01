@@ -1,44 +1,60 @@
 package fr.smarquis.ar_toolbox
 
+import android.view.MenuItem
 import com.google.ar.sceneform.ArSceneView
 import java.util.concurrent.atomic.AtomicBoolean
 
 fun AtomicBoolean.toggle() = set(!get())
 
-sealed class Settings {
+class Settings {
 
     object Sunlight : AtomicBoolean(true) {
 
-        fun update(arSceneView: ArSceneView) {
-            arSceneView.scene.sunlight?.isEnabled = get()
+        fun applyTo(arSceneView: ArSceneView? = null, menuItem: MenuItem? = null) {
+            with(get()) {
+                arSceneView?.scene?.sunlight?.isEnabled = this
+                menuItem?.isChecked = this
+            }
         }
+
     }
 
     object Shadows : AtomicBoolean(true) {
-        fun update(arSceneView: ArSceneView) {
-            val get = get()
-            arSceneView.scene.callOnHierarchy {
-                it.renderable?.apply {
-                    isShadowCaster = get
-                    isShadowReceiver = get
+
+        fun applyTo(arSceneView: ArSceneView? = null, menuItem: MenuItem? = null) {
+            with(get()) {
+                arSceneView?.scene?.callOnHierarchy {
+                    it.renderable?.apply {
+                        isShadowCaster = this@with
+                        isShadowReceiver = this@with
+                    }
                 }
+                menuItem?.isChecked = this
             }
         }
+
     }
 
     object Planes : AtomicBoolean(true) {
-        fun update(arSceneView: ArSceneView) {
-            arSceneView.planeRenderer.isEnabled = get()
-        }
-    }
 
+        fun applyTo(arSceneView: ArSceneView? = null, menuItem: MenuItem? = null) {
+            with(get()) {
+                arSceneView?.planeRenderer?.isEnabled = this
+                menuItem?.isChecked = this
+            }
+        }
+
+    }
 
     object Selection : AtomicBoolean(true) {
 
-        fun update(selectionVisualizer: Footprint) {
-            selectionVisualizer.isEnabled = get()
+        fun applyTo(selectionVisualizer: Footprint? = null, menuItem: MenuItem? = null) {
+            with(get()) {
+                selectionVisualizer?.isEnabled = this
+                menuItem?.isChecked = this
+            }
         }
-    }
 
+    }
 
 }

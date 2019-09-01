@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:id="@+id/menu_group_1">
         <item
@@ -34,18 +35,26 @@
         <item
             android:id="@+id/menu_item_sunlight"
             android:checkable="true"
-            android:title="@string/menu_item_sunlight" />
+            android:title="@string/menu_item_sunlight"
+            app:actionViewClass="android.view.View"
+            app:showAsAction="collapseActionView" />
         <item
             android:id="@+id/menu_item_shadows"
             android:checkable="true"
-            android:title="@string/menu_item_shadows" />
+            android:title="@string/menu_item_shadows"
+            app:actionViewClass="android.view.View"
+            app:showAsAction="collapseActionView" />
         <item
             android:id="@+id/menu_item_plane_renderer"
             android:checkable="true"
-            android:title="@string/menu_item_plane_renderer" />
+            android:title="@string/menu_item_plane_renderer"
+            app:actionViewClass="android.view.View"
+            app:showAsAction="collapseActionView" />
         <item
             android:id="@+id/menu_item_selection_visualizer"
             android:checkable="true"
-            android:title="@string/menu_item_selection_visualizer" />
+            android:title="@string/menu_item_selection_visualizer"
+            app:actionViewClass="android.view.View"
+            app:showAsAction="collapseActionView" />
     </group>
 </menu>

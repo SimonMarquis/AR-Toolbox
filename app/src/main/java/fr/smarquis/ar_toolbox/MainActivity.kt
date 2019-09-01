@@ -42,6 +42,7 @@ import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
+import fr.smarquis.ar_toolbox.Settings.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main_body.*
@@ -183,27 +184,28 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_quality_720p -> videoRecorder.start(get(QUALITY_720P))
                 R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
                 R.id.menu_item_resolve_cloud_anchor -> promptCloudAnchorId()
-                R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node ->
-                    (node as? Nodes)?.detach()
+                R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node -> (node as? Nodes)?.detach() }
+                R.id.menu_item_sunlight -> {
+                    Sunlight.toggle()
+                    Sunlight.applyTo(arSceneView, it)
                 }
-                R.id.menu_item_sunlight -> Settings.Sunlight.apply {
-                    toggle()
-                    update(arSceneView)
+                R.id.menu_item_shadows -> {
+                    Shadows.toggle()
+                    Shadows.applyTo(arSceneView, it)
                 }
-                R.id.menu_item_shadows -> Settings.Shadows.apply {
-                    toggle()
-                    update(arSceneView)
+                R.id.menu_item_plane_renderer -> {
+                    Planes.toggle()
+                    Planes.applyTo(arSceneView, it)
                 }
-                R.id.menu_item_plane_renderer -> Settings.Planes.apply {
-                    toggle()
-                    update(arSceneView)
-                }
-                R.id.menu_item_selection_visualizer -> Settings.Selection.apply {
-                    toggle()
-                    update(coordinator.selectionVisualizer)
+                R.id.menu_item_selection_visualizer -> {
+                    Selection.toggle()
+                    Selection.applyTo(coordinator.selectionVisualizer, it)
                 }
             }
-            true
+            when (it.itemId) {
+                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer -> false
+                else -> true
+            }
         }
         (recordImageView.drawable as? Animatable)?.start()
         recordImageView.setOnClickListener {
@@ -218,10 +220,10 @@ class MainActivity : AppCompatActivity() {
                 findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
                 findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
                 findItem(R.id.menu_item_clean_up_scene).isVisible = arSceneView.scene.findInHierarchy { it is Nodes } != null
-                findItem(R.id.menu_item_sunlight).isChecked = Settings.Sunlight.get()
-                findItem(R.id.menu_item_shadows).isChecked = Settings.Shadows.get()
-                findItem(R.id.menu_item_plane_renderer).isChecked = Settings.Planes.get()
-                findItem(R.id.menu_item_selection_visualizer).isChecked = Settings.Selection.get()
+                findItem(R.id.menu_item_sunlight).isChecked = Sunlight.get()
+                findItem(R.id.menu_item_shadows).isChecked = Shadows.get()
+                findItem(R.id.menu_item_plane_renderer).isChecked = Planes.get()
+                findItem(R.id.menu_item_selection_visualizer).isChecked = Selection.get()
             }
             settings.show()
         }
@@ -316,10 +318,10 @@ class MainActivity : AppCompatActivity() {
             }
             recordImageView.visibility = if (isRecording) VISIBLE else GONE
         }
-        Settings.Sunlight.update(arSceneView)
-        Settings.Shadows.update(arSceneView)
-        Settings.Planes.update(arSceneView)
-        Settings.Selection.update(coordinator.selectionVisualizer)
+        Sunlight.applyTo(arSceneView)
+        Shadows.applyTo(arSceneView)
+        Planes.applyTo(arSceneView)
+        Selection.applyTo(coordinator.selectionVisualizer)
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {
