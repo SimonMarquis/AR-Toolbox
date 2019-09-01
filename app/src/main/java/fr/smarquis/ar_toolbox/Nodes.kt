@@ -142,8 +142,7 @@ sealed class MaterialNode(
     }
 
     fun update(block: (MaterialProperties.() -> Unit) = {}) {
-        block(properties)
-        properties.applyTo(renderable?.material ?: return)
+        properties.update(renderable?.material, block)
     }
 
 }
@@ -304,7 +303,7 @@ class Drawing(
     private val line = LineSimplifier()
     private var material: Material? = null
         set(value) {
-            field = value?.apply { properties.applyTo(this) }
+            field = value?.apply { properties.update(this) }
             render()
         }
 

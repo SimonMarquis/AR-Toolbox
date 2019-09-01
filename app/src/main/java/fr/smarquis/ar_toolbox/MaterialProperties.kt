@@ -23,12 +23,14 @@ class MaterialProperties(
 
     }
 
-    fun applyTo(material: Material) {
-        material.apply {
+    fun update(material: Material?, block: (MaterialProperties.() -> Unit) = {}) {
+        block(this)
+        material?.apply {
             setFloat3(MATERIAL_COLOR, color.toArColor())
             setFloat(MATERIAL_METALLIC, metallic / 100F)
             setFloat(MATERIAL_ROUGHNESS, roughness / 100F)
             setFloat(MATERIAL_REFLECTANCE, reflectance / 100F)
         }
     }
+
 }
