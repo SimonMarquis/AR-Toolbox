@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <group android:id="@+id/menu_group_1">
         <item
             android:id="@+id/menu_item_screenshot"
@@ -24,6 +23,8 @@
                     android:title="@string/menu_item_quality_480p" />
             </menu>
         </item>
+    </group>
+    <group android:id="@+id/menu_group_2">
         <item
             android:id="@+id/menu_item_resolve_cloud_anchor"
             android:title="@string/menu_item_resolve_cloud_anchor" />
@@ -31,30 +32,36 @@
             android:id="@+id/menu_item_clean_up_scene"
             android:title="@string/menu_item_clean_up_scene" />
     </group>
-    <group android:id="@+id/menu_group_2">
+    <group android:id="@+id/menu_group_3">
         <item
-            android:id="@+id/menu_item_sunlight"
-            android:checkable="true"
-            android:title="@string/menu_item_sunlight"
-            app:actionViewClass="android.view.View"
-            app:showAsAction="collapseActionView" />
-        <item
-            android:id="@+id/menu_item_shadows"
-            android:checkable="true"
-            android:title="@string/menu_item_shadows"
-            app:actionViewClass="android.view.View"
-            app:showAsAction="collapseActionView" />
-        <item
-            android:id="@+id/menu_item_plane_renderer"
-            android:checkable="true"
-            android:title="@string/menu_item_plane_renderer"
-            app:actionViewClass="android.view.View"
-            app:showAsAction="collapseActionView" />
-        <item
-            android:id="@+id/menu_item_selection_visualizer"
-            android:checkable="true"
-            android:title="@string/menu_item_selection_visualizer"
-            app:actionViewClass="android.view.View"
-            app:showAsAction="collapseActionView" />
+            android:id="@+id/menu_item_settings"
+            android:title="@string/menu_item_settings">
+            <menu>
+                <item
+                    android:id="@+id/menu_item_sunlight"
+                    android:checkable="true"
+                    android:title="@string/menu_item_sunlight"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_shadows"
+                    android:checkable="true"
+                    android:title="@string/menu_item_shadows"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_plane_renderer"
+                    android:checkable="true"
+                    android:title="@string/menu_item_plane_renderer"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_selection_visualizer"
+                    android:checkable="true"
+                    android:title="@string/menu_item_selection_visualizer"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+            </menu>
+        </item>
     </group>
 </menu>

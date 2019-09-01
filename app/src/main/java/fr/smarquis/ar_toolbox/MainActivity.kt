@@ -214,12 +214,12 @@ class MainActivity : AppCompatActivity() {
         }
         moreImageView.setOnClickListener {
             settings.menu.apply {
-                findItem(R.id.menu_item_record).isVisible = !videoRecorder.isRecording
+                findItem(R.id.menu_item_record).isEnabled = !videoRecorder.isRecording
                 findItem(R.id.menu_item_quality_2160p).isEnabled = hasProfile(QUALITY_2160P)
                 findItem(R.id.menu_item_quality_1080p).isEnabled = hasProfile(QUALITY_1080P)
                 findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
                 findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
-                findItem(R.id.menu_item_clean_up_scene).isVisible = arSceneView.scene.findInHierarchy { it is Nodes } != null
+                findItem(R.id.menu_item_clean_up_scene).isEnabled = arSceneView.scene.findInHierarchy { it is Nodes } != null
                 findItem(R.id.menu_item_sunlight).isChecked = Sunlight.get()
                 findItem(R.id.menu_item_shadows).isChecked = Shadows.get()
                 findItem(R.id.menu_item_plane_renderer).isChecked = Planes.get()
