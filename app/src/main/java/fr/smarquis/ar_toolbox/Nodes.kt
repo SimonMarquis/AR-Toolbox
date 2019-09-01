@@ -38,7 +38,8 @@ import kotlin.reflect.KClass
 
 sealed class Nodes(
     name: String,
-    coordinator: Coordinator
+    coordinator: Coordinator,
+    private val settings: Settings
 ) : TransformableNode(coordinator) {
 
     interface FacingCamera
@@ -84,8 +85,8 @@ sealed class Nodes(
 
     override fun setRenderable(renderable: Renderable?) {
         super.setRenderable(renderable?.apply {
-            isShadowCaster = Settings.Shadows.get()
-            isShadowReceiver = Settings.Shadows.get()
+            isShadowCaster = settings.shadows.get()
+            isShadowReceiver = settings.shadows.get()
         })
     }
 
@@ -134,8 +135,9 @@ sealed class Nodes(
 sealed class MaterialNode(
     name: String,
     val properties: MaterialProperties,
-    coordinator: Coordinator
-) : Nodes(name, coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes(name, coordinator, settings) {
 
     init {
         update()
@@ -150,8 +152,9 @@ sealed class MaterialNode(
 class Sphere(
     context: Context,
     properties: MaterialProperties,
-    coordinator: Coordinator
-) : MaterialNode("Sphere", properties, coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : MaterialNode("Sphere", properties, coordinator, settings) {
 
     companion object {
         private const val RADIUS = 0.05F
@@ -169,8 +172,9 @@ class Sphere(
 class Cylinder(
     context: Context,
     properties: MaterialProperties,
-    coordinator: Coordinator
-) : MaterialNode("Cylinder", properties, coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : MaterialNode("Cylinder", properties, coordinator, settings) {
 
     companion object {
         const val RADIUS = 0.05F
@@ -189,8 +193,9 @@ class Cylinder(
 class Cube(
     context: Context,
     properties: MaterialProperties,
-    coordinator: Coordinator
-) : MaterialNode("Cube", properties, coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : MaterialNode("Cube", properties, coordinator, settings) {
 
     companion object {
         private const val SIZE = 0.1F
@@ -207,8 +212,9 @@ class Cube(
 
 class Layout(
     context: Context,
-    coordinator: Coordinator
-) : Nodes("Layout", coordinator), Footprint.Invisible, Nodes.FacingCamera {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Layout", coordinator, settings), Footprint.Invisible, Nodes.FacingCamera {
 
     companion object {
         private const val HEIGHT = 0.3F
@@ -233,8 +239,9 @@ class Layout(
 
 class Andy(
     context: Context,
-    coordinator: Coordinator
-) : Nodes("Andy", coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Andy", coordinator, settings) {
 
     init {
         ModelRenderable.builder()
@@ -251,8 +258,9 @@ class Drawing(
     val isFromTouch: Boolean,
     private val plane: CollisionPlane?,
     properties: MaterialProperties,
-    coordinator: Coordinator
-) : MaterialNode("Drawing", properties, coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : MaterialNode("Drawing", properties, coordinator, settings) {
 
     companion object {
 
@@ -280,7 +288,15 @@ class Drawing(
             }
         }
 
-        fun create(x: Float, y: Float, fromTouch: Boolean, properties: MaterialProperties, ar: ArSceneView, coordinator: Coordinator): Drawing? {
+        fun create(
+            x: Float,
+            y: Float,
+            fromTouch: Boolean,
+            properties: MaterialProperties,
+            ar: ArSceneView,
+            coordinator: Coordinator,
+            settings: Settings
+        ): Drawing? {
             val context = ar.context
             val session = ar.session ?: return null
             val scene = ar.scene ?: return null
@@ -292,7 +308,7 @@ class Drawing(
             val plane = plane(hit)
             val anchor = hit?.createAnchor() ?: session.createAnchor(pose)
 
-            return Drawing(fromTouch, plane, properties, coordinator).apply {
+            return Drawing(fromTouch, plane, properties, coordinator, settings).apply {
                 makeOpaqueWithColor(context.applicationContext, properties.color.toArColor()).thenAccept { material = it }
                 attach(anchor, scene)
                 extend(x, y)
@@ -341,8 +357,9 @@ class Drawing(
 class Link(
     context: Context,
     uri: Uri,
-    coordinator: Coordinator
-) : Nodes("Link", coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Link", coordinator, settings) {
 
     companion object {
 
@@ -377,8 +394,9 @@ class Link(
 class Augmented(
     context: Context,
     private val image: AugmentedImage,
-    coordinator: Coordinator
-) : Nodes("Augmented image", coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Augmented image", coordinator, settings) {
 
     companion object {
 
@@ -390,11 +408,11 @@ class Augmented(
             null
         }?.let { BitmapFactory.decodeStream(it) }
 
-        fun update(context: Context, image: AugmentedImage, coordinator: Coordinator): Augmented? {
+        fun update(context: Context, image: AugmentedImage, coordinator: Coordinator, settings: Settings): Augmented? {
             val node = references[image]
             when (image.trackingState) {
                 TRACKING -> if (node == null && image.trackingMethod == FULL_TRACKING) {
-                    return Augmented(context.applicationContext, image, coordinator)
+                    return Augmented(context.applicationContext, image, coordinator, settings)
                 }
                 STOPPED -> node?.detach()
                 PAUSED -> Unit
@@ -429,18 +447,19 @@ class Augmented(
 class CloudAnchor(
     context: Context,
     private val session: Session,
-    coordinator: Coordinator
-) : Nodes("Cloud Anchor", coordinator) {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Cloud Anchor", coordinator, settings) {
 
     private var lastState: Anchor.CloudAnchorState? = null
 
     companion object {
 
-        fun resolve(id: String, context: Context, ar: ArSceneView, coordinator: Coordinator): CloudAnchor? {
+        fun resolve(id: String, context: Context, ar: ArSceneView, coordinator: Coordinator, settings: Settings): CloudAnchor? {
             if (ar.arFrame?.camera?.trackingState != TRACKING) return null
             val session = ar.session ?: return null
             val anchor = session.resolveCloudAnchor(id)
-            return CloudAnchor(context.applicationContext, session, coordinator).also { it.attach(anchor, ar.scene) }
+            return CloudAnchor(context.applicationContext, session, coordinator, settings).also { it.attach(anchor, ar.scene) }
         }
 
     }
@@ -524,8 +543,9 @@ class CloudAnchor(
 
 class Video(
     val context: Context,
-    coordinator: Coordinator
-) : Nodes("Video", coordinator), MediaPlayer.OnVideoSizeChangedListener {
+    coordinator: Coordinator,
+    settings: Settings
+) : Nodes("Video", coordinator, settings), MediaPlayer.OnVideoSizeChangedListener {
 
     private var mediaPlayer: MediaPlayer? = null
     private val texture = ExternalTexture()

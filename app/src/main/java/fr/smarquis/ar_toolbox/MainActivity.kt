@@ -42,7 +42,6 @@ import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
-import fr.smarquis.ar_toolbox.Settings.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main.*
 import kotlinx.android.synthetic.main.bottom_sheet_main_body.*
@@ -63,6 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     private val coordinator by lazy { Coordinator(this, ::onArTap, ::onNodeSelected, ::onNodeFocused) }
     private val model: MainViewModel by viewModels()
+    private val settings by lazy { Settings.instance(this) }
 
     private val setOfMaterialViews by lazy {
         setOf(
@@ -173,10 +173,10 @@ class MainActivity : AppCompatActivity() {
             createNodeAndAddToScene(anchor = { session.createAnchor(Nodes.defaultPose(arSceneView)) }, focus = false)
         }
 
-        val settings = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)
-        settings.inflate(R.menu.menu_main)
-        MenuCompat.setGroupDividerEnabled(settings.menu, true)
-        settings.setOnMenuItemClickListener {
+        val popupMenu = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)
+        popupMenu.inflate(R.menu.menu_main)
+        MenuCompat.setGroupDividerEnabled(popupMenu.menu, true)
+        popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.menu_item_screenshot -> arSceneView.screenshot()
                 R.id.menu_item_quality_2160p -> videoRecorder.start(get(QUALITY_2160P))
@@ -185,22 +185,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
                 R.id.menu_item_resolve_cloud_anchor -> promptCloudAnchorId()
                 R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node -> (node as? Nodes)?.detach() }
-                R.id.menu_item_sunlight -> {
-                    Sunlight.toggle()
-                    Sunlight.applyTo(arSceneView, it)
-                }
-                R.id.menu_item_shadows -> {
-                    Shadows.toggle()
-                    Shadows.applyTo(arSceneView, it)
-                }
-                R.id.menu_item_plane_renderer -> {
-                    Planes.toggle()
-                    Planes.applyTo(arSceneView, it)
-                }
-                R.id.menu_item_selection_visualizer -> {
-                    Selection.toggle()
-                    Selection.applyTo(coordinator.selectionVisualizer, it)
-                }
+                R.id.menu_item_sunlight -> settings.sunlight.toggle(it, arSceneView)
+                R.id.menu_item_shadows -> settings.shadows.toggle(it, arSceneView)
+                R.id.menu_item_plane_renderer -> settings.planes.toggle(it, arSceneView)
+                R.id.menu_item_selection_visualizer -> settings.selection.toggle(it, coordinator.selectionVisualizer)
             }
             when (it.itemId) {
                 R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer -> false
@@ -213,19 +201,19 @@ class MainActivity : AppCompatActivity() {
             videoRecorder.export()
         }
         moreImageView.setOnClickListener {
-            settings.menu.apply {
+            popupMenu.menu.apply {
                 findItem(R.id.menu_item_record).isEnabled = !videoRecorder.isRecording
                 findItem(R.id.menu_item_quality_2160p).isEnabled = hasProfile(QUALITY_2160P)
                 findItem(R.id.menu_item_quality_1080p).isEnabled = hasProfile(QUALITY_1080P)
                 findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
                 findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
                 findItem(R.id.menu_item_clean_up_scene).isEnabled = arSceneView.scene.findInHierarchy { it is Nodes } != null
-                findItem(R.id.menu_item_sunlight).isChecked = Sunlight.get()
-                findItem(R.id.menu_item_shadows).isChecked = Shadows.get()
-                findItem(R.id.menu_item_plane_renderer).isChecked = Planes.get()
-                findItem(R.id.menu_item_selection_visualizer).isChecked = Selection.get()
+                settings.sunlight.applyTo(findItem(R.id.menu_item_sunlight))
+                settings.shadows.applyTo(findItem(R.id.menu_item_shadows))
+                settings.planes.applyTo(findItem(R.id.menu_item_plane_renderer))
+                settings.selection.applyTo(findItem(R.id.menu_item_selection_visualizer))
             }
-            settings.show()
+            popupMenu.show()
         }
 
         model.selection.observe(this, androidx.lifecycle.Observer {
@@ -304,7 +292,7 @@ class MainActivity : AppCompatActivity() {
                 val x = motionEvent.x
                 val y = motionEvent.y
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> drawing = Drawing.create(x, y, true, materialProperties(), arSceneView, coordinator)
+                    MotionEvent.ACTION_DOWN -> drawing = Drawing.create(x, y, true, materialProperties(), arSceneView, coordinator, settings)
                     MotionEvent.ACTION_MOVE -> drawing?.extend(x, y)
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> drawing = drawing?.deleteIfEmpty().let { null }
                 }
@@ -318,10 +306,10 @@ class MainActivity : AppCompatActivity() {
             }
             recordImageView.visibility = if (isRecording) VISIBLE else GONE
         }
-        Sunlight.applyTo(arSceneView)
-        Shadows.applyTo(arSceneView)
-        Planes.applyTo(arSceneView)
-        Selection.applyTo(coordinator.selectionVisualizer)
+        settings.sunlight.applyTo(arSceneView)
+        settings.shadows.applyTo(arSceneView)
+        settings.planes.applyTo(arSceneView)
+        settings.selection.applyTo(coordinator.selectionVisualizer)
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {
@@ -437,7 +425,7 @@ class MainActivity : AppCompatActivity() {
         val dialog = AlertDialog.Builder(context)
             .setView(view)
             .setPositiveButton(R.string.cloud_anchor_id_resolve) { _, _ ->
-                CloudAnchor.resolve(input.text.toString(), this, arSceneView, coordinator)?.also {
+                CloudAnchor.resolve(input.text.toString(), this, arSceneView, coordinator, settings)?.also {
                     coordinator.focusNode(it)
                 }
             }
@@ -475,14 +463,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun createNodeAndAddToScene(anchor: () -> Anchor, focus: Boolean = true) {
         when (model.selection.value) {
-            Sphere::class -> Sphere(this, materialProperties(), coordinator)
-            Cylinder::class -> Cylinder(this, materialProperties(), coordinator)
-            Cube::class -> Cube(this, materialProperties(), coordinator)
-            Layout::class -> Layout(this, coordinator)
-            Andy::class -> Andy(this, coordinator)
-            Video::class -> Video(this, coordinator)
-            Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator)
-            CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator)
+            Sphere::class -> Sphere(this, materialProperties(), coordinator, settings)
+            Cylinder::class -> Cylinder(this, materialProperties(), coordinator, settings)
+            Cube::class -> Cube(this, materialProperties(), coordinator, settings)
+            Layout::class -> Layout(this, coordinator, settings)
+            Andy::class -> Andy(this, coordinator, settings)
+            Video::class -> Video(this, coordinator, settings)
+            Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator, settings)
+            CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator, settings)
             else -> return
         }.attach(anchor(), arSceneView.scene, focus)
     }
@@ -539,7 +527,7 @@ class MainActivity : AppCompatActivity() {
             val y = arSceneView.height / 2F
             val pressed = addImageView.isPressed
             when {
-                pressed && drawing == null -> drawing = Drawing.create(x, y, false, materialProperties(), arSceneView, coordinator)
+                pressed && drawing == null -> drawing = Drawing.create(x, y, false, materialProperties(), arSceneView, coordinator, settings)
                 pressed && drawing?.isFromTouch == false -> drawing?.extend(x, y)
                 !pressed && drawing?.isFromTouch == false -> drawing = drawing?.deleteIfEmpty().let { null }
                 else -> Unit
@@ -547,7 +535,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         arSceneView.arFrame?.getUpdatedTrackables(AugmentedImage::class.java)?.forEach {
-            Augmented.update(this, it, coordinator)?.apply {
+            Augmented.update(this, it, coordinator, settings)?.apply {
                 attach(it.createAnchor(it.centerPose), arSceneView.scene)
             }
         }
