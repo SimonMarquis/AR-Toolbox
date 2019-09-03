@@ -17,8 +17,6 @@ class Settings(context: Context) {
     val shadows = Shadows(true, "shadows", prefs)
     val planes = Planes(true, "planes", prefs)
     val selection = Selection(true, "selection", prefs)
-    val reticule = Reticule(false, "reticule", prefs)
-    val pointCloud = PointCloud(false, "pointCloud", prefs)
 
     open class AtomicBooleanPref(defaultValue: Boolean, private val key: String, private val prefs: SharedPreferences) {
 
