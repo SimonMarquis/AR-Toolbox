@@ -76,6 +76,8 @@ fun filename(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).form
 
 fun cacheFile(context: Context, extension: String): File = File(context.cacheDir, filename() + extension)
 
+inline fun <reified T> ArSceneView.findNode(): T? = scene.findInHierarchy { it is T } as T?
+
 fun ArSceneView.screenshot() {
     Toast.makeText(context, R.string.screenshot_saving, Toast.LENGTH_LONG).show()
     val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -112,4 +114,3 @@ fun @receiver:ColorInt Int.toArColor(): Color = Color(this)
 fun Pose.translation() = Vector3(tx(), ty(), tz())
 
 fun Pose.rotation() = Quaternion(qx(), qy(), qz(), qw())
-

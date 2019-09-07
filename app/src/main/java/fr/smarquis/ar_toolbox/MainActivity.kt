@@ -189,9 +189,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_shadows -> settings.shadows.toggle(it, arSceneView)
                 R.id.menu_item_plane_renderer -> settings.planes.toggle(it, arSceneView)
                 R.id.menu_item_selection_visualizer -> settings.selection.toggle(it, coordinator.selectionVisualizer)
+                R.id.menu_item_reticle -> settings.reticle.toggle(it, arSceneView)
             }
             when (it.itemId) {
-                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer -> false
+                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer, R.id.menu_item_reticle -> false
                 else -> true
             }
         }
@@ -212,6 +213,7 @@ class MainActivity : AppCompatActivity() {
                 settings.shadows.applyTo(findItem(R.id.menu_item_shadows))
                 settings.planes.applyTo(findItem(R.id.menu_item_plane_renderer))
                 settings.selection.applyTo(findItem(R.id.menu_item_selection_visualizer))
+                settings.reticle.applyTo(findItem(R.id.menu_item_reticle))
             }
             popupMenu.show()
         }
@@ -310,6 +312,7 @@ class MainActivity : AppCompatActivity() {
         settings.shadows.applyTo(arSceneView)
         settings.planes.applyTo(arSceneView)
         settings.selection.applyTo(coordinator.selectionVisualizer)
+        settings.reticle.applyTo(arSceneView)
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {

@@ -61,6 +61,12 @@
                     android:title="@string/menu_item_selection_visualizer"
                     app:actionViewClass="android.view.View"
                     app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_reticle"
+                    android:checkable="true"
+                    android:title="@string/menu_item_reticle"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
             </menu>
         </item>
     </group>
