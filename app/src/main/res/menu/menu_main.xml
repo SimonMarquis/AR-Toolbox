@@ -67,6 +67,12 @@
                     android:title="@string/menu_item_reticle"
                     app:actionViewClass="android.view.View"
                     app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_point_cloud"
+                    android:checkable="true"
+                    android:title="@string/menu_item_point_cloud"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
             </menu>
         </item>
     </group>

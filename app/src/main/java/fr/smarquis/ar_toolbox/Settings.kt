@@ -8,7 +8,10 @@ import com.google.ar.core.Plane
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.FrameTime
 import com.google.ar.sceneform.math.Vector3
+import com.google.ar.sceneform.rendering.Material
+import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
 import com.google.ar.sceneform.rendering.ModelRenderable
+import fr.smarquis.ar_toolbox.PointCloud.makePointCloud
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Settings(context: Context) {
@@ -22,6 +25,7 @@ class Settings(context: Context) {
     val planes = Planes(true, "planes", prefs)
     val selection = Selection(true, "selection", prefs)
     val reticle = Reticle(false, "reticle", prefs)
+    val pointCloud = PointCloud(false, "pointCloud", prefs)
 
     open class AtomicBooleanPref(defaultValue: Boolean, private val key: String, private val prefs: SharedPreferences) {
 
@@ -174,6 +178,83 @@ class Settings(context: Context) {
 
         private fun ArSceneView.update() {
             findNode<Node>()?.isEnabled = get()
+        }
+
+    }
+
+    class PointCloud(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+
+        class Node(context: Context) : com.google.ar.sceneform.Node() {
+
+            private var timestamp: Long = 0
+            private var properties: MaterialProperties = MaterialProperties(metallic = 100, roughness = 100, reflectance = 0)
+            private var material: Material? = null
+                set(value) {
+                    field = value?.apply { properties.update(this) }
+                }
+
+            init {
+                makeOpaqueWithColor(context.applicationContext, properties.color.toArColor()).thenAccept { material = it }
+            }
+
+            fun properties(block: (MaterialProperties.() -> Unit) = {}) {
+                properties.update(renderable?.material, block)
+            }
+
+            override fun onUpdate(frameTime: FrameTime?) {
+                super.onUpdate(frameTime)
+                if (!isEnabled) return
+                val ar = scene?.view as? ArSceneView ?: return
+                val frame = ar.arFrame ?: return
+                frame.acquirePointCloud().use {
+                    render(it)
+                }
+            }
+
+            private fun render(pointCloud: com.google.ar.core.PointCloud) {
+                timestamp = pointCloud.timestamp.takeIf { it != timestamp } ?: return
+                val material = material ?: return
+                val definition = makePointCloud(pointCloud, material) ?: return //reset renderable?
+                when (val render = renderable) {
+                    null -> ModelRenderable.builder().setSource(definition).build().thenAccept {
+                        renderable = it.apply {
+                            properties.update(material)
+                            isShadowCaster = false
+                            isShadowReceiver = false
+                            collisionShape = null
+                        }
+                    }
+                    else -> render.updateFromDefinition(definition).also {
+                        renderable?.collisionShape = null
+                    }
+                }
+            }
+
+        }
+
+        fun initAndApplyTo(arSceneView: ArSceneView) {
+            if (arSceneView.findNode<Node>() == null) {
+                Node(arSceneView.context).apply { setParent(arSceneView.scene) }
+            }
+            arSceneView.update()
+        }
+
+        fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
+            toggle()
+            applyTo(menuItem)
+            arSceneView.update()
+        }
+
+        fun applyTo(menuItem: MenuItem) {
+            menuItem.isChecked = get()
+        }
+
+        private fun ArSceneView.update() {
+            findNode<Node>()?.isEnabled = get()
+        }
+
+        fun updateMaterial(arSceneView: ArSceneView, block: (MaterialProperties.() -> Unit)) {
+            arSceneView.findNode<Node>()?.properties(block)
         }
 
     }

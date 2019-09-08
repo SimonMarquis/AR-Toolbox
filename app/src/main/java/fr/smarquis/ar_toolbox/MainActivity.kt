@@ -190,9 +190,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_item_plane_renderer -> settings.planes.toggle(it, arSceneView)
                 R.id.menu_item_selection_visualizer -> settings.selection.toggle(it, coordinator.selectionVisualizer)
                 R.id.menu_item_reticle -> settings.reticle.toggle(it, arSceneView)
+                R.id.menu_item_point_cloud -> settings.pointCloud.toggle(it, arSceneView)
             }
             when (it.itemId) {
-                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer, R.id.menu_item_reticle -> false
+                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer, R.id.menu_item_reticle, R.id.menu_item_point_cloud -> false
                 else -> true
             }
         }
@@ -214,6 +215,7 @@ class MainActivity : AppCompatActivity() {
                 settings.planes.applyTo(findItem(R.id.menu_item_plane_renderer))
                 settings.selection.applyTo(findItem(R.id.menu_item_selection_visualizer))
                 settings.reticle.applyTo(findItem(R.id.menu_item_reticle))
+                settings.pointCloud.applyTo(findItem(R.id.menu_item_point_cloud))
             }
             popupMenu.show()
         }
@@ -247,6 +249,7 @@ class MainActivity : AppCompatActivity() {
             arSceneView.planeRenderer.material?.thenAccept {
                 it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
             }
+            settings.pointCloud.updateMaterial(arSceneView) { this.color = color }
         }
         colorValue.post { colorValue.setColor(MaterialProperties.DEFAULT.color) }
     }
@@ -313,6 +316,7 @@ class MainActivity : AppCompatActivity() {
         settings.planes.applyTo(arSceneView)
         settings.selection.applyTo(coordinator.selectionVisualizer)
         settings.reticle.initAndApplyTo(arSceneView)
+        settings.pointCloud.initAndApplyTo(arSceneView)
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {
