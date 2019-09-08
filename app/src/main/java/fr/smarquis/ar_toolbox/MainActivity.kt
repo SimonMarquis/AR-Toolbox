@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity() {
     private fun initNodeBottomSheet() {
         nodeBottomSheetBehavior = from(nodeBottomSheet)
         nodeBottomSheetBehavior.skipCollapsed = true
-        nodeBottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
+        nodeBottomSheetBehavior.bottomSheetCallback = object : BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 bottomSheet.requestLayout()
@@ -262,7 +262,7 @@ class MainActivity : AppCompatActivity() {
                     coordinator.selectNode(null)
                 }
             }
-        })
+        }
         nodeBottomSheetBehavior.state = STATE_HIDDEN
         nodeHeader.setOnClickListener { coordinator.selectNode(null) }
         nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
