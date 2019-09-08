@@ -332,7 +332,7 @@ class Drawing(
     private fun render() {
         val definition = ExtrudedCylinder.makeExtrudedCylinder(RADIUS, line.points, material ?: return) ?: return
         if (renderable == null) {
-            renderable = ModelRenderable.builder().setSource(definition).build().join()
+            ModelRenderable.builder().setSource(definition).build().thenAccept { renderable = it }
         } else {
             renderable?.updateFromDefinition(definition)
         }
