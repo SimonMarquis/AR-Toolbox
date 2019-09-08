@@ -312,7 +312,7 @@ class MainActivity : AppCompatActivity() {
         settings.shadows.applyTo(arSceneView)
         settings.planes.applyTo(arSceneView)
         settings.selection.applyTo(coordinator.selectionVisualizer)
-        settings.reticle.applyTo(arSceneView)
+        settings.reticle.initAndApplyTo(arSceneView)
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {

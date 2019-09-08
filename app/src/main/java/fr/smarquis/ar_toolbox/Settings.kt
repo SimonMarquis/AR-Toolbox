@@ -155,18 +155,25 @@ class Settings(context: Context) {
 
         }
 
+        fun initAndApplyTo(arSceneView: ArSceneView) {
+            if (arSceneView.findNode<Node>() == null) {
+                Node(arSceneView.context).apply { setParent(arSceneView.scene) }
+            }
+            arSceneView.update()
+        }
+
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
             applyTo(menuItem)
-            applyTo(arSceneView)
-        }
-
-        fun applyTo(arSceneView: ArSceneView) {
-            (arSceneView.findNode() ?: Node(arSceneView.context).apply { setParent(arSceneView.scene) }).isEnabled = get()
+            arSceneView.update()
         }
 
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
+        }
+
+        private fun ArSceneView.update() {
+            findNode<Node>()?.isEnabled = get()
         }
 
     }
