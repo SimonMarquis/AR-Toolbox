@@ -4,6 +4,7 @@
 
 <!-- MarkdownTOC -->
 
+- [1.6.0](#160)
 - [1.5.0](#150)
 - [1.4.0](#140)
 - [1.3.0](#130)
@@ -15,6 +16,13 @@
 <!-- /MarkdownTOC -->
 </details>
 
+## 1.6.0
+> 2019.09.08
+
+- ☁️ PointCloud: display detected feature points
+- ⭕ Reticle: footprint of plane at screen center
+- ⚙️ Refactor settings popup menu
+
 ## 1.5.0
 > 2019.08.18
 
@@ -24,7 +32,7 @@
 - 🛠️ Improve gesture handling and bottomsheet display
 - 👆 Tap outside to deselect a node
 - 👁️ Layout node always facing the camera
-- 🐛 Fix Layout node crash and invisible Cube node 
+- 🐛 Fix Layout node crash and invisible Cube node
 
 ## 1.4.0
 > 2019.07.28

@@ -10,9 +10,9 @@
 
 <br>
 
-| Scene | Settings | Models |
-|---|---|---|
-| ![](art/screenshot_scene.png) | ![](art/screenshot_settings.png) | ![](art/screenshot_models.png) |
+| Scene | Models | Options | Settings |
+|---|---|---|---|
+| ![](art/screenshot_scene.png) | ![](art/screenshot_models.png) | ![](art/screenshot_options.png) | ![](art/screenshot_settings.png) |
 
 ### Features
 
@@ -23,6 +23,7 @@
 - **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
 - **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
+- **[PointCloud](https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/PointCloud)**: Feature points
 - **[Screen capture & recording](https://developers.google.com/ar/develop/java/sceneform/video-recording)**: 480p, 720p, 1080p, 2160p
 
 ## Credits
