@@ -26,6 +26,8 @@
 - **[Material properties](https://developers.google.com/ar/develop/java/sceneform/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
 - **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
+- **[Augmented faces](https://developers.google.com/ar/develop/java/augmented-faces/)**: Identify regions of a detected face
+- **[Native & web scene viewers](https://developers.google.com/ar/develop/java/scene-viewer)**: Interactive models in native or on the web
 - **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
 - **[PointCloud](https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/PointCloud)**: Feature points
 - **[Screen capture & recording](https://developers.google.com/ar/develop/java/sceneform/video-recording)**: 480p, 720p, 1080p, 2160p
@@ -38,6 +40,7 @@
 - [sceneform-samples](https://github.com/googlesamples/sceneform-samples)
 - [glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models)
 - [Poly](https://poly.google.com/)
+- [\<model-viewer\>](https://github.com/GoogleWebComponents/model-viewer)
 
 ## License
 

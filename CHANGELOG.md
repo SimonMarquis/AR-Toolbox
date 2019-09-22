@@ -4,6 +4,7 @@
 
 <!-- MarkdownTOC -->
 
+- [1.7.0](#170)
 - [1.6.0](#160)
 - [1.5.0](#150)
 - [1.4.0](#140)
@@ -15,6 +16,13 @@
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.7.0
+> 2019.09.22
+
+- 📦 Update arcore & sceneform 1.12.0
+- 🦊 Augmented faces
+- 🧰 Native & web scene viewers
 
 ## 1.6.0
 > 2019.09.08
