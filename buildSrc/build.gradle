@@ -17,5 +17,5 @@ repositories {
 }
 
 dependencies {
-    implementation "com.android.tools.build:gradle:3.6.0-alpha10"
+    implementation "com.android.tools.build:gradle:3.6.0-alpha12"
 }
