@@ -2,6 +2,10 @@
 
     <string name="app_name">AR Toolbox</string>
 
+    <string name="scene_viewer_native_data">https://poly.googleapis.com/downloads/fp/1562493657287824/dLHpzNdygsg/f4d6EEz_n3N/Astronaut.gltf</string>
+    <string name="scene_viewer_native_link">https://poly.google.com/view/dLHpzNdygsg</string>
+    <string name="scene_viewer_web">https://model-viewer.glitch.me/</string>
+
     <string name="format_pose_translation">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
     <string name="format_pose_rotation">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
     <string name="format_vector3">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
@@ -17,6 +21,7 @@
     <string name="tracking_failure_insufficient_light">Insufficient light</string>
     <string name="tracking_failure_excessive_motion">Excessive motion</string>
     <string name="tracking_failure_insufficient_features">Insufficient features</string>
+    <string name="augmented_faces">Augmented Faces</string>
 
     <string name="menu_item_screenshot">Screen capture</string>
     <string name="menu_item_record">Screen record</string>
@@ -24,6 +29,11 @@
     <string name="menu_item_quality_1080p">1080p</string>
     <string name="menu_item_quality_720p">720p</string>
     <string name="menu_item_quality_480p">480p</string>
+    <string name="menu_item_modes">Switch mode</string>
+    <string name="menu_item_mode_scene">3D Scene</string>
+    <string name="menu_item_mode_faces">Augmented Faces</string>
+    <string name="menu_item_mode_native_viewer">Native Scene Viewer</string>
+    <string name="menu_item_mode_web_viewer">Web Scene Viewer</string>
     <string name="menu_item_resolve_cloud_anchor">Resolve Cloud Anchor</string>
     <string name="menu_item_clean_up_scene">Clean up scene</string>
     <string name="menu_item_settings">Settings</string>
@@ -33,6 +43,8 @@
     <string name="menu_item_selection_visualizer">Selection visualizer</string>
     <string name="menu_item_reticle">Reticle</string>
     <string name="menu_item_point_cloud">Point cloud</string>
+    <string name="menu_item_face_regions">Face regions</string>
+    <string name="menu_item_face_mesh">Face mesh</string>
 
     <string name="entry_position_label">Position</string>
     <string name="entry_rotation_label">Rotation</string>
@@ -44,6 +56,9 @@
     <string name="entry_roughness_label">Roughness</string>
     <string name="entry_reflectance_label">Reflectance</string>
     <string name="entry_scale_label">Scale</string>
+    <string name="entry_face_forehead_left_label">Forehead left</string>
+    <string name="entry_face_forehead_right_label">Forehead right</string>
+    <string name="entry_face_nose_tip_label">Nose tip</string>
 
     <string name="screenshot_saving">Saving screenshot…</string>
     <string name="recording">Recording…</string>
@@ -54,6 +69,7 @@
     <string name="exception_apk_too_old">Please update ARCore</string>
     <string name="exception_sdk_too_old">Please update this app</string>
     <string name="exception_device_not_compatible">This device does not support AR</string>
+    <string name="exception_user_declined_installation">User declined installation</string>
     <string name="exception_unknown">Failed to create AR session</string>
 
     <string name="cloud_anchor_id_hint">Cloud Anchor ID</string>

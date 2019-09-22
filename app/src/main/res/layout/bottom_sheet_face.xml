@@ -2,19 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nodeBottomSheet"
+    android:id="@+id/faceBottomSheet"
     android:layout_width="@dimen/bottom_sheet_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.MaterialComponents.Light"
     app:behavior_hideable="true"
-    app:behavior_peekHeight="0dp"
+    app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
+    app:behavior_skipCollapsed="false"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:showIn="@layout/activity_scene">
+    tools:showIn="@layout/activity_face">
 
-    <include layout="@layout/bottom_sheet_node_header" />
+    <include layout="@layout/bottom_sheet_face_header" />
 
-    <include layout="@layout/bottom_sheet_node_body" />
+    <include layout="@layout/bottom_sheet_face_body" />
 
 </LinearLayout>

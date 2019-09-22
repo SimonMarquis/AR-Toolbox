@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
     android:paddingBottom="@dimen/material_unit_1"
     tools:ignore="KeyboardInaccessibleWidget,Overdraw"
-    tools:showIn="@layout/bottom_sheet_main">
+    tools:showIn="@layout/bottom_sheet_scene">
 
     <ImageView
         android:id="@+id/modelSphere"

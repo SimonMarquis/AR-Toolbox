@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SceneActivity">
 
     <com.google.ar.sceneform.ArSceneView
         android:id="@+id/arSceneView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include layout="@layout/bottom_sheet_main" />
+    <include layout="@layout/bottom_sheet_scene" />
 
     <include layout="@layout/bottom_sheet_node" />
 

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.ar" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -15,14 +16,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App"
         tools:ignore="GoogleAppIndexingWarning">
+
         <meta-data
             android:name="com.google.ar.core"
             android:value="required" />
         <meta-data
             android:name="com.google.android.ar.API_KEY"
-            android:value="AIzaSyDR3gYtb0FbQG_5LcvxeKUke5bwgXjQVlI"/>
+            android:value="AIzaSyDR3gYtb0FbQG_5LcvxeKUke5bwgXjQVlI" />
+
         <activity
-            android:name=".MainActivity"
+            android:name=".SceneActivity"
             android:launchMode="singleTop"
             android:screenOrientation="behind">
             <intent-filter>
@@ -53,8 +56,13 @@
                 <data android:pathPattern=".*\\..*\\..*\\.gltf" />
                 <data android:pathPattern=".*\\..*\\..*\\..*\\.gltf" />
             </intent-filter>
-
         </activity>
+
+        <activity
+            android:name=".FaceActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="behind" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"
@@ -64,6 +72,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/paths" />
         </provider>
+
     </application>
 
 </manifest>

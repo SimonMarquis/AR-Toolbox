@@ -6,15 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import kotlin.reflect.KClass
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class SceneViewModel(application: Application) : AndroidViewModel(application) {
 
     private val prefs = PreferenceManager.getDefaultSharedPreferences(application)
 
     val selection = MutableLiveData<KClass<out Nodes>>(Sphere::class)
-
-    var sessionInitializationFailed: Boolean = false
-
-    var installRequested: Boolean = false
 
     val externalModelUri: MutableLiveData<String?> = object : MutableLiveData<String?>() {
 

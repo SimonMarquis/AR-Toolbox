@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/menu_group_settings">
+        <item
+            android:id="@+id/menu_item_screenshot"
+            android:title="@string/menu_item_screenshot" />
+        <item
+            android:id="@+id/menu_item_record"
+            android:title="@string/menu_item_record">
+            <menu>
+                <item
+                    android:id="@+id/menu_item_quality_2160p"
+                    android:title="@string/menu_item_quality_2160p" />
+                <item
+                    android:id="@+id/menu_item_quality_1080p"
+                    android:title="@string/menu_item_quality_1080p" />
+                <item
+                    android:id="@+id/menu_item_quality_720p"
+                    android:title="@string/menu_item_quality_720p" />
+                <item
+                    android:id="@+id/menu_item_quality_480p"
+                    android:title="@string/menu_item_quality_480p" />
+            </menu>
+        </item>
+        <item
+            android:id="@+id/menu_group_modes"
+            android:title="@string/menu_item_modes">
+            <menu>
+                <group android:checkableBehavior="single">
+                    <item
+                        android:id="@+id/menu_item_mode_scene"
+                        android:title="@string/menu_item_mode_scene"
+                        app:actionViewClass="android.view.View"
+                        app:showAsAction="collapseActionView" />
+                    <item
+                        android:id="@+id/menu_item_mode_faces"
+                        android:title="@string/menu_item_mode_faces"
+                        app:actionViewClass="android.view.View"
+                        app:showAsAction="collapseActionView" />
+                    <item
+                        android:id="@+id/menu_item_mode_native_viewer"
+                        android:title="@string/menu_item_mode_native_viewer"
+                        app:actionViewClass="android.view.View"
+                        app:showAsAction="collapseActionView" />
+                    <item
+                        android:id="@+id/menu_item_mode_web_viewer"
+                        android:title="@string/menu_item_mode_web_viewer"
+                        app:actionViewClass="android.view.View"
+                        app:showAsAction="collapseActionView" />
+                </group>
+            </menu>
+
+        </item>
+    </group>
+
+</menu>

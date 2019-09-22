@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainBottomSheet"
+    android:id="@+id/sceneBottomSheet"
     android:layout_width="@dimen/bottom_sheet_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
@@ -12,10 +12,10 @@
     app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
     app:behavior_skipCollapsed="false"
     app:layout_behavior="@string/bottom_sheet_behavior"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_scene">
 
-    <include layout="@layout/bottom_sheet_main_header" />
+    <include layout="@layout/bottom_sheet_scene_header" />
 
-    <include layout="@layout/bottom_sheet_main_body" />
+    <include layout="@layout/bottom_sheet_scene_body" />
 
 </LinearLayout>

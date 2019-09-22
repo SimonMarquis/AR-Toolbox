@@ -1,68 +1,46 @@
 package fr.smarquis.ar_toolbox
 
-import android.Manifest.permission.CAMERA
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.content.res.Configuration.ORIENTATION_LANDSCAPE
-import android.graphics.Color
-import android.graphics.drawable.Animatable
-import android.media.CamcorderProfile.*
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.O
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.*
-import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.appcompat.widget.PopupMenu
-import androidx.core.app.ActivityCompat.checkSelfPermission
 import androidx.core.net.toUri
-import androidx.core.view.MenuCompat
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.ar.core.*
-import com.google.ar.core.ArCoreApk.InstallStatus.INSTALL_REQUESTED
 import com.google.ar.core.TrackingFailureReason.*
 import com.google.ar.core.TrackingState.*
-import com.google.ar.core.exceptions.*
-import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.bottom_sheet_main.*
-import kotlinx.android.synthetic.main.bottom_sheet_main_body.*
-import kotlinx.android.synthetic.main.bottom_sheet_main_header.*
+import kotlinx.android.synthetic.main.activity_scene.*
 import kotlinx.android.synthetic.main.bottom_sheet_node.*
 import kotlinx.android.synthetic.main.bottom_sheet_node_body.*
 import kotlinx.android.synthetic.main.bottom_sheet_node_header.*
+import kotlinx.android.synthetic.main.bottom_sheet_scene.*
+import kotlinx.android.synthetic.main.bottom_sheet_scene_body.*
+import kotlinx.android.synthetic.main.bottom_sheet_scene_header.*
 
-class MainActivity : AppCompatActivity() {
-
-    companion object {
-        const val REQUEST_CAMERA_PERMISSION = 1
-    }
-
-    private lateinit var mainBottomSheetBehavior: BottomSheetBehavior<out View>
-    private lateinit var nodeBottomSheetBehavior: BottomSheetBehavior<out View>
-    private lateinit var videoRecorder: VideoRecorder
+class SceneActivity : ArActivity(R.layout.activity_scene) {
 
     private val coordinator by lazy { Coordinator(this, ::onArTap, ::onNodeSelected, ::onNodeFocused) }
-    private val model: MainViewModel by viewModels()
+    private val model: SceneViewModel by viewModels()
     private val settings by lazy { Settings.instance(this) }
+    private var drawing: Drawing? = null
 
     private val setOfMaterialViews by lazy {
         setOf(
@@ -79,13 +57,9 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private var drawing: Drawing? = null
-    private var restoreMainBottomSheetExpandedState: Boolean = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initMainBottomSheet()
+        initSceneBottomSheet()
         initNodeBottomSheet()
         initAr()
         initWithIntent(intent)
@@ -94,6 +68,34 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         initWithIntent(intent)
+    }
+
+    override fun onBackPressed() {
+        if (coordinator.selectedNode != null) {
+            coordinator.selectNode(null)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
+    override fun arSceneView(): ArSceneView = arSceneView
+
+    override fun recordingIndicator(): ImageView? = sceneRecording
+
+    override fun config(session: Session): Config = Config(session).apply {
+        lightEstimationMode = Config.LightEstimationMode.DISABLED
+        planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
+        updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+        cloudAnchorMode = Config.CloudAnchorMode.ENABLED
+        augmentedImageDatabase = AugmentedImageDatabase(session).apply {
+            Augmented.target(this@SceneActivity)?.let { addImage("augmented", it) }
+        }
+        augmentedFaceMode = Config.AugmentedFaceMode.DISABLED
+        focusMode = Config.FocusMode.AUTO
+    }
+
+    override fun onArResumed() {
+        sceneBottomSheet.behavior().update(state = STATE_EXPANDED, isHideable = false)
     }
 
     private fun initWithIntent(intent: Intent?) {
@@ -105,110 +107,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        initArSession()
-        try {
-            arSceneView.resume()
-        } catch (ex: CameraNotAvailableException) {
-            model.sessionInitializationFailed = true
-        }
-        if (hasCameraPermission() && !model.installRequested && !model.sessionInitializationFailed) {
-            if (SDK_INT >= O && resources.configuration.orientation != ORIENTATION_LANDSCAPE) {
-                window.navigationBarColor = Color.WHITE
-                window.decorView.systemUiVisibility =
-                    FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            }
-            mainBottomSheetBehavior.apply {
-                if (state == STATE_HIDDEN) {
-                    state = STATE_EXPANDED
-                    isHideable = false
-                }
-            }
-        }
-    }
+    private fun initSceneBottomSheet() {
+        sceneBottomSheet.behavior().state = STATE_HIDDEN
+        sceneHeader.setOnClickListener { sceneBottomSheet.behavior().toggle() }
 
-    override fun onPause() {
-        super.onPause()
-        arSceneView.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        arSceneView.destroy()
-        videoRecorder.stop()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION && !hasCameraPermission()) {
-            redirectToApplicationSettings()
-        }
-    }
-
-    override fun onBackPressed() {
-        if (coordinator.selectedNode != null) {
-            coordinator.selectNode(null)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    private fun initMainBottomSheet() {
-        mainBottomSheetBehavior = from(mainBottomSheet).apply {
-            state = STATE_HIDDEN
-        }
-
-        mainHeader.setOnClickListener {
-            mainBottomSheetBehavior.state = when (mainBottomSheetBehavior.state) {
-                STATE_COLLAPSED -> STATE_EXPANDED
-                STATE_EXPANDED -> STATE_COLLAPSED
-                else -> return@setOnClickListener
-            }
-        }
-
-        addImageView.setOnClickListener {
+        sceneAdd.setOnClickListener {
             val session = arSceneView.session
             val camera = arSceneView.arFrame?.camera ?: return@setOnClickListener
             if (session == null || camera.trackingState != TRACKING) return@setOnClickListener
             createNodeAndAddToScene(anchor = { session.createAnchor(Nodes.defaultPose(arSceneView)) }, focus = false)
         }
 
-        val popupMenu = PopupMenu(ContextThemeWrapper(this, R.style.PopupMenu), moreImageView, Gravity.END)
-        popupMenu.inflate(R.menu.menu_main)
-        MenuCompat.setGroupDividerEnabled(popupMenu.menu, true)
-        popupMenu.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.menu_item_screenshot -> arSceneView.screenshot()
-                R.id.menu_item_quality_2160p -> videoRecorder.start(get(QUALITY_2160P))
-                R.id.menu_item_quality_1080p -> videoRecorder.start(get(QUALITY_1080P))
-                R.id.menu_item_quality_720p -> videoRecorder.start(get(QUALITY_720P))
-                R.id.menu_item_quality_480p -> videoRecorder.start(get(QUALITY_480P))
-                R.id.menu_item_resolve_cloud_anchor -> promptCloudAnchorId()
-                R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node -> (node as? Nodes)?.detach() }
-                R.id.menu_item_sunlight -> settings.sunlight.toggle(it, arSceneView)
-                R.id.menu_item_shadows -> settings.shadows.toggle(it, arSceneView)
-                R.id.menu_item_plane_renderer -> settings.planes.toggle(it, arSceneView)
-                R.id.menu_item_selection_visualizer -> settings.selection.toggle(it, coordinator.selectionVisualizer)
-                R.id.menu_item_reticle -> settings.reticle.toggle(it, arSceneView)
-                R.id.menu_item_point_cloud -> settings.pointCloud.toggle(it, arSceneView)
-            }
-            when (it.itemId) {
-                R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer, R.id.menu_item_reticle, R.id.menu_item_point_cloud -> false
-                else -> true
-            }
-        }
-        (recordImageView.drawable as? Animatable)?.start()
-        recordImageView.setOnClickListener {
-            videoRecorder.stop()
-            videoRecorder.export()
-        }
-        moreImageView.setOnClickListener {
-            popupMenu.menu.apply {
-                findItem(R.id.menu_item_record).isEnabled = !videoRecorder.isRecording
-                findItem(R.id.menu_item_quality_2160p).isEnabled = hasProfile(QUALITY_2160P)
-                findItem(R.id.menu_item_quality_1080p).isEnabled = hasProfile(QUALITY_1080P)
-                findItem(R.id.menu_item_quality_720p).isEnabled = hasProfile(QUALITY_720P)
-                findItem(R.id.menu_item_quality_480p).isEnabled = hasProfile(QUALITY_480P)
+        initPopupMenu(
+            anchor = sceneMore,
+            menu = R.menu.menu_scene,
+            onClick = {
+                when (it.itemId) {
+                    R.id.menu_item_resolve_cloud_anchor -> promptCloudAnchorId()
+                    R.id.menu_item_clean_up_scene -> arSceneView.scene.callOnHierarchy { node -> (node as? Nodes)?.detach() }
+                    R.id.menu_item_sunlight -> settings.sunlight.toggle(it, arSceneView)
+                    R.id.menu_item_shadows -> settings.shadows.toggle(it, arSceneView)
+                    R.id.menu_item_plane_renderer -> settings.planes.toggle(it, arSceneView)
+                    R.id.menu_item_selection_visualizer -> settings.selection.toggle(it, coordinator.selectionVisualizer)
+                    R.id.menu_item_reticle -> settings.reticle.toggle(it, arSceneView)
+                    R.id.menu_item_point_cloud -> settings.pointCloud.toggle(it, arSceneView)
+                }
+                when (it.itemId) {
+                    R.id.menu_item_sunlight, R.id.menu_item_shadows, R.id.menu_item_plane_renderer, R.id.menu_item_selection_visualizer, R.id.menu_item_reticle, R.id.menu_item_point_cloud -> false
+                    else -> true
+                }
+            },
+            onUpdate = {
                 findItem(R.id.menu_item_clean_up_scene).isEnabled = arSceneView.scene.findInHierarchy { it is Nodes } != null
                 settings.sunlight.applyTo(findItem(R.id.menu_item_sunlight))
                 settings.shadows.applyTo(findItem(R.id.menu_item_shadows))
@@ -217,8 +146,7 @@ class MainActivity : AppCompatActivity() {
                 settings.reticle.applyTo(findItem(R.id.menu_item_reticle))
                 settings.pointCloud.applyTo(findItem(R.id.menu_item_point_cloud))
             }
-            popupMenu.show()
-        }
+        )
 
         model.selection.observe(this, androidx.lifecycle.Observer {
             modelSphere.isSelected = it == Sphere::class
@@ -230,7 +158,7 @@ class MainActivity : AppCompatActivity() {
             modelDrawing.isSelected = it == Drawing::class
             modelLink.isSelected = it == Link::class
             modelCloudAnchor.isSelected = it == CloudAnchor::class
-            addImageView.requestDisallowInterceptTouchEvent = it == Drawing::class
+            sceneAdd.requestDisallowInterceptTouchEvent = it == Drawing::class
         })
 
         modelSphere.setOnClickListener { model.selection.value = Sphere::class }
@@ -255,18 +183,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initNodeBottomSheet() {
-        nodeBottomSheetBehavior = from(nodeBottomSheet)
-        nodeBottomSheetBehavior.skipCollapsed = true
-        nodeBottomSheetBehavior.bottomSheetCallback = object : BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                bottomSheet.requestLayout()
-                if (newState == STATE_HIDDEN) {
-                    coordinator.selectNode(null)
+        nodeBottomSheet.behavior().apply {
+            skipCollapsed = true
+            bottomSheetCallback = object : BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    bottomSheet.requestLayout()
+                    if (newState == STATE_HIDDEN) {
+                        coordinator.selectNode(null)
+                    }
                 }
             }
+            state = STATE_HIDDEN
         }
-        nodeBottomSheetBehavior.state = STATE_HIDDEN
         nodeHeader.setOnClickListener { coordinator.selectNode(null) }
         nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
         nodePlayPause.setOnClickListener { (coordinator.focusedNode as? Video)?.toggle() }
@@ -291,6 +220,7 @@ class MainActivity : AppCompatActivity() {
     )
 
     private fun initAr() {
+        arSceneView.scene.addOnUpdateListener { onArUpdate() }
         arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
             coordinator.onTouch(hitTestResult, motionEvent)
             if (shouldHandleDrawing(motionEvent, hitTestResult)) {
@@ -304,13 +234,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        arSceneView.scene.addOnUpdateListener(::onArUpdate)
-        videoRecorder = VideoRecorder(this, arSceneView) { isRecording ->
-            if (isRecording) {
-                Toast.makeText(this, R.string.recording, Toast.LENGTH_LONG).show()
-            }
-            recordImageView.visibility = if (isRecording) VISIBLE else GONE
-        }
         settings.sunlight.applyTo(arSceneView)
         settings.shadows.applyTo(arSceneView)
         settings.planes.applyTo(arSceneView)
@@ -325,65 +248,6 @@ class MainActivity : AppCompatActivity() {
         if (arSceneView.arFrame?.camera?.trackingState != TRACKING) return false
         if (motionEvent?.action == MotionEvent.ACTION_DOWN && hitTestResult?.node != null) return false
         return true
-    }
-
-    private fun initArSession() {
-        if (arSceneView.session != null) {
-            return
-        }
-        if (!hasCameraPermission()) {
-            requestCameraPermission()
-            return
-        }
-        if (model.sessionInitializationFailed) {
-            return
-        }
-        val sessionException: UnavailableException?
-        try {
-            val requestInstall = ArCoreApk.getInstance().requestInstall(this, !model.installRequested)
-            if (requestInstall == INSTALL_REQUESTED) {
-                model.installRequested = true
-                return
-            }
-            model.installRequested = false
-            val session = Session(applicationContext, emptySet())
-            session.configure(Config(session).apply {
-                lightEstimationMode = Config.LightEstimationMode.DISABLED
-                planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-                updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
-                cloudAnchorMode = Config.CloudAnchorMode.ENABLED
-                augmentedImageDatabase = AugmentedImageDatabase(session).apply {
-                    Augmented.target(this@MainActivity)?.let { addImage("augmented", it) }
-                }
-                augmentedFaceMode = Config.AugmentedFaceMode.DISABLED
-                focusMode = Config.FocusMode.AUTO
-            })
-            arSceneView.setupSession(session)
-            return
-        } catch (e: UnavailableException) {
-            sessionException = e
-        } catch (e: Exception) {
-            sessionException = UnavailableException().apply { initCause(e) }
-        }
-        model.sessionInitializationFailed = true
-
-        val message = when (sessionException) {
-            is UnavailableArcoreNotInstalledException -> R.string.exception_arcore_not_installed
-            is UnavailableApkTooOldException -> R.string.exception_apk_too_old
-            is UnavailableSdkTooOldException -> R.string.exception_sdk_too_old
-            is UnavailableDeviceNotCompatibleException -> R.string.exception_device_not_compatible
-            else -> R.string.exception_unknown
-        }
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-        finish()
-    }
-
-    private fun hasCameraPermission() = checkSelfPermission(this, CAMERA) == PERMISSION_GRANTED
-
-    private fun requestCameraPermission() {
-        if (!hasCameraPermission()) {
-            requestPermissions(arrayOf(CAMERA), REQUEST_CAMERA_PERMISSION)
-        }
     }
 
     private fun promptExternalModel() {
@@ -482,7 +346,7 @@ class MainActivity : AppCompatActivity() {
         }.attach(anchor(), arSceneView.scene, focus)
     }
 
-    private fun onArUpdate(@Suppress("UNUSED_PARAMETER") frameTime: FrameTime) {
+    private fun onArUpdate() {
         val frame = arSceneView.arFrame
         val camera = frame?.camera
         val state = camera?.trackingState
@@ -496,7 +360,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) {
-        trackingTextView.setText(
+        sceneStatusLabel.setText(
             when (state) {
                 TRACKING -> R.string.tracking_success
                 PAUSED -> when (reason) {
@@ -514,7 +378,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) {
-        trackingImageView.setImageResource(
+        sceneStatusIcon.setImageResource(
             when (state) {
                 TRACKING -> android.R.drawable.presence_online
                 PAUSED -> when (reason) {
@@ -530,11 +394,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onArUpdateBottomSheet(state: TrackingState?) {
-        addImageView.isEnabled = state == TRACKING
-        when (mainBottomSheetBehavior.state) {
+        sceneAdd.isEnabled = state == TRACKING
+        when (sceneBottomSheet.behavior().state) {
             STATE_HIDDEN, STATE_COLLAPSED -> Unit
             else -> {
-                arSceneView.arFrame?.camera?.pose?.let {
+                arSceneView.arFrame?.camera?.pose.let {
                     poseTranslationValue.text = it.formatTranslation(this)
                     poseRotationValue.text = it.formatRotation(this)
                 }
@@ -547,7 +411,7 @@ class MainActivity : AppCompatActivity() {
         if (shouldHandleDrawing()) {
             val x = arSceneView.width / 2F
             val y = arSceneView.height / 2F
-            val pressed = addImageView.isPressed
+            val pressed = sceneAdd.isPressed
             when {
                 pressed && drawing == null -> drawing = Drawing.create(x, y, false, materialProperties(), arSceneView, coordinator, settings)
                 pressed && drawing?.isFromTouch == false -> drawing?.extend(x, y)
@@ -567,7 +431,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun onNodeUpdate(node: Nodes) {
         when {
-            node != coordinator.selectedNode || node != coordinator.focusedNode || nodeBottomSheetBehavior.state == STATE_HIDDEN -> Unit
+            node != coordinator.selectedNode || node != coordinator.focusedNode || nodeBottomSheet.behavior().state == STATE_HIDDEN -> Unit
             else -> {
                 nodeStatus.setImageResource(node.statusIcon())
                 nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
@@ -589,30 +453,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onNodeFocused(node: Nodes?) {
-        if (node == null) {
-            nodeBottomSheetBehavior.state = STATE_HIDDEN
-            if (restoreMainBottomSheetExpandedState) {
-                restoreMainBottomSheetExpandedState = false
-                mainBottomSheetBehavior.state = STATE_EXPANDED
+        val nodeSheetBehavior = nodeBottomSheet.behavior()
+        val sceneBehavior = sceneBottomSheet.behavior()
+        when (node) {
+            null -> {
+                nodeSheetBehavior.state = STATE_HIDDEN
+                if ((sceneBottomSheet.tag as? Boolean) == true) {
+                    sceneBottomSheet.tag = false
+                    sceneBehavior.state = STATE_EXPANDED
+                }
             }
-        } else if (node == coordinator.selectedNode) {
-            nodeName.text = node.name
-            nodeCopy.visibility = if (node is CloudAnchor) VISIBLE else GONE
-            nodePlayPause.visibility = if (node is Video) VISIBLE else GONE
-            (node as? MaterialNode)?.properties?.run {
-                nodeColorValue.setColor(color)
-                nodeMetallicValue.progress = metallic
-                nodeRoughnessValue.progress = roughness
-                nodeReflectanceValue.progress = reflectance
-            }
-            val materialVisibility = if (node is MaterialNode) VISIBLE else GONE
-            setOfMaterialViews.forEach { it.visibility = materialVisibility }
-            val cloudAnchorVisibility = if (node is CloudAnchor) VISIBLE else GONE
-            setOfCloudAnchorViews.forEach { it.visibility = cloudAnchorVisibility }
-            nodeBottomSheetBehavior.state = STATE_EXPANDED
-            if (mainBottomSheetBehavior.state != STATE_COLLAPSED) {
-                mainBottomSheetBehavior.state = STATE_COLLAPSED
-                restoreMainBottomSheetExpandedState = true
+            coordinator.selectedNode -> {
+                nodeName.text = node.name
+                nodeCopy.visibility = if (node is CloudAnchor) VISIBLE else GONE
+                nodePlayPause.visibility = if (node is Video) VISIBLE else GONE
+                (node as? MaterialNode)?.properties?.run {
+                    nodeColorValue.setColor(color)
+                    nodeMetallicValue.progress = metallic
+                    nodeRoughnessValue.progress = roughness
+                    nodeReflectanceValue.progress = reflectance
+                }
+                val materialVisibility = if (node is MaterialNode) VISIBLE else GONE
+                setOfMaterialViews.forEach { it.visibility = materialVisibility }
+                val cloudAnchorVisibility = if (node is CloudAnchor) VISIBLE else GONE
+                setOfCloudAnchorViews.forEach { it.visibility = cloudAnchorVisibility }
+                nodeSheetBehavior.state = STATE_EXPANDED
+                if (sceneBehavior.state != STATE_COLLAPSED) {
+                    sceneBehavior.state = STATE_COLLAPSED
+                    sceneBottomSheet.tag = true
+                }
             }
         }
     }

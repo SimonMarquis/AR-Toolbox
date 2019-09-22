@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainHeader"
+    android:id="@+id/faceHeader"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_sheet_peek_height"
     android:background="@drawable/bottom_sheet_background"
@@ -15,10 +15,10 @@
     android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
     android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
     android:showDividers="middle"
-    tools:showIn="@layout/bottom_sheet_main">
+    tools:showIn="@layout/bottom_sheet_face">
 
     <ImageView
-        android:id="@+id/trackingImageView"
+        android:id="@+id/faceStatusIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="@dimen/material_unit_1"
@@ -26,7 +26,7 @@
         tools:src="@android:drawable/presence_online" />
 
     <TextView
-        android:id="@+id/trackingTextView"
+        android:id="@+id/faceStatusLabel"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
@@ -34,11 +34,11 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:lines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        tools:text="@string/tracking_success" />
+        android:text="@string/augmented_faces"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
     <ImageView
-        android:id="@+id/recordImageView"
+        android:id="@+id/faceRecording"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?selectableItemBackgroundBorderless"
@@ -48,19 +48,8 @@
         app:srcCompat="@drawable/ic_recording"
         tools:ignore="ContentDescription" />
 
-    <fr.smarquis.ar_toolbox.ImageViewPreventScroll
-        android:id="@+id/addImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:enabled="false"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
-        app:srcCompat="@drawable/ic_add_node"
-        tools:ignore="ContentDescription" />
-
     <ImageView
-        android:id="@+id/moreImageView"
+        android:id="@+id/faceMore"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="?selectableItemBackgroundBorderless"

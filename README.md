@@ -12,7 +12,11 @@
 
 | Scene | Models | Options | Settings |
 |---|---|---|---|
-| ![](art/screenshot_scene.png) | ![](art/screenshot_models.png) | ![](art/screenshot_options.png) | ![](art/screenshot_settings.png) |
+| ![](art/screenshot_scene.png) | ![](art/screenshot_scene_models.png) | ![](art/screenshot_scene_options.png) | ![](art/screenshot_scene_settings.png) |
+
+| Model chooser | Augmented Face | Native Viewer | Web Viewer |
+|---|---|---|---|
+| ![](art/screenshot_models_gltf.png) | ![](art/screenshot_faces.png) | ![](art/screenshot_viewer_native.png) | ![](art/screenshot_viewer_web.png) |
 
 ### Features
 

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sceneHeader"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_sheet_peek_height"
+    android:background="@drawable/bottom_sheet_background"
+    android:divider="@drawable/material_divider_1"
+    android:elevation="@dimen/material_elevation"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:orientation="horizontal"
+    android:outlineProvider="background"
+    android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
+    android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
+    android:showDividers="middle"
+    tools:showIn="@layout/bottom_sheet_scene">
+
+    <ImageView
+        android:id="@+id/sceneStatusIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="@dimen/material_unit_1"
+        tools:ignore="ContentDescription"
+        tools:src="@android:drawable/presence_online" />
+
+    <TextView
+        android:id="@+id/sceneStatusLabel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:gravity="center_vertical"
+        android:lines="1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        tools:text="@string/tracking_success" />
+
+    <ImageView
+        android:id="@+id/sceneRecording"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:enabled="false"
+        android:padding="@dimen/material_unit_1"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_recording"
+        tools:ignore="ContentDescription" />
+
+    <fr.smarquis.ar_toolbox.ImageViewPreventScroll
+        android:id="@+id/sceneAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:enabled="false"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_tint"
+        app:srcCompat="@drawable/ic_add_node"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/sceneMore"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        app:srcCompat="@drawable/ic_more"
+        tools:ignore="ContentDescription" />
+
+</LinearLayout>

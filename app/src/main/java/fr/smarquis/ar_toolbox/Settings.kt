@@ -26,6 +26,8 @@ class Settings(context: Context) {
     val selection = Selection(true, "selection", prefs)
     val reticle = Reticle(false, "reticle", prefs)
     val pointCloud = PointCloud(false, "pointCloud", prefs)
+    val faceRegions = FaceRegions(true, "faceRegions", prefs)
+    val faceMesh = FaceMesh(true, "faceMesh", prefs)
 
     open class AtomicBooleanPref(defaultValue: Boolean, private val key: String, private val prefs: SharedPreferences) {
 
@@ -255,6 +257,46 @@ class Settings(context: Context) {
 
         fun updateMaterial(arSceneView: ArSceneView, block: (MaterialProperties.() -> Unit)) {
             arSceneView.findNode<Node>()?.properties(block)
+        }
+
+    }
+
+    class FaceRegions(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+
+        fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
+            toggle()
+            applyTo(menuItem)
+            applyTo(arSceneView)
+        }
+
+        fun applyTo(arSceneView: ArSceneView) {
+            arSceneView.scene?.callOnHierarchy {
+                (it as? FaceActivity.FaceNode)?.apply(this)
+            }
+        }
+
+        fun applyTo(menuItem: MenuItem) {
+            menuItem.isChecked = get()
+        }
+
+    }
+
+    class FaceMesh(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+
+        fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
+            toggle()
+            applyTo(menuItem)
+            applyTo(arSceneView)
+        }
+
+        fun applyTo(arSceneView: ArSceneView) {
+            arSceneView.scene?.callOnHierarchy {
+                (it as? FaceActivity.FaceNode)?.apply(this)
+            }
+        }
+
+        fun applyTo(menuItem: MenuItem) {
+            menuItem.isChecked = get()
         }
 
     }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/menu_group_face">
+        <item
+            android:id="@+id/menu_item_settings"
+            android:title="@string/menu_item_settings">
+            <menu>
+                <item
+                    android:id="@+id/menu_item_face_regions"
+                    android:checkable="true"
+                    android:title="@string/menu_item_face_regions"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+                <item
+                    android:id="@+id/menu_item_face_mesh"
+                    android:checkable="true"
+                    android:title="@string/menu_item_face_mesh"
+                    app:actionViewClass="android.view.View"
+                    app:showAsAction="collapseActionView" />
+            </menu>
+        </item>
+    </group>
+</menu>

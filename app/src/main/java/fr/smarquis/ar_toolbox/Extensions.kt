@@ -8,15 +8,18 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.provider.Settings
 import android.view.PixelCopy
+import android.view.View
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.ar.core.Plane
 import com.google.ar.core.Point
 import com.google.ar.core.Pose
 import com.google.ar.core.Session
+import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
@@ -31,8 +34,8 @@ val screenshotHandler = HandlerThread("screenshot")
     .also { it.start() }
     .let { Handler(it.looper) }
 
-fun Pose.formatTranslation(context: Context) = context.getString(R.string.format_pose_translation, tx(), ty(), tz())
-fun Pose.formatRotation(context: Context) = context.getString(R.string.format_pose_rotation, qx(), qy(), qz(), qw())
+fun Pose?.formatTranslation(context: Context): String = context.getString(R.string.format_pose_translation, this?.tx() ?: 0F, this?.ty() ?: 0F, this?.tz() ?: 0F)
+fun Pose?.formatRotation(context: Context): String = context.getString(R.string.format_pose_rotation, this?.qx() ?: 0F, this?.qy() ?: 0F, this?.qz() ?: 0F, this?.qw() ?: 0F)
 fun Vector3.format(context: Context) = context.getString(R.string.format_vector3, x, y, z)
 fun Quaternion.format(context: Context) = context.getString(R.string.format_quaternion, x, y, z, w)
 fun Session.format(context: Context) = context.getString(
@@ -114,3 +117,50 @@ fun @receiver:ColorInt Int.toArColor(): Color = Color(this)
 fun Pose.translation() = Vector3(tx(), ty(), tz())
 
 fun Pose.rotation() = Quaternion(qx(), qy(), qz(), qw())
+
+fun UnavailableException?.message(): Int {
+    return when (this) {
+        is UnavailableArcoreNotInstalledException -> R.string.exception_arcore_not_installed
+        is UnavailableApkTooOldException -> R.string.exception_apk_too_old
+        is UnavailableSdkTooOldException -> R.string.exception_sdk_too_old
+        is UnavailableDeviceNotCompatibleException -> R.string.exception_device_not_compatible
+        is UnavailableUserDeclinedInstallationException -> R.string.exception_user_declined_installation
+        else -> R.string.exception_unknown
+    }
+}
+
+fun View.behavior(): BottomSheetBehavior<out View> = BottomSheetBehavior.from(this)
+
+fun BottomSheetBehavior<out View>.toggle() {
+    state = when (state) {
+        BottomSheetBehavior.STATE_COLLAPSED -> BottomSheetBehavior.STATE_EXPANDED
+        BottomSheetBehavior.STATE_EXPANDED -> BottomSheetBehavior.STATE_COLLAPSED
+        else -> return
+    }
+}
+
+fun BottomSheetBehavior<out View>.update(@BottomSheetBehavior.State state: Int, isHideable: Boolean?) {
+    this.state = state
+    if (isHideable != null) {
+        this.isHideable = isHideable
+    }
+}
+
+fun createArCoreViewerIntent(model: Uri, link: String? = null, title: String? = null): Intent {
+    val builder = model.buildUpon()
+    if (!link.isNullOrBlank()) builder.appendQueryParameter("link", link)
+    if (!title.isNullOrBlank()) builder.appendQueryParameter("title", title)
+    // com.google.ar.core/.viewer.IntentForwardActivity
+    // com.google.android.googlequicksearchbox/.ViewerLauncher
+    // com.google.android.googlequicksearchbox/com.google.ar.core.viewer.ViewerActivity
+    return Intent(Intent.ACTION_VIEW, builder.build()).apply { `package` = "com.google.ar.core" }
+}
+
+fun Intent?.safeStartActivity(context: Context) {
+    if (this == null) return
+    if (resolveActivity(context.packageManager) == null) return
+    try {
+        context.startActivity(this)
+    } catch (e: Exception) {
+    }
+}
