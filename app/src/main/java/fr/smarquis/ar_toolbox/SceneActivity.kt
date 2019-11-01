@@ -185,7 +185,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
     private fun initNodeBottomSheet() {
         nodeBottomSheet.behavior().apply {
             skipCollapsed = true
-            bottomSheetCallback = object : BottomSheetCallback() {
+            addBottomSheetCallback(object : BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {}
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     bottomSheet.requestLayout()
@@ -193,7 +193,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                         coordinator.selectNode(null)
                     }
                 }
-            }
+            })
             state = STATE_HIDDEN
         }
         nodeHeader.setOnClickListener { coordinator.selectNode(null) }
