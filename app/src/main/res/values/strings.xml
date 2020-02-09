@@ -10,7 +10,7 @@
     <string name="format_pose_rotation">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
     <string name="format_vector3">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
     <string name="format_quaternion">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
-    <string name="format_session">[Anchors: %1$d, Planes: %2$d, Points: %3$d]</string>
+    <string name="format_session">[Anchors:%1$d, Planes:%2$d, Points:%3$d]</string>
     <string name="format_camera_config">[Size:%1$s, Fps:%2$s, Depth:%3$b]</string>
     <string name="format_distance_m">%.2f m</string>
     <string name="format_distance_cm">%d cm</string>
