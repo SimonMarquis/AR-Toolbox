@@ -21,6 +21,7 @@
     <string name="tracking_failure_insufficient_light">Insufficient light</string>
     <string name="tracking_failure_excessive_motion">Excessive motion</string>
     <string name="tracking_failure_insufficient_features">Insufficient features</string>
+    <string name="tracking_failure_camera_unavailable">Camera unavailable</string>
     <string name="augmented_faces">Augmented Faces</string>
 
     <string name="menu_item_screenshot">Screen capture</string>

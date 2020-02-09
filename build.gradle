@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.6.0-alpha12'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.ar.sceneform:plugin:1.12.0'
+        classpath 'com.google.ar.sceneform:plugin:1.15.0'
     }
 }
 

@@ -369,6 +369,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                     INSUFFICIENT_LIGHT -> R.string.tracking_failure_insufficient_light
                     EXCESSIVE_MOTION -> R.string.tracking_failure_excessive_motion
                     INSUFFICIENT_FEATURES -> R.string.tracking_failure_insufficient_features
+                    CAMERA_UNAVAILABLE -> R.string.tracking_failure_camera_unavailable
                     null -> 0
                 }
                 STOPPED -> R.string.tracking_stopped
@@ -383,7 +384,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 TRACKING -> android.R.drawable.presence_online
                 PAUSED -> when (reason) {
                     NONE -> android.R.drawable.presence_invisible
-                    BAD_STATE -> android.R.drawable.presence_busy
+                    BAD_STATE, CAMERA_UNAVAILABLE -> android.R.drawable.presence_busy
                     INSUFFICIENT_LIGHT, EXCESSIVE_MOTION, INSUFFICIENT_FEATURES -> android.R.drawable.presence_away
                     null -> 0
                 }
