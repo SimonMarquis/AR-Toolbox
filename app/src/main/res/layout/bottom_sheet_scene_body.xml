@@ -220,7 +220,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cameraLabel"
         app:layout_constraintTop_toBottomOf="@+id/sceneLabel" />
+
+    <TextView
+        android:id="@+id/cameraLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_camera_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cameraValue"
+        app:layout_constraintTop_toBottomOf="@+id/sceneValue" />
+
+    <TextView
+        android:id="@+id/cameraValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cameraLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,10 +15,9 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.ar.core.Plane
-import com.google.ar.core.Point
-import com.google.ar.core.Pose
-import com.google.ar.core.Session
+import com.google.ar.core.*
+import com.google.ar.core.CameraConfig.DepthSensorUsage.DO_NOT_USE
+import com.google.ar.core.CameraConfig.DepthSensorUsage.REQUIRE_AND_USE
 import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.math.Quaternion
@@ -43,6 +42,16 @@ fun Session.format(context: Context) = context.getString(
     allAnchors.count(),
     getAllTrackables(Plane::class.java).count(),
     getAllTrackables(Point::class.java).count()
+)
+
+fun CameraConfig.format(context: Context) = context.getString(
+    R.string.format_camera_config,
+    textureSize,
+    fpsRange,
+    when (depthSensorUsage) {
+        REQUIRE_AND_USE -> true
+        DO_NOT_USE, null -> false
+    }
 )
 
 fun formatDistance(context: Context, pose: Pose?, vector3: Vector3): String {

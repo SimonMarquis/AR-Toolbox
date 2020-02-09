@@ -96,6 +96,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
 
     override fun onArResumed() {
         sceneBottomSheet.behavior().update(state = STATE_EXPANDED, isHideable = false)
+        cameraValue.text = arSceneView.session?.cameraConfig?.format(this)
     }
 
     private fun initWithIntent(intent: Intent?) {
