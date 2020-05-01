@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
     android:paddingRight="@dimen/bottom_sheet_horizontal_padding"
     android:paddingBottom="@dimen/material_unit_1"
-    tools:ignore="KeyboardInaccessibleWidget"
+    tools:ignore="KeyboardInaccessibleWidget,Overdraw"
     tools:showIn="@layout/bottom_sheet_face">
 
     <TextView

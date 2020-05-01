@@ -39,6 +39,7 @@ android {
     }
     lintOptions {
         textReport = true
+        disable "UnsafeExperimentalUsageError","UnsafeExperimentalUsageWarning"
     }
 }
 

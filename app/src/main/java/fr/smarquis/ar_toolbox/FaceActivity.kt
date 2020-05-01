@@ -69,10 +69,6 @@ class FaceActivity : ArActivity(R.layout.activity_face) {
     }
 
     private fun onArUpdate() {
-        val frame = arSceneView.arFrame
-        val camera = frame?.camera
-        val state = camera?.trackingState // Always TrackingState.PAUSED
-
         val updatedFaces = arSceneView.arFrame?.getUpdatedTrackables(AugmentedFace::class.java)
         updatedFaces?.forEach {
             when (it.trackingState) {
