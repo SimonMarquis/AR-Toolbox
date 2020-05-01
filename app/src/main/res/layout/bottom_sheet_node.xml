@@ -10,6 +10,7 @@
     android:theme="@style/ThemeOverlay.MaterialComponents.Light"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
+    app:gestureInsetBottomIgnored="true"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:showIn="@layout/activity_scene">
 

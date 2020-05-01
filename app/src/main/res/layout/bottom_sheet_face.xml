@@ -11,6 +11,7 @@
     app:behavior_hideable="true"
     app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
     app:behavior_skipCollapsed="false"
+    app:gestureInsetBottomIgnored="true"
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:showIn="@layout/activity_face">
 

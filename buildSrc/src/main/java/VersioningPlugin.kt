@@ -1,8 +1,4 @@
-import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.internal.api.ApkVariantOutputImpl
-import com.android.build.gradle.internal.api.LibraryVariantOutputImpl
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -20,13 +16,6 @@ import org.gradle.api.Project
 class VersioningPlugin : Plugin<Project> {
 
     companion object {
-        private val ABI_CODES = mapOf(
-            "universal" to 0,
-            "armeabi-v7a" to 1,
-            "arm64-v8a" to 2,
-            "x86" to 3,
-            "x86_64" to 4
-        )
         private const val EXTENSION_KEY = "versioning"
     }
 
@@ -35,10 +24,6 @@ class VersioningPlugin : Plugin<Project> {
         project.afterEvaluate {
             validateExtension(version)
             validateDefaultConfig(project, version)
-            when {
-                project.plugins.hasPlugin("com.android.application") -> renameApplication(project, version)
-                project.plugins.hasPlugin("com.android.library") -> renameLibrary(project, version)
-            }
         }
     }
 
@@ -78,56 +63,6 @@ class VersioningPlugin : Plugin<Project> {
                     |}
                     """.trimMargin()
             )
-        }
-    }
-
-    private val BaseExtension.app: AppExtension
-        get() = this as AppExtension
-
-    @SuppressWarnings("DefaultLocale")
-    private fun renameApplication(project: Project, version: Version) {
-        project.android.app.applicationVariants.all { variant ->
-            // Rename APKs
-            variant.outputs.all { output ->
-                @Suppress("LABEL_NAME_CLASH")
-                val apk = output as? ApkVariantOutputImpl ?: return@all
-                if (project.android.splits.abi.isEnable) {
-                    val abi = apk.getFilter("ABI") ?: "universal"
-                    apk.versionCodeOverride = variant.versionCode * 10 + ABI_CODES.getValue(abi)
-                    apk.outputFileName = "${variant.applicationId}-${version.name()}-$abi-${variant.baseName}.apk"
-                } else {
-                    apk.outputFileName = "${variant.applicationId}-${version.name()}-${variant.baseName}.apk"
-                }
-                project.logger.lifecycle(apk.outputFileName)
-            }
-
-            // Rename AABs
-            val bundleTask = project.tasks.getByName("bundle${variant.name.capitalize()}")
-            val renamingTask = project.tasks.register("${bundleTask.name}Renaming") { task ->
-                task.doLast {
-                    val directory = "${project.buildDir}/outputs/bundle/${variant.name}"
-                    val aab = project.fileTree(directory) { it.include("*.aab") }.firstOrNull() ?: return@doLast
-                    val filename = "${variant.applicationId}-${version.name()}-${variant.baseName}.aab"
-                    aab.renameTo(project.file("$directory/$filename"))
-                    project.logger.lifecycle(filename)
-                }
-            }
-            bundleTask.finalizedBy(renamingTask)
-        }
-    }
-
-    private val BaseExtension.lib: LibraryExtension
-        get() = this as LibraryExtension
-
-    private fun renameLibrary(project: Project, version: Version) {
-        project.android.lib.libraryVariants.all { variant ->
-            variant.outputs.all { output ->
-                @Suppress("LABEL_NAME_CLASH")
-                val aar = (output as? LibraryVariantOutputImpl) ?: return@all
-                val archivesBaseName = project.property("archivesBaseName")
-                aar.outputFileName = "$archivesBaseName-${version.name()}-${variant.baseName}.aar"
-                project.logger.lifecycle(aar.outputFileName)
-            }
         }
     }
 
