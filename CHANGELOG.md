@@ -2,8 +2,9 @@
 
 <details><summary>Releases</summary>
 
-<!-- MarkdownTOC -->
+<!-- MarkdownTOC autolink="true" -->
 
+- [1.8.0](#180)
 - [1.7.0](#170)
 - [1.6.0](#160)
 - [1.5.0](#150)
@@ -16,6 +17,12 @@
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.8.0
+> 2020.05.01
+
+- 📦 Update arcore 1.16.0 & sceneform 1.15.0
+- ⚙ Display camera configuration
 
 ## 1.7.0
 > 2019.09.22
