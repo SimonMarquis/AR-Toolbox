@@ -22,8 +22,8 @@
     <string name="format_quaternion">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
     <string name="format_session">[Anchors:%1$d, Planes:%2$d, Points:%3$d]</string>
     <string name="format_camera_config">[Size:%1$s, Fps:%2$s, Depth:%3$b]</string>
-    <string name="format_distance_m">%.2f m</string>
-    <string name="format_distance_cm">%d cm</string>
+    <string name="format_distance_m">%.2f&#160;m</string>
+    <string name="format_distance_cm">%d&#160;cm</string>
 
     <string name="tracking_success">Tracking</string>
     <string name="tracking_stopped">Tracking stopped</string>
