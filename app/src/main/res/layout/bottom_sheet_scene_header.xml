@@ -19,52 +19,46 @@
 
     <ImageView
         android:id="@+id/sceneStatusIcon"
+        style="@style/HeaderStatus"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="@dimen/material_unit_1"
         tools:ignore="ContentDescription"
         tools:src="@android:drawable/presence_online" />
 
     <TextView
         android:id="@+id/sceneStatusLabel"
+        style="@style/HeaderTitle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:ellipsize="end"
-        android:gravity="center_vertical"
-        android:lines="1"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         tools:text="@string/tracking_success" />
 
     <ImageView
         android:id="@+id/sceneRecording"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
         android:enabled="false"
-        android:padding="@dimen/material_unit_1"
+        android:tint="@null"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_recording"
         tools:ignore="ContentDescription" />
 
     <fr.smarquis.ar_toolbox.ImageViewPreventScroll
         android:id="@+id/sceneAdd"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
         android:enabled="false"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_add_node"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/sceneMore"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="@dimen/material_unit_1"
         app:srcCompat="@drawable/ic_more"
         tools:ignore="ContentDescription" />
 

@@ -14,11 +14,11 @@
 
     <TextView
         android:id="@+id/nodeColorLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_color_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeColorValue"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,11 +34,11 @@
 
     <TextView
         android:id="@+id/nodeMetallicLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_metallic_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeMetallicValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeColorValue" />
 
@@ -54,11 +54,11 @@
 
     <TextView
         android:id="@+id/nodeRoughnessLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_roughness_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeMetallicValue" />
 
@@ -74,11 +74,11 @@
 
     <TextView
         android:id="@+id/nodeReflectanceLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_reflectance_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessValue" />
 
@@ -94,109 +94,109 @@
 
     <TextView
         android:id="@+id/nodeCloudAnchorIdLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_cloud_anchor_id_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorIdValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceValue" />
 
     <TextView
         android:id="@+id/nodeCloudAnchorIdValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdLabel" />
 
     <TextView
         android:id="@+id/nodeCloudAnchorStateLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_cloud_anchor_state_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdValue" />
 
     <TextView
         android:id="@+id/nodeCloudAnchorStateValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/nodeMeasureLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateLabel" />
 
     <TextView
         android:id="@+id/nodeMeasureLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_measure_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeMeasureValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateValue" />
 
     <TextView
         android:id="@+id/nodeMeasureValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeMeasureLabel" />
 
     <TextView
         android:id="@+id/nodePositionLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_position_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodePositionValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeMeasureValue" />
 
     <TextView
         android:id="@+id/nodePositionValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/nodeRotationLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodePositionLabel" />
 
     <TextView
         android:id="@+id/nodeRotationLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_rotation_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeRotationValue"
         app:layout_constraintTop_toBottomOf="@+id/nodePositionValue" />
 
     <TextView
         android:id="@+id/nodeRotationValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/nodeScaleLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeRotationLabel" />
 
     <TextView
         android:id="@+id/nodeScaleLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_scale_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodeScaleValue"
         app:layout_constraintTop_toBottomOf="@+id/nodeRotationValue" />
 
     <TextView
         android:id="@+id/nodeScaleValue"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nodeScaleLabel" />
 

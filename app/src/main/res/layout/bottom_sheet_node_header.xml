@@ -19,9 +19,9 @@
 
     <ImageView
         android:id="@+id/nodeStatus"
+        style="@style/HeaderStatus"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:padding="@dimen/material_unit_1"
         tools:ignore="ContentDescription"
         tools:src="@android:drawable/presence_online" />
 
@@ -34,12 +34,10 @@
 
         <TextView
             android:id="@+id/nodeName"
+            style="@style/HeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:ellipsize="end"
-            android:lines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             tools:text="Sphere #1" />
 
         <TextView
@@ -61,41 +59,33 @@
 
     <ImageView
         android:id="@+id/nodePlayPause"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_play_pause"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/nodeCopy"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_copy_node"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/nodeUndo"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_undo"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/nodeDelete"
+        style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?selectableItemBackgroundBorderless"
-        android:padding="@dimen/material_unit_1"
-        android:tint="@color/ic_tint"
         app:srcCompat="@drawable/ic_delete_node"
         tools:ignore="ContentDescription" />
 

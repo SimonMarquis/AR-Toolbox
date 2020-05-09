@@ -8,4 +8,35 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HeaderStatus">
+        <item name="android:padding">@dimen/material_unit_1</item>
+    </style>
+
+    <style name="HeaderTitle">
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
+        <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="HeaderButton">
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/material_unit_1</item>
+        <item name="android:tint">@color/ic_tint</item>
+    </style>
+
+    <style name="ModelIcon">
+        <item name="android:background">?selectableItemBackgroundBorderless</item>
+        <item name="android:padding">@dimen/material_unit_1</item>
+        <item name="android:tint">@color/ic_model_tint</item>
+    </style>
+
+    <style name="PropertyLabel">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PropertyValue">
+        <item name="android:fontFamily">monospace</item>
+    </style>
+
 </resources>

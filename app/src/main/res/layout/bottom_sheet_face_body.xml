@@ -14,79 +14,79 @@
 
     <TextView
         android:id="@+id/faceForeheadLeftLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_forehead_left_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/faceForeheadLeftTranslation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/faceForeheadLeftTranslation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/faceForeheadLeftRotation"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftLabel" />
 
     <TextView
         android:id="@+id/faceForeheadLeftRotation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightLabel"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftTranslation" />
 
     <TextView
         android:id="@+id/faceForeheadRightLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_forehead_right_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightTranslation"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftRotation" />
 
     <TextView
         android:id="@+id/faceForeheadRightTranslation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightRotation"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightLabel" />
 
     <TextView
         android:id="@+id/faceForeheadRightRotation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/faceNoseTipLabel"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightTranslation" />
 
     <TextView
         android:id="@+id/faceNoseTipLabel"
+        style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_nose_tip_label"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/faceNoseTipTranslation"
         app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightRotation" />
 
     <TextView
         android:id="@+id/faceNoseTipTranslation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toTopOf="@+id/faceNoseTipRotation"
         app:layout_constraintTop_toBottomOf="@+id/faceNoseTipLabel" />
 
     <TextView
         android:id="@+id/faceNoseTipRotation"
+        style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="monospace"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/faceNoseTipTranslation" />
 
