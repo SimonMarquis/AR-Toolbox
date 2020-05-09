@@ -22,16 +22,16 @@
 ### Features
 
 - **Scene debug**: Camera position, Camera rotation, Anchors, Planes, Points
-- **[Scene configuration](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Sunlight, Shadows, Plane renderer, Selection visualizer
-- **[3D models](https://developers.google.com/ar/develop/java/sceneform/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF, Video
-- **[Material properties](https://developers.google.com/ar/develop/java/sceneform/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
-- **[Gestures](https://developers.google.com/ar/develop/java/sceneform/build-scene)**: Drag, Rotate, Scale
+- **[Scene configuration](https://developers.google.com/sceneform/develop/build-scene)**: Sunlight, Shadows, Plane renderer, Selection visualizer
+- **[3D models](https://developers.google.com/sceneform/develop/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF, Video
+- **[Material properties](https://developers.google.com/sceneform/develop/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
+- **[Gestures](https://developers.google.com/sceneform/develop/build-scene)**: Drag, Rotate, Scale
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
 - **[Augmented faces](https://developers.google.com/ar/develop/java/augmented-faces/)**: Identify regions of a detected face
 - **[Native & web scene viewers](https://developers.google.com/ar/develop/java/scene-viewer)**: Interactive models in native or on the web
 - **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
 - **[PointCloud](https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/PointCloud)**: Feature points
-- **[Screen capture & recording](https://developers.google.com/ar/develop/java/sceneform/video-recording)**: 480p, 720p, 1080p, 2160p
+- **[Screen capture & recording](https://developers.google.com/sceneform/develop/video-recording)**: 480p, 720p, 1080p, 2160p
 
 ## Credits
 
