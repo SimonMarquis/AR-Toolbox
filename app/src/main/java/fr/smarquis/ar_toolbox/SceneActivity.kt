@@ -173,7 +173,6 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             promptExternalModel()
         }
         modelCloudAnchor.setOnClickListener { model.selection.value = CloudAnchor::class }
-        modelCloudAnchor.setOnLongClickListener { promptCloudAnchorId().let { true } }
         colorValue.setOnColorChangeListener { color ->
             arSceneView.planeRenderer.material?.thenAccept {
                 it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())

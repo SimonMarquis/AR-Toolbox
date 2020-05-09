@@ -6,6 +6,16 @@
     <string name="scene_viewer_native_link">https://poly.google.com/view/dLHpzNdygsg</string>
     <string name="scene_viewer_web">https://model-viewer.glitch.me/</string>
 
+    <string name="tooltip_model_sphere">Sphere</string>
+    <string name="tooltip_model_cylinder">Cylinder</string>
+    <string name="tooltip_model_cube">Cube</string>
+    <string name="tooltip_model_layout">Layout</string>
+    <string name="tooltip_model_andy">Andy</string>
+    <string name="tooltip_model_drawing">Drawing</string>
+    <string name="tooltip_model_link">Link</string>
+    <string name="tooltip_model_cloud_anchor">Cloud Anchor</string>
+    <string name="tooltip_model_video">Video</string>
+
     <string name="format_pose_translation">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
     <string name="format_pose_rotation">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
     <string name="format_vector3">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
