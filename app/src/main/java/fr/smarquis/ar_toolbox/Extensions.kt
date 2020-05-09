@@ -155,14 +155,15 @@ fun BottomSheetBehavior<out View>.update(@BottomSheetBehavior.State state: Int, 
     }
 }
 
-fun createArCoreViewerIntent(model: Uri, link: String? = null, title: String? = null): Intent {
-    val builder = model.buildUpon()
-    if (!link.isNullOrBlank()) builder.appendQueryParameter("link", link)
-    if (!title.isNullOrBlank()) builder.appendQueryParameter("title", title)
-    // com.google.ar.core/.viewer.IntentForwardActivity
-    // com.google.android.googlequicksearchbox/.ViewerLauncher
-    // com.google.android.googlequicksearchbox/com.google.ar.core.viewer.ViewerActivity
-    return Intent(Intent.ACTION_VIEW, builder.build()).apply { `package` = "com.google.ar.core" }
+fun createArCoreViewerIntent(uri: Uri, model: String, link: String, title: String): Intent = Intent(Intent.ACTION_VIEW).apply {
+    `package` = "com.google.ar.core"
+    data = uri.buildUpon()
+        .appendQueryParameter("file", model)
+        .appendQueryParameter("mode", "ar_preferred")
+        .appendQueryParameter("title", title)
+        .appendQueryParameter("link", link)
+        .appendQueryParameter("resizable", "true")
+        .build()
 }
 
 fun Intent?.safeStartActivity(context: Context) {

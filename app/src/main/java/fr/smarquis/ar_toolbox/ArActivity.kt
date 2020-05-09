@@ -49,9 +49,10 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
 
     private val arCoreViewerIntent by lazy {
         createArCoreViewerIntent(
-            model = getString(R.string.scene_viewer_native_data).toUri(),
+            uri = getString(R.string.scene_viewer_native_uri).toUri(),
+            model = getString(R.string.scene_viewer_native_model),
             link = getString(R.string.scene_viewer_native_link),
-            title = null
+            title = getString(R.string.scene_viewer_native_title)
         )
     }
 

@@ -2,8 +2,10 @@
 
     <string name="app_name">AR Toolbox</string>
 
-    <string name="scene_viewer_native_data">https://poly.googleapis.com/downloads/fp/1562493657287824/dLHpzNdygsg/f4d6EEz_n3N/Astronaut.gltf</string>
+    <string name="scene_viewer_native_uri">https://arvr.google.com/scene-viewer/1.1</string>
+    <string name="scene_viewer_native_model">https://poly.googleapis.com/downloads/fp/1562493657287824/dLHpzNdygsg/f4d6EEz_n3N/Astronaut.gltf</string>
     <string name="scene_viewer_native_link">https://poly.google.com/view/dLHpzNdygsg</string>
+    <string name="scene_viewer_native_title">Astronaut</string>
     <string name="scene_viewer_web">https://model-viewer.glitch.me/</string>
 
     <string name="tooltip_model_sphere">Sphere</string>
