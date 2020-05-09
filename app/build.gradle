@@ -8,7 +8,7 @@ apply plugin: VersioningPlugin
 
 versioning {
     major = 1
-    minor = 8
+    minor = 9
     patch = 0
 }
 
