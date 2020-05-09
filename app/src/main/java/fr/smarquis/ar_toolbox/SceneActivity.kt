@@ -56,6 +56,12 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             nodeCloudAnchorIdLabel, nodeCloudAnchorIdValue
         )
     }
+    private val setOfMeasureViews by lazy {
+        setOf(
+            nodeUndo,
+            nodeMeasureLabel, nodeMeasureValue
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,6 +159,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             modelSphere.isSelected = it == Sphere::class
             modelCylinder.isSelected = it == Cylinder::class
             modelCube.isSelected = it == Cube::class
+            modelMeasure.isSelected = it == Measure::class
             modelView.isSelected = it == Layout::class
             modelAndy.isSelected = it == Andy::class
             modelVideo.isSelected = it == Video::class
@@ -167,11 +174,10 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         modelCube.setOnClickListener { model.selection.value = Cube::class }
         modelView.setOnClickListener { model.selection.value = Layout::class }
         modelDrawing.setOnClickListener { model.selection.value = Drawing::class }
+        modelMeasure.setOnClickListener { model.selection.value = Measure::class }
         modelAndy.setOnClickListener { model.selection.value = Andy::class }
         modelVideo.setOnClickListener { model.selection.value = Video::class }
-        modelLink.setOnClickListener {
-            promptExternalModel()
-        }
+        modelLink.setOnClickListener { promptExternalModel() }
         modelCloudAnchor.setOnClickListener { model.selection.value = CloudAnchor::class }
         colorValue.setOnColorChangeListener { color ->
             arSceneView.planeRenderer.material?.thenAccept {
@@ -200,6 +206,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
         nodePlayPause.setOnClickListener { (coordinator.focusedNode as? Video)?.toggle() }
         nodeDelete.setOnClickListener { coordinator.focusedNode?.detach() }
+        nodeUndo.setOnClickListener { (coordinator.focusedNode as? Measure)?.undo() }
 
         nodeColorValue.setOnColorChangeListener { focusedMaterialNode()?.update { color = it } }
         nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
@@ -340,6 +347,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             Layout::class -> Layout(this, coordinator, settings)
             Andy::class -> Andy(this, coordinator, settings)
             Video::class -> Video(this, coordinator, settings)
+            Measure::class -> Measure(this, materialProperties(), coordinator, settings)
             Link::class -> Link(this, model.externalModelUri.value.orEmpty().toUri(), coordinator, settings)
             CloudAnchor::class -> CloudAnchor(this, arSceneView.session ?: return, coordinator, settings)
             else -> return
@@ -435,7 +443,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             node != coordinator.selectedNode || node != coordinator.focusedNode || nodeBottomSheet.behavior().state == STATE_HIDDEN -> Unit
             else -> {
                 nodeStatus.setImageResource(node.statusIcon())
-                nodeDistance.text = formatDistance(this, arSceneView.arFrame?.camera?.pose, node.worldPosition)
+                nodeDistance.text = arSceneView.arFrame?.camera.formatDistance(this, node)
                 nodeCopy.isEnabled = (node as? CloudAnchor)?.id() != null
                 nodePlayPause.isActivated = (node as? Video)?.isPlaying() == true
                 nodeDelete.isEnabled = !node.isTransforming
@@ -444,6 +452,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 nodeScaleValue.text = node.worldScale.format(this)
                 nodeCloudAnchorStateValue.text = (node as? CloudAnchor)?.state()?.name
                 nodeCloudAnchorIdValue.text = (node as? CloudAnchor)?.let { it.id() ?: "…" }
+                nodeMeasureValue.text = (node as? Measure)?.formatMeasure()
             }
         }
     }
@@ -478,6 +487,8 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 setOfMaterialViews.forEach { it.visibility = materialVisibility }
                 val cloudAnchorVisibility = if (node is CloudAnchor) VISIBLE else GONE
                 setOfCloudAnchorViews.forEach { it.visibility = cloudAnchorVisibility }
+                val measureVisibility = if (node is Measure) VISIBLE else GONE
+                setOfMeasureViews.forEach { it.visibility = measureVisibility }
                 nodeSheetBehavior.state = STATE_EXPANDED
                 if (sceneBehavior.state != STATE_COLLAPSED) {
                     sceneBehavior.state = STATE_COLLAPSED

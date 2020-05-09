@@ -80,6 +80,16 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
+        android:id="@+id/nodeUndo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_tint"
+        app:srcCompat="@drawable/ic_undo"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
         android:id="@+id/nodeDelete"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

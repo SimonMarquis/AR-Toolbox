@@ -26,6 +26,7 @@
 - **[3D models](https://developers.google.com/sceneform/develop/create-renderables)**: Sphere, Cylinder, Cube, Layout, sfa, Freehand drawing, glTF, Video
 - **[Material properties](https://developers.google.com/sceneform/develop/standard_properties.pdf)**: Color, Metallic, Roughness, Reflectance
 - **[Gestures](https://developers.google.com/sceneform/develop/build-scene)**: Drag, Rotate, Scale
+- **[Measurements](https://developers.google.com/sceneform/develop/create-renderables)**: Measure polylines
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
 - **[Augmented faces](https://developers.google.com/ar/develop/java/augmented-faces/)**: Identify regions of a detected face
 - **[Native & web scene viewers](https://developers.google.com/ar/develop/java/scene-viewer)**: Interactive models in native or on the web

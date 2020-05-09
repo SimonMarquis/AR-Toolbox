@@ -61,6 +61,21 @@
         app:srcCompat="@drawable/ic_model_cube"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
+    <ImageView
+        android:id="@+id/modelMeasure"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackgroundBorderless"
+        android:padding="@dimen/material_unit_1"
+        android:tint="@color/ic_model_tint"
+        android:tooltipText="@string/tooltip_model_measure"
+        app:layout_constraintBottom_toBottomOf="@+id/modelDrawing"
+        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
+        app:layout_constraintTop_toTopOf="@+id/modelDrawing"
+        app:srcCompat="@drawable/ic_model_measure"
+        tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
         android:id="@+id/modelView"
@@ -102,11 +117,11 @@
         android:padding="@dimen/material_unit_1"
         android:tint="@color/ic_model_tint"
         android:tooltipText="@string/tooltip_model_drawing"
-        app:layout_constraintBottom_toBottomOf="@+id/modelAndy"
-        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintBottom_toBottomOf="@+id/modelVideo"
+        app:layout_constraintEnd_toStartOf="@+id/modelMeasure"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/modelVideo"
-        app:layout_constraintTop_toTopOf="@+id/modelAndy"
+        app:layout_constraintTop_toTopOf="@+id/modelVideo"
         app:srcCompat="@drawable/ic_model_drawing"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -118,11 +133,11 @@
         android:padding="@dimen/material_unit_1"
         android:tint="@color/ic_model_tint"
         android:tooltipText="@string/tooltip_model_cloud_anchor"
-        app:layout_constraintBottom_toBottomOf="@+id/modelDrawing"
+        app:layout_constraintBottom_toBottomOf="@+id/modelLink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/modelLink"
-        app:layout_constraintTop_toTopOf="@+id/modelDrawing"
+        app:layout_constraintTop_toTopOf="@+id/modelLink"
         app:srcCompat="@drawable/ic_model_cloud_anchor"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -134,11 +149,11 @@
         android:padding="@dimen/material_unit_1"
         android:tint="@color/ic_model_tint"
         android:tooltipText="@string/tooltip_model_link"
-        app:layout_constraintBottom_toBottomOf="@+id/modelCloudAnchor"
+        app:layout_constraintBottom_toBottomOf="@+id/modelMeasure"
         app:layout_constraintEnd_toStartOf="@+id/modelCloudAnchor"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
-        app:layout_constraintTop_toTopOf="@+id/modelCloudAnchor"
+        app:layout_constraintStart_toEndOf="@+id/modelMeasure"
+        app:layout_constraintTop_toTopOf="@+id/modelMeasure"
         app:srcCompat="@drawable/ic_model_link"
         tools:ignore="ContentDescription,UnusedAttribute" />
 

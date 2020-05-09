@@ -10,6 +10,7 @@ import android.text.Layout
 import android.text.style.AlignmentSpan
 import android.util.Log
 import android.view.ContextThemeWrapper
+import android.view.Gravity
 import android.view.MotionEvent
 import android.widget.ImageView
 import android.widget.Toast
@@ -27,14 +28,18 @@ import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLB
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLTF2
 import com.google.ar.sceneform.collision.RayHit
+import com.google.ar.sceneform.collision.Sphere
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.*
 import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
+import com.google.ar.sceneform.ux.BaseTransformableNode
 import com.google.ar.sceneform.ux.TransformableNode
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.reflect.KClass
+import kotlin.text.Typography.leftGuillemete
+import kotlin.text.Typography.rightGuillemete
 
 sealed class Nodes(
     name: String,
@@ -114,11 +119,13 @@ sealed class Nodes(
 
     open fun detach() {
         if (this == transformationSystem.selectedNode) {
-            transformationSystem.selectNode(null)
+            transformationSystem.selectNode(selectionContinuation())
         }
         (parent as? AnchorNode)?.anchor?.detach()
         setParent(null)
     }
+
+    open fun selectionContinuation(): BaseTransformableNode? = null
 
     open fun statusIcon(): Int = if (isActive && isEnabled && (parent as? AnchorNode)?.isTracking == true)
         android.R.drawable.presence_online
@@ -206,6 +213,122 @@ class Cube(
         val color = properties.color.toArColor()
         makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
+    }
+
+}
+
+class Measure(
+    private val context: Context,
+    properties: MaterialProperties,
+    coordinator: Coordinator,
+    settings: Settings
+) : MaterialNode("Measure", properties, coordinator, settings) {
+
+    companion object {
+        private const val SPHERE_RADIUS = 0.01f
+        private const val SPHERE_COLLISION_RADIUS = SPHERE_RADIUS * 5
+        private const val CYLINDER_RADIUS = SPHERE_RADIUS * 0.5F
+    }
+
+    private var previous: Measure? = null
+    private var next: Measure? = null
+    private var join: Join? = null
+
+    init {
+        rotationController.isEnabled = false
+        scaleController.isEnabled = false
+        makeOpaqueWithColor(context.applicationContext, properties.color.toArColor()).thenAccept {
+            renderable = ShapeFactory.makeSphere(SPHERE_RADIUS, Vector3.zero(), it).apply { collisionShape = Sphere(SPHERE_COLLISION_RADIUS, Vector3.zero()) }
+            join?.applyMaterial(it)
+        }
+        linkTo(lastSelected())
+    }
+
+    private fun linkTo(to: Measure?) {
+        if (to == null) return
+        join?.let { removeChild(it) }
+        previous = to.apply { next = this@Measure }
+        join = Join(to).apply {
+            this@Measure.addChild(this)
+            this@Measure.renderable?.material?.let { applyMaterial(it) }
+        }
+    }
+
+    private fun unlink() {
+        previous?.next = null
+        next?.run {
+            previous = null
+            removeChild(join)
+        }
+    }
+
+    private fun last(): Measure = next?.last() ?: this
+
+    private fun lastSelected(): Measure? = (transformationSystem.selectedNode as Measure?)?.last()
+
+    override fun selectionContinuation(): BaseTransformableNode? = previous ?: next
+
+    override fun setParent(parent: NodeParent?) {
+        super.setParent(parent)
+        if (parent == null) unlink()
+    }
+
+    override fun attach(anchor: Anchor, scene: Scene, focus: Boolean) {
+        super.attach(anchor, scene, focus)
+        transformationSystem.selectNode(this)
+    }
+
+    override fun detach(): Unit = when (val last = last()) {
+        /* detach() self and propagate to the previous */
+        this -> super.detach().also { previous?.detach() }
+        /* Run detach() on the last */
+        else -> last.detach()
+    }
+
+    fun undo(): Unit = super.detach().also { next?.linkTo(previous) }
+
+    fun formatMeasure(): String = when {
+        previous == null && next == null -> "…"
+        previous == null && next?.next == null -> context.getString(R.string.format_measure_single, "", formatNextDistance())
+        next == null && previous?.previous == null -> context.getString(R.string.format_measure_single, formatPreviousDistance(), "")
+        else -> context.getString(R.string.format_measure_multiple, formatPreviousDistance(), formatNextDistance(), formatDistance(context, totalMeasurePrevious() + totalMeasureNext()))
+    }
+
+    private fun totalMeasurePrevious(): Double = previous?.let { it.totalMeasurePrevious() + distance(this, it) } ?: .0
+
+    private fun totalMeasureNext(): Double = next?.let { distance(this, it) + it.totalMeasureNext() } ?: .0
+
+    private fun formatPreviousDistance(): String = previous?.let { it.formatPreviousDistance() + formatDistance(context, this, it) + " $leftGuillemete " }.orEmpty()
+
+    private fun formatNextDistance(): String = next?.let { " $rightGuillemete " + formatDistance(context, this, it) + it.formatNextDistance() }.orEmpty()
+
+    private inner class Join(private val previous: Node) : Node() {
+
+        private val scale = Vector3.one()
+
+        init {
+            setOnTapListener { _, _ ->
+                Toast.makeText(context, formatDistance(context, this, previous), Toast.LENGTH_SHORT).apply { setGravity(Gravity.CENTER, 0, 0) }.show()
+            }
+        }
+
+        override fun onUpdate(frameTime: FrameTime) {
+            super.onUpdate(frameTime)
+            val start: Vector3 = this@Measure.worldPosition
+            val end: Vector3 = previous.worldPosition
+            localScale = scale.apply {
+                y = distance(start, end).toFloat()
+            }
+            worldPosition = Vector3.lerp(start, end, 0.5f)
+            val direction = Vector3.subtract(start, end).normalized()
+            val quaternion = Quaternion.lookRotation(direction, Vector3.up())
+            worldRotation = Quaternion.multiply(quaternion, Quaternion.axisAngle(Vector3.right(), 90f))
+        }
+
+        fun applyMaterial(material: Material?) {
+            renderable = ShapeFactory.makeCylinder(CYLINDER_RADIUS, 1F, Vector3.zero(), material)
+        }
+
     }
 
 }
@@ -549,6 +672,7 @@ class Video(
 
     private var mediaPlayer: MediaPlayer? = null
     private val texture = ExternalTexture()
+
     /* Use a child node to keep the video dimensions independent of scaling */
     private val video: Node = Node().apply { setParent(this@Video) }
 

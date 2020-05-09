@@ -17,6 +17,7 @@
     <string name="tooltip_model_link">Link</string>
     <string name="tooltip_model_cloud_anchor">Cloud Anchor</string>
     <string name="tooltip_model_video">Video</string>
+    <string name="tooltip_model_measure">Measure</string>
 
     <string name="format_pose_translation">[x:%1$ .03f, y:%2$ .03f, z:%3$ .03f]</string>
     <string name="format_pose_rotation">[x:%1$ .02f, y:%2$ .02f, z:%3$ .02f, w:%4$ .02f]</string>
@@ -26,6 +27,8 @@
     <string name="format_camera_config">[Size:%1$s, Fps:%2$s, Depth:%3$b]</string>
     <string name="format_distance_m">%.2f&#160;m</string>
     <string name="format_distance_cm">%d&#160;cm</string>
+    <string name="format_measure_single">[%1$s×%2$s]</string>
+    <string name="format_measure_multiple">[%1$s×%2$s] =&#160;%3$s</string>
 
     <string name="tracking_success">Tracking</string>
     <string name="tracking_stopped">Tracking stopped</string>
@@ -70,6 +73,7 @@
     <string name="entry_metallic_label">Metallic</string>
     <string name="entry_roughness_label">Roughness</string>
     <string name="entry_reflectance_label">Reflectance</string>
+    <string name="entry_measure_label">Measure</string>
     <string name="entry_scale_label">Scale</string>
     <string name="entry_face_forehead_left_label">Forehead left</string>
     <string name="entry_face_forehead_right_label">Forehead right</string>

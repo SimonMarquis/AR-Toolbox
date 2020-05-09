@@ -125,8 +125,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
-        app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
+        app:layout_constraintBottom_toTopOf="@+id/nodeMeasureLabel"
         app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateLabel" />
+
+    <TextView
+        android:id="@+id/nodeMeasureLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/material_unit_1"
+        android:text="@string/entry_measure_label"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/nodeMeasureValue"
+        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateValue" />
+
+    <TextView
+        android:id="@+id/nodeMeasureValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/nodeMeasureLabel" />
 
     <TextView
         android:id="@+id/nodePositionLabel"
@@ -136,7 +154,7 @@
         android:text="@string/entry_position_label"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/nodePositionValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateValue" />
+        app:layout_constraintTop_toBottomOf="@+id/nodeMeasureValue" />
 
     <TextView
         android:id="@+id/nodePositionValue"

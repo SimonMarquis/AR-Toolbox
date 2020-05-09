@@ -20,12 +20,14 @@ import com.google.ar.core.CameraConfig.DepthSensorUsage.DO_NOT_USE
 import com.google.ar.core.CameraConfig.DepthSensorUsage.REQUIRE_AND_USE
 import com.google.ar.core.exceptions.*
 import com.google.ar.sceneform.ArSceneView
+import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.Color
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
@@ -35,6 +37,7 @@ val screenshotHandler = HandlerThread("screenshot")
 
 fun Pose?.formatTranslation(context: Context): String = context.getString(R.string.format_pose_translation, this?.tx() ?: 0F, this?.ty() ?: 0F, this?.tz() ?: 0F)
 fun Pose?.formatRotation(context: Context): String = context.getString(R.string.format_pose_rotation, this?.qx() ?: 0F, this?.qy() ?: 0F, this?.qz() ?: 0F, this?.qw() ?: 0F)
+fun Pose.toVector3(): Vector3 = Vector3(tx(), ty(), tz())
 fun Vector3.format(context: Context) = context.getString(R.string.format_vector3, x, y, z)
 fun Quaternion.format(context: Context) = context.getString(R.string.format_quaternion, x, y, z, w)
 fun Session.format(context: Context) = context.getString(
@@ -54,12 +57,11 @@ fun CameraConfig.format(context: Context) = context.getString(
     }
 )
 
-fun formatDistance(context: Context, pose: Pose?, vector3: Vector3): String {
-    if (pose == null) return "?"
-    val x = pose.tx() - vector3.x
-    val y = pose.ty() - vector3.y
-    val z = pose.tz() - vector3.z
-    val distanceInMeters = sqrt((x * x + y * y + z * z).toDouble())
+fun Camera?.formatDistance(context: Context, node: Node) = this?.pose?.let { formatDistance(context, distance(it.toVector3(), node.worldPosition)) } ?: "?"
+
+fun formatDistance(context: Context, src: Node, dst: Node): String = formatDistance(context, distance(src, dst))
+
+fun formatDistance(context: Context, distanceInMeters: Double): String {
     val distanceInCentimeters = (distanceInMeters * 100).roundToInt()
     return if (distanceInCentimeters >= 100) {
         context.getString(R.string.format_distance_m, distanceInCentimeters / 100F)
@@ -67,6 +69,10 @@ fun formatDistance(context: Context, pose: Pose?, vector3: Vector3): String {
         context.getString(R.string.format_distance_cm, distanceInCentimeters)
     }
 }
+
+fun distance(src: Node, dst: Node): Double = distance(src.worldPosition, dst.worldPosition)
+
+fun distance(src: Vector3, dst: Vector3): Double = sqrt(((dst.x - src.x).pow(2) + (dst.y - src.y).pow(2) + (dst.z - src.z).pow(2)).toDouble())
 
 class SimpleSeekBarChangeListener(val block: (Int) -> Unit) : SeekBar.OnSeekBarChangeListener {
     override fun onStartTrackingTouch(seekBar: SeekBar?) {}
