@@ -4,6 +4,7 @@
 
 <!-- MarkdownTOC autolink="true" -->
 
+- [1.10.0](#1100)
 - [1.9.0](#190)
 - [1.8.0](#180)
 - [1.7.0](#170)
@@ -18,6 +19,13 @@
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.10.0
+> 2020.10.25
+
+- 📦 Update arcore 1.20.0
+- 📦 Update sceneform 1.17.1
+- 🐛 Misc bug fix
 
 ## 1.9.0
 > 2020.05.09
