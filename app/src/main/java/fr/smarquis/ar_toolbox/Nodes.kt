@@ -264,7 +264,7 @@ class Measure(
 
     private fun last(): Measure = next?.last() ?: this
 
-    private fun lastSelected(): Measure? = (transformationSystem.selectedNode as Measure?)?.last()
+    private fun lastSelected(): Measure? = (transformationSystem.selectedNode as? Measure)?.last()
 
     override fun selectionContinuation(): BaseTransformableNode? = previous ?: next
 
