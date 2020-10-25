@@ -40,9 +40,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:enabled="false"
-        android:tint="@null"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_recording"
+        app:tint="@null"
         tools:ignore="ContentDescription" />
 
     <fr.smarquis.ar_toolbox.ImageViewPreventScroll

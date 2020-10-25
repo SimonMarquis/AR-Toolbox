@@ -495,6 +495,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                     sceneBottomSheet.tag = true
                 }
             }
+            else -> {}
         }
     }
 

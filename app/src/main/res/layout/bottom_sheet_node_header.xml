@@ -45,15 +45,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:drawableLeft="@drawable/ic_distance"
             android:drawablePadding="@dimen/material_unit_0_5"
-            android:drawableTint="?android:attr/textColorSecondary"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:lines="1"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             tools:ignore="RtlHardcoded"
-            tools:text="1.23 m" />
+            tools:text="1.23 m"
+            app:drawableLeftCompat="@drawable/ic_distance"
+            app:drawableTint="?android:attr/textColorSecondary" />
 
     </LinearLayout>
 

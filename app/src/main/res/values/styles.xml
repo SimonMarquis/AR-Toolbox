@@ -22,13 +22,13 @@
     <style name="HeaderButton">
         <item name="android:background">?selectableItemBackgroundBorderless</item>
         <item name="android:padding">@dimen/material_unit_1</item>
-        <item name="android:tint">@color/ic_tint</item>
+        <item name="tint">@color/ic_tint</item>
     </style>
 
     <style name="ModelIcon">
         <item name="android:background">?selectableItemBackgroundBorderless</item>
         <item name="android:padding">@dimen/material_unit_1</item>
-        <item name="android:tint">@color/ic_model_tint</item>
+        <item name="tint">@color/ic_model_tint</item>
     </style>
 
     <style name="PropertyLabel">
