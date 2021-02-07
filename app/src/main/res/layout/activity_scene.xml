@@ -10,8 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <include layout="@layout/bottom_sheet_scene" />
+    <include
+        android:id="@+id/bottomSheetScene"
+        layout="@layout/bottom_sheet_scene" />
 
-    <include layout="@layout/bottom_sheet_node" />
+    <include
+        android:id="@+id/bottomSheetNode"
+        layout="@layout/bottom_sheet_node" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

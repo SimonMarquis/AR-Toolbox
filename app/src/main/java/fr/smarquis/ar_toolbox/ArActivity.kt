@@ -11,6 +11,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,7 +19,6 @@ import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
 import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -27,15 +27,15 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
+import androidx.viewbinding.ViewBinding
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.Session
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.UnavailableException
 import com.google.ar.sceneform.ArSceneView
-import kotlinx.android.synthetic.main.activity_scene.*
 
-abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(contentLayoutId) {
+abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater) -> T) : AppCompatActivity() {
 
     private companion object {
         const val REQUEST_CAMERA_PERMISSION = 1
@@ -56,19 +56,26 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
         )
     }
 
+    protected lateinit var binding: T
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(inflate(layoutInflater).also { binding = it }.root)
+    }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        videoRecorder = VideoRecorder(this, arSceneView()) { isRecording ->
+        videoRecorder = VideoRecorder(this, arSceneView) { isRecording ->
             if (isRecording) {
                 Toast.makeText(this, R.string.recording, Toast.LENGTH_LONG).show()
             }
 
-            recordingIndicator()?.apply {
+            recordingIndicator.apply {
                 visibility = if (isRecording) View.VISIBLE else View.GONE
                 (drawable as? Animatable)?.apply { if (isRecording) start() else stop() }
             }
         }
-        recordingIndicator()?.setOnClickListener {
+        recordingIndicator.setOnClickListener {
             videoRecorder.stop()
             videoRecorder.export()
         }
@@ -78,7 +85,7 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
         super.onResume()
         initArSession()
         try {
-            arSceneView().resume()
+            arSceneView.resume()
         } catch (ex: CameraNotAvailableException) {
             sessionInitializationFailed = true
         }
@@ -96,24 +103,24 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
 
     override fun onPause() {
         super.onPause()
-        arSceneView().pause()
+        arSceneView.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        arSceneView().destroy()
+        arSceneView.destroy()
         videoRecorder.stop()
     }
 
-    abstract fun arSceneView(): ArSceneView
+    abstract val arSceneView: ArSceneView
 
-    open fun features() = emptySet<Session.Feature>()
+    abstract val recordingIndicator: ImageView
+
+    open val features = emptySet<Session.Feature>()
 
     abstract fun config(session: Session): Config
 
-    abstract fun recordingIndicator(): ImageView?
-
-    open fun onArResumed() {}
+    open fun onArResumed() = Unit
 
     private fun hasCameraPermission() = ActivityCompat.checkSelfPermission(this, CAMERA) == PERMISSION_GRANTED
 
@@ -131,7 +138,7 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
     }
 
     private fun initArSession() {
-        if (arSceneView().session != null) {
+        if (arSceneView.session != null) {
             return
         }
         if (!hasCameraPermission()) {
@@ -149,9 +156,9 @@ abstract class ArActivity(@LayoutRes contentLayoutId: Int) : AppCompatActivity(c
                 return
             }
             installRequested = false
-            val session = Session(applicationContext, features())
+            val session = Session(applicationContext, features)
             session.configure(config(session))
-            arSceneView().setupSession(session)
+            arSceneView.setupSession(session)
             return
         } catch (e: UnavailableException) {
             sessionException = e

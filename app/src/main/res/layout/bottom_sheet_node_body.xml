@@ -13,191 +13,191 @@
     tools:showIn="@layout/bottom_sheet_node">
 
     <TextView
-        android:id="@+id/nodeColorLabel"
+        android:id="@+id/colorLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_color_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeColorValue"
+        app:layout_constraintBottom_toTopOf="@+id/colorValue"
         app:layout_constraintTop_toTopOf="parent" />
 
     <fr.smarquis.ar_toolbox.ColorSeekBar
-        android:id="@+id/nodeColorValue"
+        android:id="@+id/colorValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/material_unit_1"
         android:layout_marginRight="@dimen/material_unit_1"
         app:colorSeeds="@array/colors"
-        app:layout_constraintBottom_toTopOf="@+id/nodeMetallicLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeColorLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/metallicLabel"
+        app:layout_constraintTop_toBottomOf="@+id/colorLabel" />
 
     <TextView
-        android:id="@+id/nodeMetallicLabel"
+        android:id="@+id/metallicLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_metallic_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeMetallicValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeColorValue" />
+        app:layout_constraintBottom_toTopOf="@+id/metallicValue"
+        app:layout_constraintTop_toBottomOf="@+id/colorValue" />
 
     <SeekBar
-        android:id="@+id/nodeMetallicValue"
+        android:id="@+id/metallicValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicLabel"
+        app:layout_constraintBottom_toTopOf="@+id/roughnessLabel"
+        app:layout_constraintTop_toBottomOf="@+id/metallicLabel"
         tools:progress="0" />
 
     <TextView
-        android:id="@+id/nodeRoughnessLabel"
+        android:id="@+id/roughnessLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_roughness_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeRoughnessValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeMetallicValue" />
+        app:layout_constraintBottom_toTopOf="@+id/roughnessValue"
+        app:layout_constraintTop_toBottomOf="@+id/metallicValue" />
 
     <SeekBar
-        android:id="@+id/nodeRoughnessValue"
+        android:id="@+id/roughnessValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessLabel"
+        app:layout_constraintBottom_toTopOf="@+id/reflectanceLabel"
+        app:layout_constraintTop_toBottomOf="@+id/roughnessLabel"
         tools:progress="40" />
 
     <TextView
-        android:id="@+id/nodeReflectanceLabel"
+        android:id="@+id/reflectanceLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_reflectance_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeReflectanceValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeRoughnessValue" />
+        app:layout_constraintBottom_toTopOf="@+id/reflectanceValue"
+        app:layout_constraintTop_toBottomOf="@+id/roughnessValue" />
 
     <SeekBar
-        android:id="@+id/nodeReflectanceValue"
+        android:id="@+id/reflectanceValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         android:max="100"
-        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorIdLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceLabel"
+        app:layout_constraintBottom_toTopOf="@+id/cloudAnchorIdLabel"
+        app:layout_constraintTop_toBottomOf="@+id/reflectanceLabel"
         tools:progress="50" />
 
     <TextView
-        android:id="@+id/nodeCloudAnchorIdLabel"
+        android:id="@+id/cloudAnchorIdLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_cloud_anchor_id_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorIdValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeReflectanceValue" />
+        app:layout_constraintBottom_toTopOf="@+id/cloudAnchorIdValue"
+        app:layout_constraintTop_toBottomOf="@+id/reflectanceValue" />
 
     <TextView
-        android:id="@+id/nodeCloudAnchorIdValue"
+        android:id="@+id/cloudAnchorIdValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/cloudAnchorStateLabel"
+        app:layout_constraintTop_toBottomOf="@+id/cloudAnchorIdLabel" />
 
     <TextView
-        android:id="@+id/nodeCloudAnchorStateLabel"
+        android:id="@+id/cloudAnchorStateLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_cloud_anchor_state_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeCloudAnchorStateValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorIdValue" />
+        app:layout_constraintBottom_toTopOf="@+id/cloudAnchorStateValue"
+        app:layout_constraintTop_toBottomOf="@+id/cloudAnchorIdValue" />
 
     <TextView
-        android:id="@+id/nodeCloudAnchorStateValue"
+        android:id="@+id/cloudAnchorStateValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/nodeMeasureLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/measureLabel"
+        app:layout_constraintTop_toBottomOf="@+id/cloudAnchorStateLabel" />
 
     <TextView
-        android:id="@+id/nodeMeasureLabel"
+        android:id="@+id/measureLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_measure_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeMeasureValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeCloudAnchorStateValue" />
+        app:layout_constraintBottom_toTopOf="@+id/measureValue"
+        app:layout_constraintTop_toBottomOf="@+id/cloudAnchorStateValue" />
 
     <TextView
-        android:id="@+id/nodeMeasureValue"
+        android:id="@+id/measureValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/nodePositionLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeMeasureLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/positionLabel"
+        app:layout_constraintTop_toBottomOf="@+id/measureLabel" />
 
     <TextView
-        android:id="@+id/nodePositionLabel"
+        android:id="@+id/positionLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_position_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodePositionValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeMeasureValue" />
+        app:layout_constraintBottom_toTopOf="@+id/positionValue"
+        app:layout_constraintTop_toBottomOf="@+id/measureValue" />
 
     <TextView
-        android:id="@+id/nodePositionValue"
+        android:id="@+id/positionValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/nodeRotationLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodePositionLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/rotationLabel"
+        app:layout_constraintTop_toBottomOf="@+id/positionLabel" />
 
     <TextView
-        android:id="@+id/nodeRotationLabel"
+        android:id="@+id/rotationLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_rotation_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeRotationValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodePositionValue" />
+        app:layout_constraintBottom_toTopOf="@+id/rotationValue"
+        app:layout_constraintTop_toBottomOf="@+id/positionValue" />
 
     <TextView
-        android:id="@+id/nodeRotationValue"
+        android:id="@+id/rotationValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/nodeScaleLabel"
-        app:layout_constraintTop_toBottomOf="@+id/nodeRotationLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/scaleLabel"
+        app:layout_constraintTop_toBottomOf="@+id/rotationLabel" />
 
     <TextView
-        android:id="@+id/nodeScaleLabel"
+        android:id="@+id/scaleLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_scale_label"
-        app:layout_constraintBottom_toTopOf="@+id/nodeScaleValue"
-        app:layout_constraintTop_toBottomOf="@+id/nodeRotationValue" />
+        app:layout_constraintBottom_toTopOf="@+id/scaleValue"
+        app:layout_constraintTop_toBottomOf="@+id/rotationValue" />
 
     <TextView
-        android:id="@+id/nodeScaleValue"
+        android:id="@+id/scaleValue"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nodeScaleLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/scaleLabel" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

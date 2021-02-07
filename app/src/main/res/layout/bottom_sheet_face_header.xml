@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/faceHeader"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_sheet_peek_height"
     android:background="@drawable/bottom_sheet_background"
@@ -18,7 +17,7 @@
     tools:showIn="@layout/bottom_sheet_face">
 
     <ImageView
-        android:id="@+id/faceStatusIcon"
+        android:id="@+id/status"
         style="@style/HeaderStatus"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -26,7 +25,7 @@
         tools:src="@android:drawable/presence_online" />
 
     <TextView
-        android:id="@+id/faceStatusLabel"
+        android:id="@+id/label"
         style="@style/HeaderTitle"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -35,7 +34,7 @@
         android:text="@string/augmented_faces" />
 
     <ImageView
-        android:id="@+id/faceRecording"
+        android:id="@+id/recording"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -46,7 +45,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/faceMore"
+        android:id="@+id/more"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

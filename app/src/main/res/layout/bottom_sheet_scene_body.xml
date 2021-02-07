@@ -14,12 +14,12 @@
     tools:showIn="@layout/bottom_sheet_scene">
 
     <ImageView
-        android:id="@+id/modelSphere"
+        android:id="@+id/sphere"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_sphere"
-        app:layout_constraintEnd_toStartOf="@+id/modelCylinder"
+        app:layout_constraintEnd_toStartOf="@+id/cylinder"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,128 +28,128 @@
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelCylinder"
+        android:id="@+id/cylinder"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_cylinder"
-        app:layout_constraintBottom_toBottomOf="@+id/modelSphere"
-        app:layout_constraintEnd_toStartOf="@+id/modelCube"
+        app:layout_constraintBottom_toBottomOf="@+id/sphere"
+        app:layout_constraintEnd_toStartOf="@+id/cube"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelSphere"
-        app:layout_constraintTop_toTopOf="@+id/modelSphere"
+        app:layout_constraintStart_toEndOf="@+id/sphere"
+        app:layout_constraintTop_toTopOf="@+id/sphere"
         app:srcCompat="@drawable/ic_model_cylinder"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelCube"
+        android:id="@+id/cube"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_cube"
-        app:layout_constraintBottom_toBottomOf="@+id/modelCylinder"
-        app:layout_constraintEnd_toStartOf="@+id/modelView"
+        app:layout_constraintBottom_toBottomOf="@+id/cylinder"
+        app:layout_constraintEnd_toStartOf="@+id/view"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelCylinder"
-        app:layout_constraintTop_toTopOf="@+id/modelCylinder"
+        app:layout_constraintStart_toEndOf="@+id/cylinder"
+        app:layout_constraintTop_toTopOf="@+id/cylinder"
         app:srcCompat="@drawable/ic_model_cube"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelMeasure"
+        android:id="@+id/measure"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_measure"
-        app:layout_constraintBottom_toBottomOf="@+id/modelDrawing"
-        app:layout_constraintEnd_toStartOf="@+id/modelLink"
+        app:layout_constraintBottom_toBottomOf="@+id/drawing"
+        app:layout_constraintEnd_toStartOf="@+id/link"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelDrawing"
-        app:layout_constraintTop_toTopOf="@+id/modelDrawing"
+        app:layout_constraintStart_toEndOf="@+id/drawing"
+        app:layout_constraintTop_toTopOf="@+id/drawing"
         app:srcCompat="@drawable/ic_model_measure"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelView"
+        android:id="@+id/view"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_layout"
-        app:layout_constraintBottom_toBottomOf="@+id/modelCube"
-        app:layout_constraintEnd_toStartOf="@+id/modelAndy"
+        app:layout_constraintBottom_toBottomOf="@+id/cube"
+        app:layout_constraintEnd_toStartOf="@+id/andy"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelCube"
-        app:layout_constraintTop_toTopOf="@+id/modelCube"
+        app:layout_constraintStart_toEndOf="@+id/cube"
+        app:layout_constraintTop_toTopOf="@+id/cube"
         app:srcCompat="@drawable/ic_model_layout"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelAndy"
+        android:id="@+id/andy"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_andy"
-        app:layout_constraintBottom_toBottomOf="@+id/modelView"
-        app:layout_constraintEnd_toStartOf="@+id/modelVideo"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toStartOf="@+id/video"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelView"
-        app:layout_constraintTop_toTopOf="@+id/modelView"
+        app:layout_constraintStart_toEndOf="@+id/view"
+        app:layout_constraintTop_toTopOf="@+id/view"
         app:srcCompat="@drawable/ic_model_andy"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelDrawing"
+        android:id="@+id/drawing"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_drawing"
-        app:layout_constraintBottom_toBottomOf="@+id/modelVideo"
-        app:layout_constraintEnd_toStartOf="@+id/modelMeasure"
+        app:layout_constraintBottom_toBottomOf="@+id/video"
+        app:layout_constraintEnd_toStartOf="@+id/measure"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelVideo"
-        app:layout_constraintTop_toTopOf="@+id/modelVideo"
+        app:layout_constraintStart_toEndOf="@+id/video"
+        app:layout_constraintTop_toTopOf="@+id/video"
         app:srcCompat="@drawable/ic_model_drawing"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelCloudAnchor"
+        android:id="@+id/cloudAnchor"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_cloud_anchor"
-        app:layout_constraintBottom_toBottomOf="@+id/modelLink"
+        app:layout_constraintBottom_toBottomOf="@+id/link"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelLink"
-        app:layout_constraintTop_toTopOf="@+id/modelLink"
+        app:layout_constraintStart_toEndOf="@+id/link"
+        app:layout_constraintTop_toTopOf="@+id/link"
         app:srcCompat="@drawable/ic_model_cloud_anchor"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelLink"
+        android:id="@+id/link"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_link"
-        app:layout_constraintBottom_toBottomOf="@+id/modelMeasure"
-        app:layout_constraintEnd_toStartOf="@+id/modelCloudAnchor"
+        app:layout_constraintBottom_toBottomOf="@+id/measure"
+        app:layout_constraintEnd_toStartOf="@+id/cloudAnchor"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelMeasure"
-        app:layout_constraintTop_toTopOf="@+id/modelMeasure"
+        app:layout_constraintStart_toEndOf="@+id/measure"
+        app:layout_constraintTop_toTopOf="@+id/measure"
         app:srcCompat="@drawable/ic_model_link"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
     <ImageView
-        android:id="@+id/modelVideo"
+        android:id="@+id/video"
         style="@style/ModelIcon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:tooltipText="@string/tooltip_model_video"
-        app:layout_constraintBottom_toBottomOf="@+id/modelAndy"
-        app:layout_constraintEnd_toStartOf="@+id/modelDrawing"
+        app:layout_constraintBottom_toBottomOf="@+id/andy"
+        app:layout_constraintEnd_toStartOf="@+id/drawing"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/modelAndy"
-        app:layout_constraintTop_toTopOf="@+id/modelAndy"
+        app:layout_constraintStart_toEndOf="@+id/andy"
+        app:layout_constraintTop_toTopOf="@+id/andy"
         app:srcCompat="@drawable/ic_model_video"
         tools:ignore="ContentDescription,UnusedAttribute" />
 
@@ -161,7 +161,7 @@
         android:text="@string/entry_color_label"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/colorValue"
-        app:layout_constraintTop_toBottomOf="@+id/modelLink" />
+        app:layout_constraintTop_toBottomOf="@+id/link" />
 
     <fr.smarquis.ar_toolbox.ColorSeekBar
         android:id="@+id/colorValue"

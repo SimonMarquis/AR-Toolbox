@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.ar.core.*
 import com.google.ar.core.CameraConfig.DepthSensorUsage.DO_NOT_USE
@@ -143,6 +144,8 @@ fun UnavailableException?.message(): Int {
         else -> R.string.exception_unknown
     }
 }
+
+fun ViewBinding.behavior(): BottomSheetBehavior<out View> = root.behavior()
 
 fun View.behavior(): BottomSheetBehavior<out View> = BottomSheetBehavior.from(this)
 

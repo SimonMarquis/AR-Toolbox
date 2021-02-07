@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/faceBottomSheet"
     android:layout_width="@dimen/bottom_sheet_width"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
@@ -15,8 +14,12 @@
     app:layout_behavior="@string/bottom_sheet_behavior"
     tools:showIn="@layout/activity_face">
 
-    <include layout="@layout/bottom_sheet_face_header" />
+    <include
+        android:id="@+id/header"
+        layout="@layout/bottom_sheet_face_header" />
 
-    <include layout="@layout/bottom_sheet_face_body" />
+    <include
+        android:id="@+id/body"
+        layout="@layout/bottom_sheet_face_body" />
 
 </LinearLayout>

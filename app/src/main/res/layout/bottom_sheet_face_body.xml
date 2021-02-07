@@ -13,81 +13,81 @@
     tools:showIn="@layout/bottom_sheet_face">
 
     <TextView
-        android:id="@+id/faceForeheadLeftLabel"
+        android:id="@+id/foreheadLeftLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_forehead_left_label"
-        app:layout_constraintBottom_toTopOf="@+id/faceForeheadLeftTranslation"
+        app:layout_constraintBottom_toTopOf="@+id/foreheadLeftTranslation"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/faceForeheadLeftTranslation"
+        android:id="@+id/foreheadLeftTranslation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/faceForeheadLeftRotation"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/foreheadLeftRotation"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadLeftLabel" />
 
     <TextView
-        android:id="@+id/faceForeheadLeftRotation"
+        android:id="@+id/foreheadLeftRotation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightLabel"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftTranslation" />
+        app:layout_constraintBottom_toTopOf="@+id/foreheadRightLabel"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadLeftTranslation" />
 
     <TextView
-        android:id="@+id/faceForeheadRightLabel"
+        android:id="@+id/foreheadRightLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_forehead_right_label"
-        app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightTranslation"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadLeftRotation" />
+        app:layout_constraintBottom_toTopOf="@+id/foreheadRightTranslation"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadLeftRotation" />
 
     <TextView
-        android:id="@+id/faceForeheadRightTranslation"
+        android:id="@+id/foreheadRightTranslation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/faceForeheadRightRotation"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/foreheadRightRotation"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadRightLabel" />
 
     <TextView
-        android:id="@+id/faceForeheadRightRotation"
+        android:id="@+id/foreheadRightRotation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/faceNoseTipLabel"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightTranslation" />
+        app:layout_constraintBottom_toTopOf="@+id/noseTipLabel"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadRightTranslation" />
 
     <TextView
-        android:id="@+id/faceNoseTipLabel"
+        android:id="@+id/noseTipLabel"
         style="@style/PropertyLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/material_unit_1"
         android:text="@string/entry_face_nose_tip_label"
-        app:layout_constraintBottom_toTopOf="@+id/faceNoseTipTranslation"
-        app:layout_constraintTop_toBottomOf="@+id/faceForeheadRightRotation" />
+        app:layout_constraintBottom_toTopOf="@+id/noseTipTranslation"
+        app:layout_constraintTop_toBottomOf="@+id/foreheadRightRotation" />
 
     <TextView
-        android:id="@+id/faceNoseTipTranslation"
+        android:id="@+id/noseTipTranslation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/faceNoseTipRotation"
-        app:layout_constraintTop_toBottomOf="@+id/faceNoseTipLabel" />
+        app:layout_constraintBottom_toTopOf="@+id/noseTipRotation"
+        app:layout_constraintTop_toBottomOf="@+id/noseTipLabel" />
 
     <TextView
-        android:id="@+id/faceNoseTipRotation"
+        android:id="@+id/noseTipRotation"
         style="@style/PropertyValue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/faceNoseTipTranslation" />
+        app:layout_constraintTop_toBottomOf="@+id/noseTipTranslation" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

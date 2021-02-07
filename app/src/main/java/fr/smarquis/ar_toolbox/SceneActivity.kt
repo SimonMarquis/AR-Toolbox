@@ -1,6 +1,5 @@
 package fr.smarquis.ar_toolbox
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -19,23 +18,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.net.toUri
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import com.google.ar.core.*
 import com.google.ar.core.TrackingFailureReason.*
 import com.google.ar.core.TrackingState.*
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
-import kotlinx.android.synthetic.main.activity_scene.*
-import kotlinx.android.synthetic.main.bottom_sheet_node.*
-import kotlinx.android.synthetic.main.bottom_sheet_node_body.*
-import kotlinx.android.synthetic.main.bottom_sheet_node_header.*
-import kotlinx.android.synthetic.main.bottom_sheet_scene.*
-import kotlinx.android.synthetic.main.bottom_sheet_scene_body.*
-import kotlinx.android.synthetic.main.bottom_sheet_scene_header.*
+import fr.smarquis.ar_toolbox.databinding.ActivitySceneBinding
+import fr.smarquis.ar_toolbox.databinding.DialogInputBinding
 
-class SceneActivity : ArActivity(R.layout.activity_scene) {
+class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inflate) {
 
     private val coordinator by lazy { Coordinator(this, ::onArTap, ::onNodeSelected, ::onNodeFocused) }
     private val model: SceneViewModel by viewModels()
@@ -43,25 +35,39 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
     private var drawing: Drawing? = null
 
     private val setOfMaterialViews by lazy {
-        setOf(
-            nodeColorValue, nodeColorLabel,
-            nodeMetallicValue, nodeMetallicLabel,
-            nodeRoughnessValue, nodeRoughnessLabel,
-            nodeReflectanceValue, nodeReflectanceLabel
-        )
+        with(bottomSheetNode.body) {
+            setOf(
+                colorValue, colorLabel,
+                metallicValue, metallicLabel,
+                roughnessValue, roughnessLabel,
+                reflectanceValue, reflectanceLabel
+            )
+        }
     }
     private val setOfCloudAnchorViews by lazy {
-        setOf(
-            nodeCloudAnchorStateLabel, nodeCloudAnchorStateValue,
-            nodeCloudAnchorIdLabel, nodeCloudAnchorIdValue
-        )
+        with(bottomSheetNode.body) {
+            setOf(
+                cloudAnchorStateLabel, cloudAnchorStateValue,
+                cloudAnchorIdLabel, cloudAnchorIdValue
+            )
+        }
     }
     private val setOfMeasureViews by lazy {
-        setOf(
-            nodeUndo,
-            nodeMeasureLabel, nodeMeasureValue
-        )
+        with(bottomSheetNode) {
+            setOf(
+                header.undo,
+                body.measureLabel, body.measureValue
+            )
+        }
     }
+
+    override val arSceneView: ArSceneView get() = binding.arSceneView
+
+    override val recordingIndicator: ImageView get() = bottomSheetScene.header.recording
+
+    private val bottomSheetScene get() = binding.bottomSheetScene
+
+    private val bottomSheetNode get() = binding.bottomSheetNode
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,10 +90,6 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         }
     }
 
-    override fun arSceneView(): ArSceneView = arSceneView
-
-    override fun recordingIndicator(): ImageView? = sceneRecording
-
     override fun config(session: Session): Config = Config(session).apply {
         lightEstimationMode = Config.LightEstimationMode.DISABLED
         planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
@@ -101,8 +103,8 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
     }
 
     override fun onArResumed() {
-        sceneBottomSheet.behavior().update(state = STATE_EXPANDED, isHideable = false)
-        cameraValue.text = arSceneView.session?.cameraConfig?.format(this)
+        bottomSheetScene.behavior().update(state = STATE_EXPANDED, isHideable = false)
+        bottomSheetScene.body.cameraValue.text = arSceneView.session?.cameraConfig?.format(this)
     }
 
     private fun initWithIntent(intent: Intent?) {
@@ -114,11 +116,10 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         }
     }
 
-    private fun initSceneBottomSheet() {
-        sceneBottomSheet.behavior().state = STATE_HIDDEN
-        sceneHeader.setOnClickListener { sceneBottomSheet.behavior().toggle() }
-
-        sceneAdd.setOnClickListener {
+    private fun initSceneBottomSheet() = with(bottomSheetScene) {
+        behavior().state = STATE_HIDDEN
+        header.root.setOnClickListener { behavior().toggle() }
+        header.add.setOnClickListener {
             val session = arSceneView.session
             val camera = arSceneView.arFrame?.camera ?: return@setOnClickListener
             if (session == null || camera.trackingState != TRACKING) return@setOnClickListener
@@ -126,7 +127,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         }
 
         initPopupMenu(
-            anchor = sceneMore,
+            anchor = header.more,
             menu = R.menu.menu_scene,
             onClick = {
                 when (it.itemId) {
@@ -146,50 +147,56 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             },
             onUpdate = {
                 findItem(R.id.menu_item_clean_up_scene).isEnabled = arSceneView.scene.findInHierarchy { it is Nodes } != null
-                settings.sunlight.applyTo(findItem(R.id.menu_item_sunlight))
-                settings.shadows.applyTo(findItem(R.id.menu_item_shadows))
-                settings.planes.applyTo(findItem(R.id.menu_item_plane_renderer))
-                settings.selection.applyTo(findItem(R.id.menu_item_selection_visualizer))
-                settings.reticle.applyTo(findItem(R.id.menu_item_reticle))
-                settings.pointCloud.applyTo(findItem(R.id.menu_item_point_cloud))
+                settings.apply {
+                    sunlight.applyTo(findItem(R.id.menu_item_sunlight))
+                    shadows.applyTo(findItem(R.id.menu_item_shadows))
+                    planes.applyTo(findItem(R.id.menu_item_plane_renderer))
+                    selection.applyTo(findItem(R.id.menu_item_selection_visualizer))
+                    reticle.applyTo(findItem(R.id.menu_item_reticle))
+                    pointCloud.applyTo(findItem(R.id.menu_item_point_cloud))
+                }
             }
         )
 
-        model.selection.observe(this, androidx.lifecycle.Observer {
-            modelSphere.isSelected = it == Sphere::class
-            modelCylinder.isSelected = it == Cylinder::class
-            modelCube.isSelected = it == Cube::class
-            modelMeasure.isSelected = it == Measure::class
-            modelView.isSelected = it == Layout::class
-            modelAndy.isSelected = it == Andy::class
-            modelVideo.isSelected = it == Video::class
-            modelDrawing.isSelected = it == Drawing::class
-            modelLink.isSelected = it == Link::class
-            modelCloudAnchor.isSelected = it == CloudAnchor::class
-            sceneAdd.requestDisallowInterceptTouchEvent = it == Drawing::class
-        })
-
-        modelSphere.setOnClickListener { model.selection.value = Sphere::class }
-        modelCylinder.setOnClickListener { model.selection.value = Cylinder::class }
-        modelCube.setOnClickListener { model.selection.value = Cube::class }
-        modelView.setOnClickListener { model.selection.value = Layout::class }
-        modelDrawing.setOnClickListener { model.selection.value = Drawing::class }
-        modelMeasure.setOnClickListener { model.selection.value = Measure::class }
-        modelAndy.setOnClickListener { model.selection.value = Andy::class }
-        modelVideo.setOnClickListener { model.selection.value = Video::class }
-        modelLink.setOnClickListener { promptExternalModel() }
-        modelCloudAnchor.setOnClickListener { model.selection.value = CloudAnchor::class }
-        colorValue.setOnColorChangeListener { color ->
-            arSceneView.planeRenderer.material?.thenAccept {
-                it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
+        model.selection.observe(this@SceneActivity) {
+            body.apply {
+                sphere.isSelected = it == Sphere::class
+                cylinder.isSelected = it == Cylinder::class
+                cube.isSelected = it == Cube::class
+                measure.isSelected = it == Measure::class
+                view.isSelected = it == Layout::class
+                andy.isSelected = it == Andy::class
+                video.isSelected = it == Video::class
+                drawing.isSelected = it == Drawing::class
+                link.isSelected = it == Link::class
+                cloudAnchor.isSelected = it == CloudAnchor::class
             }
-            settings.pointCloud.updateMaterial(arSceneView) { this.color = color }
+            header.add.requestDisallowInterceptTouchEvent = it == Drawing::class
         }
-        colorValue.post { colorValue.setColor(MaterialProperties.DEFAULT.color) }
+
+        body.apply {
+            sphere.setOnClickListener { model.selection.value = Sphere::class }
+            cylinder.setOnClickListener { model.selection.value = Cylinder::class }
+            cube.setOnClickListener { model.selection.value = Cube::class }
+            view.setOnClickListener { model.selection.value = Layout::class }
+            drawing.setOnClickListener { model.selection.value = Drawing::class }
+            measure.setOnClickListener { model.selection.value = Measure::class }
+            andy.setOnClickListener { model.selection.value = Andy::class }
+            video.setOnClickListener { model.selection.value = Video::class }
+            link.setOnClickListener { promptExternalModel() }
+            cloudAnchor.setOnClickListener { model.selection.value = CloudAnchor::class }
+            colorValue.setOnColorChangeListener { color ->
+                arSceneView.planeRenderer.material?.thenAccept {
+                    it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
+                }
+                settings.pointCloud.updateMaterial(arSceneView) { this.color = color }
+            }
+            colorValue.post { colorValue.setColor(MaterialProperties.DEFAULT.color) }
+        }
     }
 
-    private fun initNodeBottomSheet() {
-        nodeBottomSheet.behavior().apply {
+    private fun initNodeBottomSheet() = with(bottomSheetNode) {
+        behavior().apply {
             skipCollapsed = true
             addBottomSheetCallback(object : BottomSheetCallback() {
                 override fun onSlide(bottomSheet: View, slideOffset: Float) {}
@@ -202,51 +209,58 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             })
             state = STATE_HIDDEN
         }
-        nodeHeader.setOnClickListener { coordinator.selectNode(null) }
-        nodeCopy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this) }
-        nodePlayPause.setOnClickListener { (coordinator.focusedNode as? Video)?.toggle() }
-        nodeDelete.setOnClickListener { coordinator.focusedNode?.detach() }
-        nodeUndo.setOnClickListener { (coordinator.focusedNode as? Measure)?.undo() }
+        header.apply {
+            root.setOnClickListener { coordinator.selectNode(null) }
+            copy.setOnClickListener { (coordinator.focusedNode as? CloudAnchor)?.copyToClipboard(this@SceneActivity) }
+            playPause.setOnClickListener { (coordinator.focusedNode as? Video)?.toggle() }
+            delete.setOnClickListener { coordinator.focusedNode?.detach() }
+            undo.setOnClickListener { (coordinator.focusedNode as? Measure)?.undo() }
+        }
 
-        nodeColorValue.setOnColorChangeListener { focusedMaterialNode()?.update { color = it } }
-        nodeMetallicValue.progress = MaterialProperties.DEFAULT.metallic
-        nodeMetallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { metallic = it } })
-        nodeRoughnessValue.progress = MaterialProperties.DEFAULT.roughness
-        nodeRoughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { roughness = it } })
-        nodeReflectanceValue.progress = MaterialProperties.DEFAULT.reflectance
-        nodeReflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { reflectance = it } })
+        body.apply {
+            colorValue.setOnColorChangeListener { focusedMaterialNode()?.update { color = it } }
+            metallicValue.progress = MaterialProperties.DEFAULT.metallic
+            metallicValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { metallic = it } })
+            roughnessValue.progress = MaterialProperties.DEFAULT.roughness
+            roughnessValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { roughness = it } })
+            reflectanceValue.progress = MaterialProperties.DEFAULT.reflectance
+            reflectanceValue.setOnSeekBarChangeListener(SimpleSeekBarChangeListener { focusedMaterialNode()?.update { reflectance = it } })
+        }
     }
 
     private fun focusedMaterialNode() = (coordinator.focusedNode as? MaterialNode)
 
-    private fun materialProperties() = MaterialProperties(
-        if (focusedMaterialNode() != null) nodeColorValue.getColor() else colorValue.getColor(),
-        nodeMetallicValue.progress,
-        nodeRoughnessValue.progress,
-        nodeReflectanceValue.progress
-    )
+    private fun materialProperties() = with(bottomSheetNode.body) {
+        MaterialProperties(
+            color = if (focusedMaterialNode() != null) colorValue.getColor() else bottomSheetScene.body.colorValue.getColor(),
+            metallic = metallicValue.progress,
+            roughness = roughnessValue.progress,
+            reflectance = reflectanceValue.progress
+        )
+    }
 
-    private fun initAr() {
-        arSceneView.scene.addOnUpdateListener { onArUpdate() }
-        arSceneView.scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
+    private fun initAr() = with(arSceneView) {
+        scene.addOnUpdateListener { onArUpdate() }
+        scene.addOnPeekTouchListener { hitTestResult, motionEvent ->
             coordinator.onTouch(hitTestResult, motionEvent)
             if (shouldHandleDrawing(motionEvent, hitTestResult)) {
                 val x = motionEvent.x
                 val y = motionEvent.y
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> drawing = Drawing.create(x, y, true, materialProperties(), arSceneView, coordinator, settings)
+                    MotionEvent.ACTION_DOWN -> drawing = Drawing.create(x, y, true, materialProperties(), this, coordinator, settings)
                     MotionEvent.ACTION_MOVE -> drawing?.extend(x, y)
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> drawing = drawing?.deleteIfEmpty().let { null }
                 }
             }
         }
-
-        settings.sunlight.applyTo(arSceneView)
-        settings.shadows.applyTo(arSceneView)
-        settings.planes.applyTo(arSceneView)
-        settings.selection.applyTo(coordinator.selectionVisualizer)
-        settings.reticle.initAndApplyTo(arSceneView)
-        settings.pointCloud.initAndApplyTo(arSceneView)
+        settings.apply {
+            sunlight.applyTo(this@with)
+            shadows.applyTo(this@with)
+            planes.applyTo(this@with)
+            selection.applyTo(coordinator.selectionVisualizer)
+            reticle.initAndApplyTo(this@with)
+            pointCloud.initAndApplyTo(this@with)
+        }
     }
 
     private fun shouldHandleDrawing(motionEvent: MotionEvent? = null, hitTestResult: HitTestResult? = null): Boolean {
@@ -270,21 +284,20 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             .show()
     }
 
-    private fun promptExternalModelUri() {
-        val context = ContextThemeWrapper(this, R.style.AlertDialog)
-        @SuppressLint("InflateParams")
-        val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
-        view.findViewById<TextInputLayout>(R.id.dialog_input_layout).hint = getText(R.string.model_link_custom_hint)
-        val input = view.findViewById<TextInputEditText>(R.id.dialog_input_value)
-        input.inputType = InputType.TYPE_TEXT_VARIATION_URI
-        input.setText(model.externalModelUri.value.takeUnless { it in resources.getStringArray(R.array.models_uris) })
-        AlertDialog.Builder(context)
-            .setView(view)
-            .setPositiveButton(android.R.string.ok) { _, _ -> selectExternalModel(input.text.toString()) }
+    private fun prompt(block: DialogInputBinding.(AlertDialog.Builder) -> Unit) =
+        DialogInputBinding.inflate(LayoutInflater.from(ContextThemeWrapper(this, R.style.AlertDialog)), null, false).apply {
+            block(AlertDialog.Builder(root.context).setView(root))
+        }
+
+    private fun promptExternalModelUri() = prompt { builder ->
+        layout.hint = getText(R.string.model_link_custom_hint)
+        value.inputType = InputType.TYPE_TEXT_VARIATION_URI
+        value.setText(model.externalModelUri.value.takeUnless { it in resources.getStringArray(R.array.models_uris) })
+        builder.setPositiveButton(android.R.string.ok) { _, _ -> selectExternalModel(value.text.toString()) }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .setCancelable(false)
             .show()
-        input.requestFocus()
+        value.requestFocus()
     }
 
     private fun selectExternalModel(value: String) {
@@ -293,24 +306,18 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         Link.warmup(this, value.toUri())
     }
 
-    private fun promptCloudAnchorId() {
-        val context = ContextThemeWrapper(this, R.style.AlertDialog)
-        @SuppressLint("InflateParams")
-        val view: View = LayoutInflater.from(context).inflate(R.layout.dialog_input, null)
-        view.findViewById<TextInputLayout>(R.id.dialog_input_layout).hint = getText(R.string.cloud_anchor_id_hint)
-        val input = view.findViewById<TextInputEditText>(R.id.dialog_input_value)
-        input.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-        val dialog = AlertDialog.Builder(context)
-            .setView(view)
-            .setPositiveButton(R.string.cloud_anchor_id_resolve) { _, _ ->
-                CloudAnchor.resolve(input.text.toString(), this, arSceneView, coordinator, settings)?.also {
-                    coordinator.focusNode(it)
-                }
+    private fun promptCloudAnchorId() = prompt { builder ->
+        layout.hint = getText(R.string.cloud_anchor_id_hint)
+        value.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        val dialog = builder.setPositiveButton(R.string.cloud_anchor_id_resolve) { _, _ ->
+            CloudAnchor.resolve(value.text.toString(), applicationContext, arSceneView, coordinator, settings)?.also {
+                coordinator.focusNode(it)
             }
+        }
             .setNegativeButton(android.R.string.cancel) { _, _ -> }
             .setCancelable(false)
             .show()
-        input.addTextChangedListener(object : TextWatcher {
+        value.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 dialog.getButton(DialogInterface.BUTTON_POSITIVE)?.isEnabled = !s.isNullOrBlank()
             }
@@ -318,8 +325,8 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-        input.text = input.text
-        input.requestFocus()
+        value.text = value.text
+        value.requestFocus()
     }
 
     private fun onArTap(motionEvent: MotionEvent) {
@@ -367,8 +374,8 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         onArUpdateAugmentedImages()
     }
 
-    private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) {
-        sceneStatusLabel.setText(
+    private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) =
+        bottomSheetScene.header.label.setText(
             when (state) {
                 TRACKING -> R.string.tracking_success
                 PAUSED -> when (reason) {
@@ -384,10 +391,9 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 null -> 0
             }
         )
-    }
 
-    private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) {
-        sceneStatusIcon.setImageResource(
+    private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) =
+        bottomSheetScene.header.status.setImageResource(
             when (state) {
                 TRACKING -> android.R.drawable.presence_online
                 PAUSED -> when (reason) {
@@ -400,18 +406,17 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 null -> 0
             }
         )
-    }
 
-    private fun onArUpdateBottomSheet(state: TrackingState?) {
-        sceneAdd.isEnabled = state == TRACKING
-        when (sceneBottomSheet.behavior().state) {
+    private fun onArUpdateBottomSheet(state: TrackingState?) = with(bottomSheetScene) {
+        header.add.isEnabled = state == TRACKING
+        when (behavior().state) {
             STATE_HIDDEN, STATE_COLLAPSED -> Unit
-            else -> {
+            else -> body.apply {
                 arSceneView.arFrame?.camera?.pose.let {
-                    poseTranslationValue.text = it.formatTranslation(this)
-                    poseRotationValue.text = it.formatRotation(this)
+                    poseTranslationValue.text = it.formatTranslation(this@SceneActivity)
+                    poseRotationValue.text = it.formatRotation(this@SceneActivity)
                 }
-                sceneValue.text = arSceneView.session?.format(this)
+                sceneValue.text = arSceneView.session?.format(this@SceneActivity)
             }
         }
     }
@@ -420,7 +425,7 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         if (shouldHandleDrawing()) {
             val x = arSceneView.width / 2F
             val y = arSceneView.height / 2F
-            val pressed = sceneAdd.isPressed
+            val pressed = bottomSheetScene.header.add.isPressed
             when {
                 pressed && drawing == null -> drawing = Drawing.create(x, y, false, materialProperties(), arSceneView, coordinator, settings)
                 pressed && drawing?.isFromTouch == false -> drawing?.extend(x, y)
@@ -438,21 +443,25 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
         }
     }
 
-    private fun onNodeUpdate(node: Nodes) {
+    private fun onNodeUpdate(node: Nodes) = with(bottomSheetNode) {
         when {
-            node != coordinator.selectedNode || node != coordinator.focusedNode || nodeBottomSheet.behavior().state == STATE_HIDDEN -> Unit
+            node != coordinator.selectedNode || node != coordinator.focusedNode || behavior().state == STATE_HIDDEN -> Unit
             else -> {
-                nodeStatus.setImageResource(node.statusIcon())
-                nodeDistance.text = arSceneView.arFrame?.camera.formatDistance(this, node)
-                nodeCopy.isEnabled = (node as? CloudAnchor)?.id() != null
-                nodePlayPause.isActivated = (node as? Video)?.isPlaying() == true
-                nodeDelete.isEnabled = !node.isTransforming
-                nodePositionValue.text = node.worldPosition.format(this)
-                nodeRotationValue.text = node.worldRotation.format(this)
-                nodeScaleValue.text = node.worldScale.format(this)
-                nodeCloudAnchorStateValue.text = (node as? CloudAnchor)?.state()?.name
-                nodeCloudAnchorIdValue.text = (node as? CloudAnchor)?.let { it.id() ?: "…" }
-                nodeMeasureValue.text = (node as? Measure)?.formatMeasure()
+                with(header) {
+                    status.setImageResource(node.statusIcon())
+                    distance.text = arSceneView.arFrame?.camera.formatDistance(this@SceneActivity, node)
+                    copy.isEnabled = (node as? CloudAnchor)?.id() != null
+                    playPause.isActivated = (node as? Video)?.isPlaying() == true
+                    delete.isEnabled = !node.isTransforming
+                }
+                with(body) {
+                    positionValue.text = node.worldPosition.format(this@SceneActivity)
+                    rotationValue.text = node.worldRotation.format(this@SceneActivity)
+                    scaleValue.text = node.worldScale.format(this@SceneActivity)
+                    cloudAnchorStateValue.text = (node as? CloudAnchor)?.state()?.name
+                    cloudAnchorIdValue.text = (node as? CloudAnchor)?.let { it.id() ?: "…" }
+                    measureValue.text = (node as? Measure)?.formatMeasure()
+                }
             }
         }
     }
@@ -463,25 +472,29 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
     }
 
     private fun onNodeFocused(node: Nodes?) {
-        val nodeSheetBehavior = nodeBottomSheet.behavior()
-        val sceneBehavior = sceneBottomSheet.behavior()
+        val nodeSheetBehavior = bottomSheetNode.behavior()
+        val sceneBehavior = bottomSheetScene.behavior()
         when (node) {
             null -> {
                 nodeSheetBehavior.state = STATE_HIDDEN
-                if ((sceneBottomSheet.tag as? Boolean) == true) {
-                    sceneBottomSheet.tag = false
+                if ((bottomSheetScene.root.tag as? Boolean) == true) {
+                    bottomSheetScene.root.tag = false
                     sceneBehavior.state = STATE_EXPANDED
                 }
             }
             coordinator.selectedNode -> {
-                nodeName.text = node.name
-                nodeCopy.visibility = if (node is CloudAnchor) VISIBLE else GONE
-                nodePlayPause.visibility = if (node is Video) VISIBLE else GONE
-                (node as? MaterialNode)?.properties?.run {
-                    nodeColorValue.setColor(color)
-                    nodeMetallicValue.progress = metallic
-                    nodeRoughnessValue.progress = roughness
-                    nodeReflectanceValue.progress = reflectance
+                with(bottomSheetNode.header) {
+                    name.text = node.name
+                    copy.visibility = if (node is CloudAnchor) VISIBLE else GONE
+                    playPause.visibility = if (node is Video) VISIBLE else GONE
+                }
+                with(bottomSheetNode.body) {
+                    (node as? MaterialNode)?.properties?.let {
+                        colorValue.setColor(it.color)
+                        metallicValue.progress = it.metallic
+                        roughnessValue.progress = it.roughness
+                        reflectanceValue.progress = it.reflectance
+                    }
                 }
                 val materialVisibility = if (node is MaterialNode) VISIBLE else GONE
                 setOfMaterialViews.forEach { it.visibility = materialVisibility }
@@ -492,10 +505,10 @@ class SceneActivity : ArActivity(R.layout.activity_scene) {
                 nodeSheetBehavior.state = STATE_EXPANDED
                 if (sceneBehavior.state != STATE_COLLAPSED) {
                     sceneBehavior.state = STATE_COLLAPSED
-                    sceneBottomSheet.tag = true
+                    bottomSheetScene.root.tag = true
                 }
             }
-            else -> {}
+            else -> Unit
         }
     }
 

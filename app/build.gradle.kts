@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
 }
 
 val versionMajor = 1
@@ -18,6 +17,9 @@ android {
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+        viewBinding = true
     }
     buildTypes {
         getByName("release") {
@@ -38,31 +40,31 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.4.10")
+    implementation(Kotlin.stdlib.jdk7)
 
-    implementation("androidx.activity:activity-ktx:1.1.0")
-    implementation("androidx.appcompat:appcompat:1.2.0")
-    implementation("androidx.browser:browser:1.2.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.2")
-    implementation("androidx.coordinatorlayout:coordinatorlayout:1.1.0")
-    implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.2.5")
-    implementation("androidx.lifecycle:lifecycle-common:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-core-ktx:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
-    implementation("androidx.preference:preference-ktx:1.1.1")
-    implementation("com.google.android.material:material:1.3.0-alpha03")
+    implementation(AndroidX.activityKtx)
+    implementation(AndroidX.appCompat)
+    implementation(AndroidX.browser)
+    implementation(AndroidX.constraintLayout)
+    implementation(AndroidX.coordinatorLayout)
+    implementation(AndroidX.core)
+    implementation(AndroidX.fragmentKtx)
+    implementation(AndroidX.lifecycle.common)
+    implementation(AndroidX.lifecycle.liveDataCoreKtx)
+    implementation(AndroidX.lifecycle.viewModelKtx)
+    implementation(AndroidX.preferenceKtx)
 
-    implementation("com.google.ar:core:1.20.0")
-    implementation("com.google.ar.sceneform:assets:1.17.1")
-    implementation("com.google.ar.sceneform:core:1.17.1")
-    implementation("com.google.ar.sceneform:rendering:1.17.1")
-    implementation("com.google.ar.sceneform:sceneform-base:1.17.1")
-    implementation("com.google.ar.sceneform.ux:sceneform-ux:1.17.1")
+    implementation(Google.Android.material)
 
-    testImplementation("junit:junit:4.13.1")
+    implementation(Google.Ar.core)
+    implementation(Google.Ar.sceneform.assets)
+    implementation(Google.Ar.sceneform.core)
+    implementation(Google.Ar.sceneform.rendering)
+    implementation(Google.Ar.sceneform.sceneformBase)
+    implementation(Google.Ar.sceneform.ux)
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    testImplementation(Testing.junit4)
+
+    androidTestImplementation(AndroidX.Test.ext.junit)
+    androidTestImplementation(AndroidX.Test.espresso.core)
 }

@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nodeHeader"
     android:layout_width="match_parent"
     android:layout_height="@dimen/bottom_sheet_peek_height"
     android:background="@drawable/bottom_sheet_background"
@@ -18,7 +17,7 @@
     tools:showIn="@layout/bottom_sheet_node">
 
     <ImageView
-        android:id="@+id/nodeStatus"
+        android:id="@+id/status"
         style="@style/HeaderStatus"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -33,7 +32,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/nodeName"
+            android:id="@+id/name"
             style="@style/HeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,7 +40,7 @@
             tools:text="Sphere #1" />
 
         <TextView
-            android:id="@+id/nodeDistance"
+            android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -58,7 +57,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/nodePlayPause"
+        android:id="@+id/playPause"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -66,7 +65,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/nodeCopy"
+        android:id="@+id/copy"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -74,7 +73,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/nodeUndo"
+        android:id="@+id/undo"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -82,7 +81,7 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/nodeDelete"
+        android:id="@+id/delete"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
