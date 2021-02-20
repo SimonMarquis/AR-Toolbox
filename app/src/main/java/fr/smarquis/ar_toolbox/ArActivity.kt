@@ -206,6 +206,7 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
                     it.isChecked = true
                     CustomTabsIntent.Builder().build().launchUrl(this, getString(R.string.scene_viewer_web).toUri())
                 }
+                R.id.menu_item_performance_overlay -> sendBroadcast(Intent("com.google.ar.core.ENABLE_PERFORMANCE_OVERLAY"))
                 else -> return@setOnMenuItemClickListener onClick(it)
             }
             return@setOnMenuItemClickListener true

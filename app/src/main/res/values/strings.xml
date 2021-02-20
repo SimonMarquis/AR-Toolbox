@@ -51,6 +51,7 @@
     <string name="menu_item_mode_faces">Augmented Faces</string>
     <string name="menu_item_mode_native_viewer">Native Scene Viewer</string>
     <string name="menu_item_mode_web_viewer">Web Scene Viewer</string>
+    <string name="menu_item_performance_overlay">Performance overlay</string>
     <string name="menu_item_resolve_cloud_anchor">Resolve Cloud Anchor</string>
     <string name="menu_item_clean_up_scene">Clean up scene</string>
     <string name="menu_item_settings">Settings</string>

@@ -52,6 +52,9 @@
             </menu>
 
         </item>
+        <item
+            android:id="@+id/menu_item_performance_overlay"
+            android:title="@string/menu_item_performance_overlay" />
     </group>
 
 </menu>

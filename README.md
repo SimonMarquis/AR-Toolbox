@@ -33,6 +33,7 @@
 - **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
 - **[PointCloud](https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/PointCloud)**: Feature points
 - **[Screen capture & recording](https://developers.google.com/sceneform/develop/video-recording)**: 480p, 720p, 1080p, 2160p
+- **[Performance overlay](https://developers.google.com/ar/develop/java/debugging-tools/performance-overlay)**: CPU usage, memory, temperature
 
 ## Credits
 
