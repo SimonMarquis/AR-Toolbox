@@ -25,7 +25,7 @@
 > 2021.02.20
 
 - 📦 Update arcore 1.23.0
-- ⚙ Performance overlay
+- ⚙️ Performance overlay
 
 ## 1.10.0
 > 2020.10.25
