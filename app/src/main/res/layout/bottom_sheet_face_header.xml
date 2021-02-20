@@ -33,7 +33,7 @@
         android:layout_weight="1"
         android:text="@string/augmented_faces" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recording"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         app:tint="@null"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/more"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"

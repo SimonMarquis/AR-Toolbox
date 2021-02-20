@@ -33,7 +33,7 @@
         android:layout_weight="1"
         tools:text="@string/tracking_success" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/recording"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         app:srcCompat="@drawable/ic_add_node"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/more"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"

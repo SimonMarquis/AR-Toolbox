@@ -96,6 +96,7 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CAMERA_PERMISSION && !hasCameraPermission()) {
             redirectToApplicationSettings()
         }

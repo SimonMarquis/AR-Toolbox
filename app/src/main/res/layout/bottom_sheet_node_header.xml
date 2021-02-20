@@ -39,7 +39,7 @@
             android:layout_gravity="center_vertical"
             tools:text="Sphere #1" />
 
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
     </LinearLayout>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playPause"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
         app:srcCompat="@drawable/ic_play_pause"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/copy"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
         app:srcCompat="@drawable/ic_copy_node"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/undo"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
         app:srcCompat="@drawable/ic_undo"
         tools:ignore="ContentDescription" />
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/delete"
         style="@style/HeaderButton"
         android:layout_width="wrap_content"

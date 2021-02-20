@@ -8,15 +8,15 @@
     app:cardCornerRadius="@dimen/material_unit_2"
     tools:viewBindingIgnore="true">
 
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/material_unit_2"
-        android:drawableTop="@mipmap/ic_launcher"
         android:drawablePadding="@dimen/material_unit_2"
         android:text="@string/app_name"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
         android:textColor="?colorOnBackground"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:drawableTopCompat="@mipmap/ic_launcher" />
 
 </com.google.android.material.card.MaterialCardView>
