@@ -27,7 +27,8 @@
         <activity
             android:name=".SceneActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="behind">
+            android:screenOrientation="behind"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
