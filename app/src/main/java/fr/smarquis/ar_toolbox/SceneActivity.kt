@@ -19,6 +19,13 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.net.toUri
 import com.google.android.material.bottomsheet.BottomSheetBehavior.*
 import com.google.ar.core.*
+import com.google.ar.core.Config.AugmentedFaceMode
+import com.google.ar.core.Config.CloudAnchorMode
+import com.google.ar.core.Config.DepthMode
+import com.google.ar.core.Config.FocusMode
+import com.google.ar.core.Config.LightEstimationMode
+import com.google.ar.core.Config.PlaneFindingMode.*
+import com.google.ar.core.Config.UpdateMode
 import com.google.ar.core.TrackingFailureReason.*
 import com.google.ar.core.TrackingState.*
 import com.google.ar.sceneform.ArSceneView
@@ -91,15 +98,18 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
     }
 
     override fun config(session: Session): Config = Config(session).apply {
-        lightEstimationMode = Config.LightEstimationMode.DISABLED
-        planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-        updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
-        cloudAnchorMode = Config.CloudAnchorMode.ENABLED
+        lightEstimationMode = LightEstimationMode.DISABLED
+        planeFindingMode = HORIZONTAL_AND_VERTICAL
+        updateMode = UpdateMode.LATEST_CAMERA_IMAGE
+        cloudAnchorMode = CloudAnchorMode.ENABLED
         augmentedImageDatabase = AugmentedImageDatabase(session).apply {
             Augmented.target(this@SceneActivity)?.let { addImage("augmented", it) }
         }
-        augmentedFaceMode = Config.AugmentedFaceMode.DISABLED
-        focusMode = Config.FocusMode.AUTO
+        augmentedFaceMode = AugmentedFaceMode.DISABLED
+        focusMode = FocusMode.AUTO
+        if (session.isDepthModeSupported(DepthMode.AUTOMATIC)) {
+            depthMode = DepthMode.AUTOMATIC
+        }
     }
 
     override fun onArResumed() {
@@ -340,6 +350,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
             val trackable = it.trackable
             when {
                 trackable is Plane && trackable.isPoseInPolygon(it.hitPose) -> true
+                trackable is DepthPoint -> true
                 trackable is Point -> true
                 else -> false
             }

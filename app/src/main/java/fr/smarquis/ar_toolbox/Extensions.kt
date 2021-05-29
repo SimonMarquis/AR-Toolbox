@@ -45,7 +45,7 @@ fun Session.format(context: Context) = context.getString(
     R.string.format_session,
     allAnchors.count(),
     getAllTrackables(Plane::class.java).count(),
-    getAllTrackables(Point::class.java).count()
+    getAllTrackables(Point::class.java).count() + getAllTrackables(DepthPoint::class.java).count()
 )
 
 fun CameraConfig.format(context: Context) = context.getString(

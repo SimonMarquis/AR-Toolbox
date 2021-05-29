@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.view.MenuItem
 import androidx.preference.PreferenceManager
+import com.google.ar.core.DepthPoint
 import com.google.ar.core.Plane
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.FrameTime
@@ -145,6 +146,7 @@ class Settings(context: Context) {
                     val trackable = it.trackable
                     when {
                         trackable is Plane && trackable.isPoseInPolygon(it.hitPose) -> true
+                        trackable is DepthPoint -> true
                         else -> false
                     }
                 }
