@@ -3,7 +3,6 @@ buildscript {
         google()
         mavenCentral()
     }
-    @Suppress("GradleDependency", "GradlePluginVersion")
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:_")
         classpath("com.android.tools.build:gradle:_")
