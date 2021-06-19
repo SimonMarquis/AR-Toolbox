@@ -63,7 +63,11 @@ sealed class Nodes(
             val centerY = ar.height / 2F
             val hits = ar.arFrame?.hitTest(centerX, centerY)
             val planeHitPose = hits?.firstOrNull {
-                (it.trackable as? Plane)?.isPoseInPolygon(it.hitPose) == true && it.distance <= PLANE_ANCHORING_DISTANCE
+                when (val trackable = it.trackable) {
+                    is Plane -> trackable.isPoseInPolygon(it.hitPose) && it.distance <= PLANE_ANCHORING_DISTANCE
+                    is DepthPoint, is Point -> it.distance <= DEFAULT_POSE_DISTANCE
+                    else -> false
+                }
             }?.hitPose
             if (planeHitPose != null) return planeHitPose
             val ray = ar.scene.camera.screenPointToRay(centerX, centerY)
