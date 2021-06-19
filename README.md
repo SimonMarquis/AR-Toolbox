@@ -29,6 +29,7 @@
 - **[Measurements](https://developers.google.com/sceneform/develop/create-renderables)**: Measure polylines
 - **[Augmented images](https://developers.google.com/ar/develop/java/augmented-images/)**: Tracks the application logo
 - **[Augmented faces](https://developers.google.com/ar/develop/java/augmented-faces/)**: Identify regions of a detected face
+- **[Depth points](https://developers.google.com/ar/develop/java/depth/developer-guide#depth_hit_test)**: More accurate hit tests
 - **[Native & web scene viewers](https://developers.google.com/ar/develop/java/scene-viewer)**: Interactive models in native or on the web
 - **[Cloud anchors](https://developers.google.com/ar/develop/java/cloud-anchors/overview-android)**: Host, share and resolve anchors
 - **[PointCloud](https://developers.google.com/ar/reference/java/arcore/reference/com/google/ar/core/PointCloud)**: Feature points
