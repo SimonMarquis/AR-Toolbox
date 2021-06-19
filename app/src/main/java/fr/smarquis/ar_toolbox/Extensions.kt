@@ -41,12 +41,16 @@ fun Pose?.formatRotation(context: Context): String = context.getString(R.string.
 fun Pose.toVector3(): Vector3 = Vector3(tx(), ty(), tz())
 fun Vector3.format(context: Context) = context.getString(R.string.format_vector3, x, y, z)
 fun Quaternion.format(context: Context) = context.getString(R.string.format_quaternion, x, y, z, w)
-fun Session.format(context: Context) = context.getString(
-    R.string.format_session,
-    allAnchors.count(),
-    getAllTrackables(Plane::class.java).count(),
-    getAllTrackables(Point::class.java).count() + getAllTrackables(DepthPoint::class.java).count()
-)
+fun Session.format(context: Context): String {
+    val trackables = getAllTrackables(Trackable::class.java).groupBy { it::class.java }
+    return context.getString(
+        R.string.format_session,
+        allAnchors.count(),
+        trackables[Plane::class.java]?.count() ?: 0,
+        trackables[Point::class.java]?.count() ?: 0,
+        trackables[DepthPoint::class.java]?.count() ?: 0,
+    )
+}
 
 fun CameraConfig.format(context: Context) = context.getString(
     R.string.format_camera_config,
