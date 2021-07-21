@@ -200,6 +200,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
                     it.setFloat3(PlaneRenderer.MATERIAL_COLOR, color.toArColor())
                 }
                 settings.pointCloud.updateMaterial(arSceneView) { this.color = color }
+                settings.reticle.updateMaterial(arSceneView) { this.color = color }
             }
             colorValue.post { colorValue.setColor(MaterialProperties.DEFAULT.color) }
         }

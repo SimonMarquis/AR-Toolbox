@@ -13,6 +13,7 @@ import com.google.ar.sceneform.rendering.Material
 import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
 import com.google.ar.sceneform.rendering.ModelRenderable
 import fr.smarquis.ar_toolbox.PointCloud.makePointCloud
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Settings(context: Context) {
@@ -128,14 +129,24 @@ class Settings(context: Context) {
 
             companion object {
                 val INVISIBLE_SCALE: Vector3 = Vector3.zero()
-                val VISIBLE_SCALE: Vector3 = Vector3.one()
+                val VISIBLE_DEFAULT_SCALE: Vector3 = Vector3.one()
+                val VISIBLE_PLANE_SCALE: Vector3 = Vector3.one()
+                val VISIBLE_DEPTH_POINT_SCALE: Vector3 = Vector3.one().scaled(0.5F)
             }
 
+            private var properties: MaterialProperties = MaterialProperties()
+
             init {
-                ModelRenderable.builder()
+                val completableModelRenderable = ModelRenderable.builder()
                     .setSource(context.applicationContext, R.raw.sceneform_footprint)
                     .build()
-                    .thenAccept { renderable = it.apply { collisionShape = null } }
+                val completableMaterial = makeOpaqueWithColor(context.applicationContext, properties.color.toArColor())
+                CompletableFuture.allOf(completableModelRenderable, completableMaterial).thenAccept {
+                    val modelRenderable = completableModelRenderable.join()
+                    val material = completableMaterial.join()
+                    renderable = modelRenderable.apply { collisionShape = null }
+                    modelRenderable.material = material.apply { properties.update(this) }
+                }
             }
 
             override fun onUpdate(frameTime: FrameTime?) {
@@ -150,25 +161,32 @@ class Settings(context: Context) {
                         else -> false
                     }
                 }
-                when (hit) {
-                    null -> localScale = INVISIBLE_SCALE
-                    else -> {
-                        val hitPose = hit.hitPose
-                        worldPosition = hitPose.translation()
-                        worldRotation = hitPose.rotation()
-                        localScale = VISIBLE_SCALE
-                    }
+                hit?.hitPose?.let {
+                    worldPosition = it.translation()
+                    worldRotation = it.rotation()
+                }
+                localScale = when (hit?.trackable) {
+                    is Plane -> VISIBLE_PLANE_SCALE
+                    is DepthPoint -> VISIBLE_DEPTH_POINT_SCALE
+                    null -> INVISIBLE_SCALE
+                    else -> VISIBLE_DEFAULT_SCALE
                 }
             }
 
+            fun properties(block: (MaterialProperties.() -> Unit) = {}) = properties.update(renderable?.material, block)
+
         }
 
+        private fun ArSceneView.findMyNode() = findNode<Node>()
+
         fun initAndApplyTo(arSceneView: ArSceneView) {
-            if (arSceneView.findNode<Node>() == null) {
+            if (arSceneView.findMyNode() == null) {
                 Node(arSceneView.context).apply { setParent(arSceneView.scene) }
             }
             arSceneView.update()
         }
+
+        fun updateMaterial(arSceneView: ArSceneView, block: (MaterialProperties.() -> Unit)) = arSceneView.findMyNode()?.properties(block)
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
