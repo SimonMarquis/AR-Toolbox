@@ -57,11 +57,7 @@ dependencies {
     implementation(Google.Android.material)
 
     implementation(Google.Ar.core)
-    implementation(Google.Ar.sceneform.assets)
-    implementation(Google.Ar.sceneform.core)
-    implementation(Google.Ar.sceneform.rendering)
-    implementation(Google.Ar.sceneform.sceneformBase)
-    implementation(Google.Ar.sceneform.ux)
+    implementation("com.gorisse.thomas.sceneform:sceneform:_")
 
     testImplementation(Testing.junit4)
 
