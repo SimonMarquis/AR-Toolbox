@@ -38,8 +38,8 @@ import com.google.ar.sceneform.ux.TransformableNode
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicLong
 import kotlin.reflect.KClass
-import kotlin.text.Typography.leftGuillemete
-import kotlin.text.Typography.rightGuillemete
+import kotlin.text.Typography.leftGuillemet
+import kotlin.text.Typography.rightGuillemet
 
 sealed class Nodes(
     name: String,
@@ -56,7 +56,7 @@ sealed class Nodes(
 
         private val IDS: MutableMap<KClass<*>, AtomicLong> = mutableMapOf()
 
-        fun Any.newId(): Long = IDS.getOrElse(this::class, { AtomicLong().also { IDS[this::class] = it } }).incrementAndGet()
+        fun Any.newId(): Long = IDS.getOrElse(this::class) { AtomicLong().also { IDS[this::class] = it } }.incrementAndGet()
 
         fun defaultPose(ar: ArSceneView): Pose {
             val centerX = ar.width / 2F
@@ -302,9 +302,9 @@ class Measure(
 
     private fun totalMeasureNext(): Double = next?.let { distance(this, it) + it.totalMeasureNext() } ?: .0
 
-    private fun formatPreviousDistance(): String = previous?.let { it.formatPreviousDistance() + formatDistance(context, this, it) + " $leftGuillemete " }.orEmpty()
+    private fun formatPreviousDistance(): String = previous?.let { it.formatPreviousDistance() + formatDistance(context, this, it) + " $leftGuillemet " }.orEmpty()
 
-    private fun formatNextDistance(): String = next?.let { " $rightGuillemete " + formatDistance(context, this, it) + it.formatNextDistance() }.orEmpty()
+    private fun formatNextDistance(): String = next?.let { " $rightGuillemet " + formatDistance(context, this, it) + it.formatNextDistance() }.orEmpty()
 
     private inner class Join(private val previous: Node) : Node() {
 
