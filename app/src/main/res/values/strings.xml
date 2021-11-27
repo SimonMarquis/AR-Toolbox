@@ -63,6 +63,7 @@
     <string name="menu_item_point_cloud">Point cloud</string>
     <string name="menu_item_face_regions">Face regions</string>
     <string name="menu_item_face_mesh">Face mesh</string>
+    <string name="menu_item_oss">Open Source Licenses</string>
 
     <string name="entry_position_label">Position</string>
     <string name="entry_rotation_label">Rotation</string>

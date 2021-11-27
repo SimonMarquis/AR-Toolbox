@@ -1,5 +1,6 @@
 plugins {
     id("com.android.application")
+    id("com.google.android.gms.oss-licenses-plugin")
     kotlin("android")
 }
 
@@ -54,6 +55,8 @@ dependencies {
     implementation(Google.Ar.sceneform.rendering)
     implementation(Google.Ar.sceneform.sceneformBase)
     implementation(Google.Ar.sceneform.ux)
+
+    implementation("com.google.android.gms:play-services-oss-licenses:_")
 
     testImplementation(Testing.junit4)
 

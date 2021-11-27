@@ -56,5 +56,10 @@
             android:id="@+id/menu_item_performance_overlay"
             android:title="@string/menu_item_performance_overlay" />
     </group>
+    <group android:orderInCategory="100">
+        <item
+            android:id="@+id/menu_item_oss"
+            android:title="@string/menu_item_oss" />
+    </group>
 
 </menu>

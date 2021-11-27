@@ -28,6 +28,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
 import androidx.viewbinding.ViewBinding
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -208,6 +209,7 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
                     CustomTabsIntent.Builder().build().launchUrl(this, getString(R.string.scene_viewer_web).toUri())
                 }
                 R.id.menu_item_performance_overlay -> sendBroadcast(Intent("com.google.ar.core.ENABLE_PERFORMANCE_OVERLAY"))
+                R.id.menu_item_oss -> startActivity(Intent(this@ArActivity, OssLicensesMenuActivity::class.java))
                 else -> return@setOnMenuItemClickListener onClick(it)
             }
             return@setOnMenuItemClickListener true
