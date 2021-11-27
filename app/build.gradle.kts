@@ -9,11 +9,11 @@ val versionPatch = 0
 val versionBuild = 0
 
 android {
-    compileSdk = 30
+    compileSdk = 31
     defaultConfig {
         applicationId = "fr.smarquis.ar_toolbox"
         minSdk = 24
-        targetSdk = 30
+        targetSdk = 31
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -29,19 +29,11 @@ android {
     }
     lint {
         textReport = true
-        disable("ObsoleteLintCustomCheck")
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
+        disable += "ObsoleteLintCustomCheck"
     }
 }
 
 dependencies {
-    implementation(Kotlin.stdlib.jdk7)
-
     implementation(AndroidX.activityKtx)
     implementation(AndroidX.appCompat)
     implementation(AndroidX.browser)
