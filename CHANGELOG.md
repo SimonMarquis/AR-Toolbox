@@ -4,6 +4,7 @@
 
 <!-- MarkdownTOC autolink="true" -->
 
+- [1.12.0](#1120)
 - [1.11.0](#1110)
 - [1.10.0](#1100)
 - [1.9.0](#190)
@@ -20,6 +21,13 @@
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.12.0
+> 2021.11.27
+
+- 📦 Update arcore 1.28.0
+- 🔎 Add support for DepthPoints
+- 📋 Add Open Source Licenses
 
 ## 1.11.0
 > 2021.02.20
