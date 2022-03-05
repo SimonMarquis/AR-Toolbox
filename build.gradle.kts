@@ -5,8 +5,8 @@ buildscript {
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:_")
-        classpath("com.android.tools.build:gradle:_")
-        classpath("com.google.android.gms:oss-licenses-plugin:_")
+        classpath(Android.tools.build.gradlePlugin)
+        classpath(Google.android.openSourceLicensesPlugin)
     }
 }
 

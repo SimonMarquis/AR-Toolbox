@@ -35,17 +35,17 @@ android {
 }
 
 dependencies {
-    implementation(AndroidX.activityKtx)
+    implementation(AndroidX.activity.ktx)
     implementation(AndroidX.appCompat)
     implementation(AndroidX.browser)
     implementation(AndroidX.constraintLayout)
     implementation(AndroidX.coordinatorLayout)
     implementation(AndroidX.core)
-    implementation(AndroidX.fragmentKtx)
+    implementation(AndroidX.fragment.ktx)
     implementation(AndroidX.lifecycle.common)
-    implementation(AndroidX.lifecycle.liveDataCoreKtx)
+    implementation(AndroidX.lifecycle.liveDataKtx)
     implementation(AndroidX.lifecycle.viewModelKtx)
-    implementation(AndroidX.preferenceKtx)
+    implementation(AndroidX.preference.ktx)
 
     implementation(Google.Android.material)
 
@@ -56,7 +56,7 @@ dependencies {
     implementation(Google.Ar.sceneform.sceneformBase)
     implementation(Google.Ar.sceneform.ux)
 
-    implementation("com.google.android.gms:play-services-oss-licenses:_")
+    implementation(Google.android.playServices.openSourceLicenses)
 
     testImplementation(Testing.junit4)
 
