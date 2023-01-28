@@ -43,7 +43,8 @@
 - [ColorSeekBar](https://github.com/divyanshub024/ColorSeekBar)
 - [sceneform-samples](https://github.com/googlesamples/sceneform-samples)
 - [glTF-Sample-Models](https://github.com/KhronosGroup/glTF-Sample-Models)
-- [Poly](https://poly.google.com/)
+- [Poly](https://poly.google.com/) [🪦](https://support.google.com/poly/answer/10192635)
+- [Poly Pizza](https://poly.pizza/)
 - [\<model-viewer\>](https://github.com/GoogleWebComponents/model-viewer)
 
 ## License
