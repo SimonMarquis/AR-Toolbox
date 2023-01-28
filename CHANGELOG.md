@@ -22,6 +22,14 @@
 <!-- /MarkdownTOC -->
 </details>
 
+## 1.13.0
+> 2023.01.28
+
+- 📦 Update arcore 1.35.0
+- 🩹 Restore access to 3D models after Poly's shutdown
+- ⚙️ Migrate from ARCore Cloud Anchor API (legacy) to ARCore API
+- 🎨 Enable monochrome icon
+
 ## 1.12.0
 > 2021.11.27
 
