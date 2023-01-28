@@ -10,11 +10,12 @@ val versionPatch = 0
 val versionBuild = 0
 
 android {
-    compileSdk = 31
+    namespace = "fr.smarquis.ar_toolbox"
+    compileSdk = 33
     defaultConfig {
         applicationId = "fr.smarquis.ar_toolbox"
         minSdk = 24
-        targetSdk = 31
+        targetSdk = 33
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -26,6 +27,7 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     lint {
