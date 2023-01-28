@@ -16,10 +16,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.ar.core.*
+import com.google.ar.core.Camera
+import com.google.ar.core.CameraConfig
 import com.google.ar.core.CameraConfig.DepthSensorUsage.DO_NOT_USE
 import com.google.ar.core.CameraConfig.DepthSensorUsage.REQUIRE_AND_USE
-import com.google.ar.core.exceptions.*
+import com.google.ar.core.DepthPoint
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.Pose
+import com.google.ar.core.Session
+import com.google.ar.core.Trackable
+import com.google.ar.core.exceptions.UnavailableApkTooOldException
+import com.google.ar.core.exceptions.UnavailableArcoreNotInstalledException
+import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException
+import com.google.ar.core.exceptions.UnavailableException
+import com.google.ar.core.exceptions.UnavailableSdkTooOldException
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.math.Quaternion
@@ -27,7 +39,8 @@ import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.Color
 import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
@@ -59,7 +72,7 @@ fun CameraConfig.format(context: Context) = context.getString(
     when (depthSensorUsage) {
         REQUIRE_AND_USE -> true
         DO_NOT_USE, null -> false
-    }
+    },
 )
 
 fun Camera?.formatDistance(context: Context, node: Node) = this?.pose?.let { formatDistance(context, distance(it.toVector3(), node.worldPosition)) } ?: "?"

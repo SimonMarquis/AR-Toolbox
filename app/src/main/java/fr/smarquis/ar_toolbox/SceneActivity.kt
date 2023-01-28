@@ -17,17 +17,36 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.net.toUri
-import com.google.android.material.bottomsheet.BottomSheetBehavior.*
-import com.google.ar.core.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
+import com.google.ar.core.Anchor
+import com.google.ar.core.AugmentedImage
+import com.google.ar.core.AugmentedImageDatabase
+import com.google.ar.core.Config
 import com.google.ar.core.Config.AugmentedFaceMode
 import com.google.ar.core.Config.CloudAnchorMode
 import com.google.ar.core.Config.DepthMode
 import com.google.ar.core.Config.FocusMode
 import com.google.ar.core.Config.LightEstimationMode
-import com.google.ar.core.Config.PlaneFindingMode.*
+import com.google.ar.core.Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
 import com.google.ar.core.Config.UpdateMode
-import com.google.ar.core.TrackingFailureReason.*
-import com.google.ar.core.TrackingState.*
+import com.google.ar.core.DepthPoint
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.Session
+import com.google.ar.core.TrackingFailureReason
+import com.google.ar.core.TrackingFailureReason.BAD_STATE
+import com.google.ar.core.TrackingFailureReason.CAMERA_UNAVAILABLE
+import com.google.ar.core.TrackingFailureReason.EXCESSIVE_MOTION
+import com.google.ar.core.TrackingFailureReason.INSUFFICIENT_FEATURES
+import com.google.ar.core.TrackingFailureReason.INSUFFICIENT_LIGHT
+import com.google.ar.core.TrackingFailureReason.NONE
+import com.google.ar.core.TrackingState
+import com.google.ar.core.TrackingState.PAUSED
+import com.google.ar.core.TrackingState.STOPPED
+import com.google.ar.core.TrackingState.TRACKING
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.HitTestResult
 import com.google.ar.sceneform.rendering.PlaneRenderer
@@ -44,18 +63,24 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
     private val setOfMaterialViews by lazy {
         with(bottomSheetNode.body) {
             setOf(
-                colorValue, colorLabel,
-                metallicValue, metallicLabel,
-                roughnessValue, roughnessLabel,
-                reflectanceValue, reflectanceLabel
+                colorValue,
+                colorLabel,
+                metallicValue,
+                metallicLabel,
+                roughnessValue,
+                roughnessLabel,
+                reflectanceValue,
+                reflectanceLabel,
             )
         }
     }
     private val setOfCloudAnchorViews by lazy {
         with(bottomSheetNode.body) {
             setOf(
-                cloudAnchorStateLabel, cloudAnchorStateValue,
-                cloudAnchorIdLabel, cloudAnchorIdValue
+                cloudAnchorStateLabel,
+                cloudAnchorStateValue,
+                cloudAnchorIdLabel,
+                cloudAnchorIdValue,
             )
         }
     }
@@ -63,7 +88,8 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
         with(bottomSheetNode) {
             setOf(
                 header.undo,
-                body.measureLabel, body.measureValue
+                body.measureLabel,
+                body.measureValue,
             )
         }
     }
@@ -165,7 +191,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
                     reticle.applyTo(findItem(R.id.menu_item_reticle))
                     pointCloud.applyTo(findItem(R.id.menu_item_point_cloud))
                 }
-            }
+            },
         )
 
         model.selection.observe(this@SceneActivity) {
@@ -246,7 +272,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
             color = if (focusedMaterialNode() != null) colorValue.getColor() else bottomSheetScene.body.colorValue.getColor(),
             metallic = metallicValue.progress,
             roughness = roughnessValue.progress,
-            reflectance = reflectanceValue.progress
+            reflectance = reflectanceValue.progress,
         )
     }
 
@@ -401,7 +427,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
                 }
                 STOPPED -> R.string.tracking_stopped
                 null -> 0
-            }
+            },
         )
 
     private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) =
@@ -416,7 +442,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
                 }
                 STOPPED -> android.R.drawable.presence_offline
                 null -> 0
-            }
+            },
         )
 
     private fun onArUpdateBottomSheet(state: TrackingState?) = with(bottomSheetScene) {
@@ -523,5 +549,4 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
             else -> Unit
         }
     }
-
 }

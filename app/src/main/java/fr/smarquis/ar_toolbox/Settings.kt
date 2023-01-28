@@ -42,7 +42,6 @@ class Settings(context: Context) {
             value.set(newValue)
             prefs.edit().putBoolean(key, newValue).apply()
         }
-
     }
 
     class Sunlight(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -60,7 +59,6 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
 
     class Shadows(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -84,7 +82,6 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
 
     class Planes(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -102,7 +99,6 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
 
     class Selection(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -120,7 +116,6 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
 
     class Reticle(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -174,7 +169,6 @@ class Settings(context: Context) {
             }
 
             fun properties(block: (MaterialProperties.() -> Unit) = {}) = properties.update(renderable?.material, block)
-
         }
 
         private fun ArSceneView.findMyNode() = findNode<Node>()
@@ -201,7 +195,6 @@ class Settings(context: Context) {
         private fun ArSceneView.update() {
             findNode<Node>()?.isEnabled = get()
         }
-
     }
 
     class PointCloud(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -236,7 +229,7 @@ class Settings(context: Context) {
             private fun render(pointCloud: com.google.ar.core.PointCloud) {
                 timestamp = pointCloud.timestamp.takeIf { it != timestamp } ?: return
                 val material = material ?: return
-                val definition = makePointCloud(pointCloud, material) ?: return //reset renderable?
+                val definition = makePointCloud(pointCloud, material) ?: return // reset renderable?
                 when (val render = renderable) {
                     null -> ModelRenderable.builder().setSource(definition).build().thenAccept {
                         renderable = it.apply {
@@ -251,7 +244,6 @@ class Settings(context: Context) {
                     }
                 }
             }
-
         }
 
         fun initAndApplyTo(arSceneView: ArSceneView) {
@@ -278,7 +270,6 @@ class Settings(context: Context) {
         fun updateMaterial(arSceneView: ArSceneView, block: (MaterialProperties.() -> Unit)) {
             arSceneView.findNode<Node>()?.properties(block)
         }
-
     }
 
     class FaceRegions(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -298,7 +289,6 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
 
     class FaceMesh(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
@@ -318,7 +308,5 @@ class Settings(context: Context) {
         fun applyTo(menuItem: MenuItem) {
             menuItem.isChecked = get()
         }
-
     }
-
 }

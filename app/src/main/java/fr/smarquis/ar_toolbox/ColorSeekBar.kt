@@ -2,8 +2,12 @@ package fr.smarquis.ar_toolbox
 
 import android.annotation.SuppressLint
 import android.content.Context
-
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -24,7 +28,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         Color.parseColor("#00C853"),
         Color.parseColor("#00B0FF"),
         Color.parseColor("#D500F9"),
-        Color.parseColor("#8D6E63")
+        Color.parseColor("#8D6E63"),
     )
     private var canvasHeight: Int = 60
     private var barHeight: Int = 20
@@ -97,13 +101,13 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        //color bar position
+        // color bar position
         val barLeft: Float = paddingStart
         val barRight: Float = width.toFloat() - paddingEnd
         val barTop: Float = ((canvasHeight / 2) - (barHeight / 2)).toFloat()
         val barBottom: Float = ((canvasHeight / 2) + (barHeight / 2)).toFloat()
 
-        //draw color bar
+        // draw color bar
         rectf.set(barLeft, barTop, barRight, barBottom)
         canvas?.drawRoundRect(rectf, barCornerRadius, barCornerRadius, rectPaint)
 

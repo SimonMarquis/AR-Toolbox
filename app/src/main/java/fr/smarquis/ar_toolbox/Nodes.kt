@@ -18,12 +18,30 @@ import androidx.core.content.getSystemService
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
-import com.google.ar.core.*
-import com.google.ar.core.Anchor.CloudAnchorState.*
+import com.google.ar.core.Anchor
+import com.google.ar.core.Anchor.CloudAnchorState.NONE
+import com.google.ar.core.Anchor.CloudAnchorState.SUCCESS
+import com.google.ar.core.Anchor.CloudAnchorState.TASK_IN_PROGRESS
+import com.google.ar.core.AugmentedImage
 import com.google.ar.core.AugmentedImage.TrackingMethod.FULL_TRACKING
-import com.google.ar.core.TrackingState.*
-import com.google.ar.sceneform.*
+import com.google.ar.core.DepthPoint
+import com.google.ar.core.Frame
+import com.google.ar.core.HitResult
+import com.google.ar.core.Plane
+import com.google.ar.core.Point
+import com.google.ar.core.Pose
+import com.google.ar.core.Session
+import com.google.ar.core.TrackingState.PAUSED
+import com.google.ar.core.TrackingState.STOPPED
+import com.google.ar.core.TrackingState.TRACKING
+import com.google.ar.sceneform.AnchorNode
+import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Camera
+import com.google.ar.sceneform.FrameTime
+import com.google.ar.sceneform.HitTestResult
+import com.google.ar.sceneform.Node
+import com.google.ar.sceneform.NodeParent
+import com.google.ar.sceneform.Scene
 import com.google.ar.sceneform.assets.RenderableSource
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLB
 import com.google.ar.sceneform.assets.RenderableSource.SourceType.GLTF2
@@ -31,8 +49,15 @@ import com.google.ar.sceneform.collision.RayHit
 import com.google.ar.sceneform.collision.Sphere
 import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
-import com.google.ar.sceneform.rendering.*
+import com.google.ar.sceneform.rendering.Color
+import com.google.ar.sceneform.rendering.ExternalTexture
+import com.google.ar.sceneform.rendering.FixedHeightViewSizer
+import com.google.ar.sceneform.rendering.Material
 import com.google.ar.sceneform.rendering.MaterialFactory.makeOpaqueWithColor
+import com.google.ar.sceneform.rendering.ModelRenderable
+import com.google.ar.sceneform.rendering.Renderable
+import com.google.ar.sceneform.rendering.ShapeFactory
+import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.BaseTransformableNode
 import com.google.ar.sceneform.ux.TransformableNode
 import java.util.concurrent.CompletableFuture
@@ -44,7 +69,7 @@ import kotlin.text.Typography.rightGuillemet
 sealed class Nodes(
     name: String,
     coordinator: Coordinator,
-    private val settings: Settings
+    private val settings: Settings,
 ) : TransformableNode(coordinator) {
 
     interface FacingCamera
@@ -93,10 +118,12 @@ sealed class Nodes(
     override fun getTransformationSystem(): Coordinator = super.getTransformationSystem() as Coordinator
 
     override fun setRenderable(renderable: Renderable?) {
-        super.setRenderable(renderable?.apply {
-            isShadowCaster = settings.shadows.get()
-            isShadowReceiver = settings.shadows.get()
-        })
+        super.setRenderable(
+            renderable?.apply {
+                isShadowCaster = settings.shadows.get()
+                isShadowReceiver = settings.shadows.get()
+            },
+        )
     }
 
     override fun onUpdate(frameTime: FrameTime) {
@@ -131,10 +158,11 @@ sealed class Nodes(
 
     open fun selectionContinuation(): BaseTransformableNode? = null
 
-    open fun statusIcon(): Int = if (isActive && isEnabled && (parent as? AnchorNode)?.isTracking == true)
+    open fun statusIcon(): Int = if (isActive && isEnabled && (parent as? AnchorNode)?.isTracking == true) {
         android.R.drawable.presence_online
-    else
+    } else {
         android.R.drawable.presence_invisible
+    }
 
     override fun onTap(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
         super.onTap(hitTestResult, motionEvent)
@@ -147,7 +175,7 @@ sealed class MaterialNode(
     name: String,
     val properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes(name, coordinator, settings) {
 
     init {
@@ -157,14 +185,13 @@ sealed class MaterialNode(
     fun update(block: (MaterialProperties.() -> Unit) = {}) {
         properties.update(renderable?.material, block)
     }
-
 }
 
 class Sphere(
     context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : MaterialNode("Sphere", properties, coordinator, settings) {
 
     companion object {
@@ -177,14 +204,13 @@ class Sphere(
         makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeSphere(RADIUS, CENTER, it) }
     }
-
 }
 
 class Cylinder(
     context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : MaterialNode("Cylinder", properties, coordinator, settings) {
 
     companion object {
@@ -198,14 +224,13 @@ class Cylinder(
         makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeCylinder(RADIUS, HEIGHT, CENTER, it) }
     }
-
 }
 
 class Cube(
     context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : MaterialNode("Cube", properties, coordinator, settings) {
 
     companion object {
@@ -218,14 +243,13 @@ class Cube(
         makeOpaqueWithColor(context.applicationContext, color)
             .thenAccept { renderable = ShapeFactory.makeCube(Vector3.one().scaled(SIZE), CENTER, it) }
     }
-
 }
 
 class Measure(
     private val context: Context,
     properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : MaterialNode("Measure", properties, coordinator, settings) {
 
     companion object {
@@ -332,15 +356,13 @@ class Measure(
         fun applyMaterial(material: Material?) {
             renderable = ShapeFactory.makeCylinder(CYLINDER_RADIUS, 1F, Vector3.zero(), material)
         }
-
     }
-
 }
 
 class Layout(
     context: Context,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Layout", coordinator, settings), Footprint.Invisible, Nodes.FacingCamera {
 
     companion object {
@@ -361,13 +383,12 @@ class Layout(
             isShadowReceiver = false
         }
     }
-
 }
 
 class Andy(
     context: Context,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Andy", coordinator, settings) {
 
     init {
@@ -376,7 +397,6 @@ class Andy(
             .build()
             .thenAccept { renderable = it }
     }
-
 }
 
 typealias CollisionPlane = com.google.ar.sceneform.collision.Plane
@@ -386,7 +406,7 @@ class Drawing(
     private val plane: CollisionPlane?,
     properties: MaterialProperties,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : MaterialNode("Drawing", properties, coordinator, settings) {
 
     companion object {
@@ -422,7 +442,7 @@ class Drawing(
             properties: MaterialProperties,
             ar: ArSceneView,
             coordinator: Coordinator,
-            settings: Settings
+            settings: Settings,
         ): Drawing? {
             val context = ar.context
             val session = ar.session ?: return null
@@ -478,14 +498,13 @@ class Drawing(
     }
 
     fun deleteIfEmpty() = if (line.points.size < 2) detach() else Unit
-
 }
 
 class Link(
     context: Context,
     uri: Uri,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Link", coordinator, settings) {
 
     companion object {
@@ -522,7 +541,7 @@ class Augmented(
     context: Context,
     private val image: AugmentedImage,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Augmented image", coordinator, settings) {
 
     companion object {
@@ -547,7 +566,6 @@ class Augmented(
             }
             return null
         }
-
     }
 
     init {
@@ -568,14 +586,13 @@ class Augmented(
         super.detach()
         references.remove(image)
     }
-
 }
 
 class CloudAnchor(
     context: Context,
     private val session: Session,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Cloud Anchor", coordinator, settings) {
 
     private var lastState: Anchor.CloudAnchorState? = null
@@ -588,7 +605,6 @@ class CloudAnchor(
             val anchor = session.resolveCloudAnchor(id)
             return CloudAnchor(context.applicationContext, session, coordinator, settings).also { it.attach(anchor, ar.scene) }
         }
-
     }
 
     init {
@@ -665,13 +681,12 @@ class CloudAnchor(
         }
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
-
 }
 
 class Video(
     val context: Context,
     coordinator: Coordinator,
-    settings: Settings
+    settings: Settings,
 ) : Nodes("Video", coordinator, settings), MediaPlayer.OnVideoSizeChangedListener {
 
     private var mediaPlayer: MediaPlayer? = null
@@ -723,5 +738,4 @@ class Video(
             else -> Vector3.one()
         }
     }
-
 }

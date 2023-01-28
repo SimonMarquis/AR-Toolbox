@@ -25,7 +25,6 @@ import com.google.ar.sceneform.rendering.RenderableDefinition.Submesh
 import com.google.ar.sceneform.rendering.Vertex
 import com.google.ar.sceneform.rendering.Vertex.UvCoordinate
 import com.google.ar.sceneform.utilities.AndroidPreconditions
-import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -35,7 +34,7 @@ object ExtrudedCylinder {
 
     private enum class Direction {
         UP,
-        DOWN
+        DOWN,
     }
 
     /**
@@ -48,7 +47,9 @@ object ExtrudedCylinder {
      */
     // CompletableFuture requires api level 24
     fun makeExtrudedCylinder(
-        radius: Float, points: List<Vector3>, material: Material
+        radius: Float,
+        points: List<Vector3>,
+        material: Material,
     ): RenderableDefinition? {
         AndroidPreconditions.checkMinAndroidApiLevel()
 
@@ -63,7 +64,12 @@ object ExtrudedCylinder {
 
         for (point in 0 until points.size - 1) {
             generateVerticesFromPoints(
-                desiredUp, vertices, rotations, points[point + 1], points[point], radius
+                desiredUp,
+                vertices,
+                rotations,
+                points[point + 1],
+                points[point],
+                radius,
             )
         }
 
@@ -90,9 +96,8 @@ object ExtrudedCylinder {
         rotations: MutableList<Quaternion>,
         firstPoint: Vector3,
         secondPoint: Vector3,
-        radius: Float
+        radius: Float,
     ) {
-
         val difference = Vector3.subtract(firstPoint, secondPoint)
         var directionFromTopToBottom = difference.normalized()
         var rotationFromAToB = Quaternion.lookRotation(directionFromTopToBottom, desiredUp)
@@ -129,8 +134,9 @@ object ExtrudedCylinder {
             var topPosition = Vector3.add(
                 directionFromTopToBottom.scaled(-halfHeight),
                 Vector3.add(
-                    rightDirection.scaled(radius * cosTheta), upDirection.scaled(radius * sinTheta)
-                )
+                    rightDirection.scaled(radius * cosTheta),
+                    upDirection.scaled(radius * sinTheta),
+                ),
             )
             var normal = Vector3.subtract(topPosition, directionFromTopToBottom.scaled(-halfHeight)).normalized()
             topPosition = Vector3.add(topPosition, center)
@@ -147,8 +153,9 @@ object ExtrudedCylinder {
             var bottomPosition = Vector3.add(
                 directionFromTopToBottom.scaled(halfHeight),
                 Vector3.add(
-                    rightDirection.scaled(radius * cosTheta), upDirection.scaled(radius * sinTheta)
-                )
+                    rightDirection.scaled(radius * cosTheta),
+                    upDirection.scaled(radius * sinTheta),
+                ),
             )
             normal = Vector3.subtract(bottomPosition, directionFromTopToBottom.scaled(halfHeight))
                 .normalized()
@@ -171,7 +178,10 @@ object ExtrudedCylinder {
     }
 
     private fun updateConnectingPoints(
-        vertices: MutableList<Vertex>, points: List<Vector3>, rotations: List<Quaternion>, radius: Float
+        vertices: MutableList<Vertex>,
+        points: List<Vector3>,
+        rotations: List<Quaternion>,
+        radius: Float,
     ) {
         // Loop over each segment of cylinder, connecting the ends of this segment to start of the next.
         var currentSegmentVertexIndex = NUMBER_OF_SIDES + 1
@@ -192,7 +202,8 @@ object ExtrudedCylinder {
 
                 // Create new position
                 val position = Vector3.add(
-                    rightDirection.scaled(radius * cosTheta), upDirection.scaled(radius * sinTheta)
+                    rightDirection.scaled(radius * cosTheta),
+                    upDirection.scaled(radius * sinTheta),
                 )
                 val normal = position.normalized()
                 position.set(Vector3.add(position, influencePoint))
@@ -207,10 +218,10 @@ object ExtrudedCylinder {
                             vertices[currentSegmentVertexIndex].uvCoordinate!!.x,
                             Vector3.subtract(
                                 position,
-                                vertices[previousSegmentVertexIndex].position
+                                vertices[previousSegmentVertexIndex].position,
                             )
-                                .length() + vertices[previousSegmentVertexIndex].uvCoordinate!!.y
-                        )
+                                .length() + vertices[previousSegmentVertexIndex].uvCoordinate!!.y,
+                        ),
                     )
                     .build()
 
@@ -232,9 +243,9 @@ object ExtrudedCylinder {
                 currentVertex.uvCoordinate!!.x,
                 Vector3.subtract(
                     vertices[vertexIndex].position,
-                    vertices[vertexIndex - NUMBER_OF_SIDES - 1].position
+                    vertices[vertexIndex - NUMBER_OF_SIDES - 1].position,
                 )
-                    .length() + vertices[vertexIndex - NUMBER_OF_SIDES - 1].uvCoordinate!!.y
+                    .length() + vertices[vertexIndex - NUMBER_OF_SIDES - 1].uvCoordinate!!.y,
             )
         }
     }
@@ -267,9 +278,8 @@ object ExtrudedCylinder {
         triangleIndices: MutableList<Int>,
         points: List<Vector3>,
         centerPointIndex: Int,
-        direction: Direction
+        direction: Direction,
     ) {
-
         val centerPoint = points[centerPointIndex]
         val nextPoint = points[centerPointIndex + (if (direction == Direction.UP) 1 else -1)]
         val normal = Vector3.subtract(centerPoint, nextPoint).normalized()
@@ -322,7 +332,7 @@ object ExtrudedCylinder {
             MathHelper.lerp(a.x, b.x, ratio),
             MathHelper.lerp(a.y, b.y, ratio),
             MathHelper.lerp(a.z, b.z, ratio),
-            MathHelper.lerp(a.w, b.w, ratio)
+            MathHelper.lerp(a.w, b.w, ratio),
         )
     }
 }

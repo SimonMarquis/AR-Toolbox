@@ -16,3 +16,25 @@ allprojects {
         mavenCentral()
     }
 }
+
+plugins {
+    id("com.diffplug.spotless")
+}
+
+spotless {
+    format("misc") {
+        target("**/*.md", ".gitignore")
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    kotlin {
+        target("**/src/**/*.kt", "**/src/**/*.kts")
+        ktlint()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    kotlinGradle {
+        target("*.gradle.kts")
+        ktlint()
+    }
+}

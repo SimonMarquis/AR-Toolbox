@@ -16,7 +16,6 @@
 package fr.smarquis.ar_toolbox
 
 import com.google.ar.sceneform.math.Vector3
-import java.util.*
 
 /** Smooths a given list of points  */
 class LineSimplifier {

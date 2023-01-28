@@ -91,5 +91,4 @@ object PointCloud {
     private fun vertex(position: Vector3, normal: Vector3, uv: Vertex.UvCoordinate): Vertex {
         return Vertex.builder().setPosition(position).setNormal(normal).setUvCoordinate(uv).build()
     }
-
 }

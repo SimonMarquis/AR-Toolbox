@@ -54,7 +54,8 @@ class FaceActivity : ArActivity<ActivityFaceBinding>(ActivityFaceBinding::inflat
             onUpdate = {
                 settings.faceRegions.applyTo(findItem(R.id.menu_item_face_regions))
                 settings.faceMesh.applyTo(findItem(R.id.menu_item_face_mesh))
-            })
+            },
+        )
     }
 
     override fun config(session: Session): Config = Config(session).apply {
@@ -62,7 +63,6 @@ class FaceActivity : ArActivity<ActivityFaceBinding>(ActivityFaceBinding::inflat
         augmentedFaceMode = Config.AugmentedFaceMode.MESH3D
         focusMode = Config.FocusMode.AUTO
     }
-
 
     override fun onArResumed() {
         bottomSheet.behavior().update(state = STATE_EXPANDED, isHideable = false)
@@ -84,7 +84,7 @@ class FaceActivity : ArActivity<ActivityFaceBinding>(ActivityFaceBinding::inflat
             when (trackingFaces?.size) {
                 null, 0 -> android.R.drawable.presence_invisible
                 else -> android.R.drawable.presence_online
-            }
+            },
         )
         trackingFaces?.firstOrNull()?.let {
             with(bottomSheet.body) {
@@ -131,7 +131,5 @@ class FaceActivity : ArActivity<ActivityFaceBinding>(ActivityFaceBinding::inflat
         fun apply(faceMesh: Settings.FaceMesh) {
             faceMeshTexture = if (faceMesh.get()) this.faceMesh else null
         }
-
     }
-
 }

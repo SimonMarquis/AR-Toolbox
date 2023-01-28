@@ -53,7 +53,7 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
             uri = getString(R.string.scene_viewer_native_uri).toUri(),
             model = getString(R.string.scene_viewer_native_model),
             link = getString(R.string.scene_viewer_native_link),
-            title = getString(R.string.scene_viewer_native_title)
+            title = getString(R.string.scene_viewer_native_title),
         )
     }
 
@@ -232,5 +232,4 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
         }
         return popupMenu
     }
-
 }

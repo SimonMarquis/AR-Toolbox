@@ -24,7 +24,5 @@ class SceneViewModel(application: Application) : AndroidViewModel(application) {
             super.setValue(value)
             prefs.edit().putString(KEY_URI, value).apply()
         }
-
     }
-
 }

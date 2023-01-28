@@ -12,19 +12,23 @@ class Coordinator(
     context: Context,
     private val onArTap: (MotionEvent) -> Unit,
     private val onNodeSelected: (old: Nodes?, new: Nodes?) -> Unit,
-    private val onNodeFocused: (nodes: Nodes?) -> Unit
+    private val onNodeFocused: (nodes: Nodes?) -> Unit,
 ) : TransformationSystem(
-    context.resources.displayMetrics, Footprint(context)
+    context.resources.displayMetrics,
+    Footprint(context),
 ) {
 
     override fun getSelectedNode(): Nodes? = super.getSelectedNode() as? Nodes
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
-            onArTap(motionEvent)
-            return true
-        }
-    })
+    private val gestureDetector = GestureDetector(
+        context,
+        object : GestureDetector.SimpleOnGestureListener() {
+            override fun onSingleTapUp(motionEvent: MotionEvent): Boolean {
+                onArTap(motionEvent)
+                return true
+            }
+        },
+    )
 
     override fun getSelectionVisualizer(): Footprint {
         return super.getSelectionVisualizer() as Footprint
@@ -34,9 +38,9 @@ class Coordinator(
         // Prevent changing the selection visualizer
     }
 
-    override fun onTouch(hitTestResult: HitTestResult?, motionEvent: MotionEvent?) {
+    override fun onTouch(hitTestResult: HitTestResult, motionEvent: MotionEvent) {
         super.onTouch(hitTestResult, motionEvent)
-        if (hitTestResult?.node == null) {
+        if (hitTestResult.node == null) {
             gestureDetector.onTouchEvent(motionEvent)
         }
     }
@@ -72,5 +76,4 @@ class Coordinator(
         if (node != null && node != selectedNode) selectNode(node)
         onNodeFocused(node)
     }
-
 }

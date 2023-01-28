@@ -13,7 +13,7 @@ import java.io.IOException
 class VideoRecorder(
     private val context: Context,
     private val sceneView: SceneView,
-    private val onRecordingListener: (isRecording: Boolean) -> Unit
+    private val onRecordingListener: (isRecording: Boolean) -> Unit,
 ) {
 
     companion object {
@@ -51,7 +51,6 @@ class VideoRecorder(
         onRecordingListener(true)
     }
 
-
     fun stop() {
         if (!isRecording) {
             return
@@ -68,7 +67,6 @@ class VideoRecorder(
         context.startActivity(viewOrShare(uri, "video/mp4"))
     }
 
-
     private fun orientation() = context.resources.configuration.orientation
 
     private fun isLandscape() = orientation() == ORIENTATION_LANDSCAPE
@@ -76,5 +74,4 @@ class VideoRecorder(
     private fun CamcorderProfile.width(): Int = if (isLandscape()) videoFrameWidth else videoFrameHeight
 
     private fun CamcorderProfile.height(): Int = if (isLandscape()) videoFrameHeight else videoFrameWidth
-
 }

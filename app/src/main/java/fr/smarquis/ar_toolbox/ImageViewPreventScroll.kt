@@ -8,7 +8,9 @@ import android.view.MotionEvent.ACTION_DOWN
 import androidx.appcompat.widget.AppCompatImageView
 
 class ImageViewPreventScroll @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     var requestDisallowInterceptTouchEvent = false
@@ -20,5 +22,4 @@ class ImageViewPreventScroll @JvmOverloads constructor(
         }
         return super.onTouchEvent(event)
     }
-
 }

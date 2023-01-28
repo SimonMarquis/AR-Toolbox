@@ -4,13 +4,16 @@ import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import com.google.ar.sceneform.rendering.Material
-import com.google.ar.sceneform.rendering.MaterialFactory.*
+import com.google.ar.sceneform.rendering.MaterialFactory.MATERIAL_COLOR
+import com.google.ar.sceneform.rendering.MaterialFactory.MATERIAL_METALLIC
+import com.google.ar.sceneform.rendering.MaterialFactory.MATERIAL_REFLECTANCE
+import com.google.ar.sceneform.rendering.MaterialFactory.MATERIAL_ROUGHNESS
 
 class MaterialProperties(
     @field:ColorInt var color: Int = DEFAULT_COLOR,
     @field:IntRange(from = 0, to = 100) var metallic: Int = DEFAULT_METALLIC,
     @field:IntRange(from = 0, to = 100) var roughness: Int = DEFAULT_ROUGHNESS,
-    @field:IntRange(from = 0, to = 100) var reflectance: Int = DEFAULT_REFLECTANCE
+    @field:IntRange(from = 0, to = 100) var reflectance: Int = DEFAULT_REFLECTANCE,
 ) {
     companion object {
 
@@ -20,7 +23,6 @@ class MaterialProperties(
         private const val DEFAULT_REFLECTANCE = 50
 
         val DEFAULT = MaterialProperties()
-
     }
 
     fun update(material: Material?, block: (MaterialProperties.() -> Unit) = {}) {
@@ -32,5 +34,4 @@ class MaterialProperties(
             setFloat(MATERIAL_REFLECTANCE, reflectance / 100F)
         }
     }
-
 }
