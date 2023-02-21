@@ -25,12 +25,12 @@ jobs:
     - name: Assemble
       run: ./gradlew assembleDebug bundleDebug --stacktrace
     - name: Upload APK
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: app-debug.apk
         path: app/build/outputs/apk/debug/app-debug.apk
     - name: Upload AAB
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: app-debug.aab
         path: app/build/outputs/bundle/debug/app-debug.aab
