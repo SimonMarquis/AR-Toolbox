@@ -1,24 +1,9 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:_")
-        classpath(Android.tools.build.gradlePlugin)
-        classpath(Google.android.openSourceLicensesPlugin)
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
 plugins {
-    id("com.diffplug.spotless")
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.android.kotlin) apply false
+    alias(libs.plugins.google.oss) apply false
+    alias(libs.plugins.spotless)
 }
 
 spotless {
