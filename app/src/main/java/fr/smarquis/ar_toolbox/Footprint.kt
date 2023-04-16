@@ -20,7 +20,7 @@ class Footprint(context: Context) : SelectionVisualizer {
 
     init {
         ModelRenderable.builder()
-            .setSource(context, R.raw.sceneform_footprint)
+            .setSource(context, com.google.ar.sceneform.ux.R.raw.sceneform_footprint)
             .build()
             .thenAccept {
                 it.collisionShape = null

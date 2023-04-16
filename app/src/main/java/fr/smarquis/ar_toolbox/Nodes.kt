@@ -371,7 +371,7 @@ class Layout(
 
     init {
         ViewRenderable.builder()
-            .setView(ContextThemeWrapper(context.applicationContext, R.style.Theme_MaterialComponents), R.layout.view_renderable_layout)
+            .setView(ContextThemeWrapper(context.applicationContext, com.google.android.material.R.style.Theme_MaterialComponents), R.layout.view_renderable_layout)
             .setSizer(FixedHeightViewSizer(HEIGHT)).build()
             .thenAccept { renderable = it }
     }
