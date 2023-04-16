@@ -133,7 +133,7 @@ class Settings(context: Context) {
 
             init {
                 val completableModelRenderable = ModelRenderable.builder()
-                    .setSource(context.applicationContext, R.raw.sceneform_footprint)
+                    .setSource(context.applicationContext, com.google.ar.sceneform.ux.R.raw.sceneform_footprint)
                     .build()
                 val completableMaterial = makeOpaqueWithColor(context.applicationContext, properties.color.toArColor())
                 CompletableFuture.allOf(completableModelRenderable, completableMaterial).thenAccept {
