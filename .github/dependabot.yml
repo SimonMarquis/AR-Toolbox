@@ -11,6 +11,7 @@ updates:
     schedule:
       interval: "daily"
     registries: "*"
+    labels: [ ]
 registries:
   maven-google:
     type: maven-repository
