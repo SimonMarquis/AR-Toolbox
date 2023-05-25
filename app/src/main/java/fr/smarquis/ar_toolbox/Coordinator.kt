@@ -71,7 +71,7 @@ class Coordinator(
         private set
 
     fun focusNode(node: Nodes?) {
-        if (node == focusedNode) return /*ignored*/
+        if (node == focusedNode) return // ignored
         focusedNode = node
         if (node != null && node != selectedNode) selectNode(node)
         onNodeFocused(node)
