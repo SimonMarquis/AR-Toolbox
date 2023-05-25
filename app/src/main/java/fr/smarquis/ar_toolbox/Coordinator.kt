@@ -48,7 +48,7 @@ class Coordinator(
     override fun selectNode(node: BaseTransformableNode?): Boolean {
         val old = selectedNode
         when (node) {
-            selectedNode -> return true /*ignored*/
+            selectedNode -> return true // ignored
             is Nodes -> {
                 return super.selectNode(node).also { selected ->
                     if (!selected) return@also
