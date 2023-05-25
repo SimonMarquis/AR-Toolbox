@@ -135,7 +135,7 @@ sealed class Nodes(
 
     private fun facingCamera() {
         // Buggy when dragging because TranslationController already handles it's own rotation on each update.
-        if (isTransforming) return /*Prevent infinite loop*/
+        if (isTransforming) return // Prevent infinite loop
         val camera = scene?.camera ?: return
         val direction = Vector3.subtract(camera.worldPosition, worldPosition)
         worldRotation = Quaternion.lookRotation(direction, Vector3.up())
