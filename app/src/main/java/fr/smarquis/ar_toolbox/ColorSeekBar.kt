@@ -98,7 +98,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         }
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         // color bar position
@@ -109,7 +109,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
 
         // draw color bar
         rectf.set(barLeft, barTop, barRight, barBottom)
-        canvas?.drawRoundRect(rectf, barCornerRadius, barCornerRadius, rectPaint)
+        canvas.drawRoundRect(rectf, barCornerRadius, barCornerRadius, rectPaint)
 
         if (thumbX < barLeft) {
             thumbX = barLeft
@@ -120,8 +120,8 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         thumbPaint.color = color
 
         // draw color bar thumb
-        canvas?.drawCircle(thumbX, thumbY, thumbBorderRadius, thumbBorderPaint)
-        canvas?.drawCircle(thumbX, thumbY, thumbRadius, thumbPaint)
+        canvas.drawCircle(thumbX, thumbY, thumbBorderRadius, thumbBorderPaint)
+        canvas.drawCircle(thumbX, thumbY, thumbRadius, thumbPaint)
     }
 
     private fun pickColor(position: Float, canvasWidth: Int): Int {
