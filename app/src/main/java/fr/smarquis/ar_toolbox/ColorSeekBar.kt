@@ -98,7 +98,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         }
     }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         // color bar position
