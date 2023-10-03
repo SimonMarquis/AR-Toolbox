@@ -321,10 +321,9 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
             .show()
     }
 
-    private fun prompt(block: DialogInputBinding.(AlertDialog.Builder) -> Unit) =
-        DialogInputBinding.inflate(LayoutInflater.from(ContextThemeWrapper(this, R.style.AlertDialog)), null, false).apply {
-            block(AlertDialog.Builder(root.context).setView(root))
-        }
+    private fun prompt(block: DialogInputBinding.(AlertDialog.Builder) -> Unit) = DialogInputBinding.inflate(LayoutInflater.from(ContextThemeWrapper(this, R.style.AlertDialog)), null, false).apply {
+        block(AlertDialog.Builder(root.context).setView(root))
+    }
 
     private fun promptExternalModelUri() = prompt { builder ->
         layout.hint = getText(R.string.model_link_custom_hint)
@@ -412,38 +411,36 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
         onArUpdateAugmentedImages()
     }
 
-    private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) =
-        bottomSheetScene.header.label.setText(
-            when (state) {
-                TRACKING -> R.string.tracking_success
-                PAUSED -> when (reason) {
-                    NONE -> R.string.tracking_failure_none
-                    BAD_STATE -> R.string.tracking_failure_bad_state
-                    INSUFFICIENT_LIGHT -> R.string.tracking_failure_insufficient_light
-                    EXCESSIVE_MOTION -> R.string.tracking_failure_excessive_motion
-                    INSUFFICIENT_FEATURES -> R.string.tracking_failure_insufficient_features
-                    CAMERA_UNAVAILABLE -> R.string.tracking_failure_camera_unavailable
-                    null -> 0
-                }
-                STOPPED -> R.string.tracking_stopped
+    private fun onArUpdateStatusText(state: TrackingState?, reason: TrackingFailureReason?) = bottomSheetScene.header.label.setText(
+        when (state) {
+            TRACKING -> R.string.tracking_success
+            PAUSED -> when (reason) {
+                NONE -> R.string.tracking_failure_none
+                BAD_STATE -> R.string.tracking_failure_bad_state
+                INSUFFICIENT_LIGHT -> R.string.tracking_failure_insufficient_light
+                EXCESSIVE_MOTION -> R.string.tracking_failure_excessive_motion
+                INSUFFICIENT_FEATURES -> R.string.tracking_failure_insufficient_features
+                CAMERA_UNAVAILABLE -> R.string.tracking_failure_camera_unavailable
                 null -> 0
-            },
-        )
+            }
+            STOPPED -> R.string.tracking_stopped
+            null -> 0
+        },
+    )
 
-    private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) =
-        bottomSheetScene.header.status.setImageResource(
-            when (state) {
-                TRACKING -> android.R.drawable.presence_online
-                PAUSED -> when (reason) {
-                    NONE -> android.R.drawable.presence_invisible
-                    BAD_STATE, CAMERA_UNAVAILABLE -> android.R.drawable.presence_busy
-                    INSUFFICIENT_LIGHT, EXCESSIVE_MOTION, INSUFFICIENT_FEATURES -> android.R.drawable.presence_away
-                    null -> 0
-                }
-                STOPPED -> android.R.drawable.presence_offline
+    private fun onArUpdateStatusIcon(state: TrackingState?, reason: TrackingFailureReason?) = bottomSheetScene.header.status.setImageResource(
+        when (state) {
+            TRACKING -> android.R.drawable.presence_online
+            PAUSED -> when (reason) {
+                NONE -> android.R.drawable.presence_invisible
+                BAD_STATE, CAMERA_UNAVAILABLE -> android.R.drawable.presence_busy
+                INSUFFICIENT_LIGHT, EXCESSIVE_MOTION, INSUFFICIENT_FEATURES -> android.R.drawable.presence_away
                 null -> 0
-            },
-        )
+            }
+            STOPPED -> android.R.drawable.presence_offline
+            null -> 0
+        },
+    )
 
     private fun onArUpdateBottomSheet(state: TrackingState?) = with(bottomSheetScene) {
         header.add.isEnabled = state == TRACKING

@@ -435,15 +435,7 @@ class Drawing(
             }
         }
 
-        fun create(
-            x: Float,
-            y: Float,
-            fromTouch: Boolean,
-            properties: MaterialProperties,
-            ar: ArSceneView,
-            coordinator: Coordinator,
-            settings: Settings,
-        ): Drawing? {
+        fun create(x: Float, y: Float, fromTouch: Boolean, properties: MaterialProperties, ar: ArSceneView, coordinator: Coordinator, settings: Settings): Drawing? {
             val context = ar.context
             val session = ar.session ?: return null
             val scene = ar.scene ?: return null
