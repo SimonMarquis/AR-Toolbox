@@ -45,12 +45,7 @@ object ExtrudedCylinder {
      * @param material the material to use for rendering the cylinder
      * @return renderable representing a cylinder with the given parameters
      */
-    // CompletableFuture requires api level 24
-    fun makeExtrudedCylinder(
-        radius: Float,
-        points: List<Vector3>,
-        material: Material,
-    ): RenderableDefinition? {
+    fun makeExtrudedCylinder(radius: Float, points: List<Vector3>, material: Material): RenderableDefinition? {
         AndroidPreconditions.checkMinAndroidApiLevel()
 
         if (points.size < 2) {
@@ -90,14 +85,7 @@ object ExtrudedCylinder {
             .build()
     }
 
-    private fun generateVerticesFromPoints(
-        desiredUp: Vector3,
-        vertices: MutableList<Vertex>,
-        rotations: MutableList<Quaternion>,
-        firstPoint: Vector3,
-        secondPoint: Vector3,
-        radius: Float,
-    ) {
+    private fun generateVerticesFromPoints(desiredUp: Vector3, vertices: MutableList<Vertex>, rotations: MutableList<Quaternion>, firstPoint: Vector3, secondPoint: Vector3, radius: Float) {
         val difference = Vector3.subtract(firstPoint, secondPoint)
         var directionFromTopToBottom = difference.normalized()
         var rotationFromAToB = Quaternion.lookRotation(directionFromTopToBottom, desiredUp)
@@ -177,12 +165,7 @@ object ExtrudedCylinder {
         vertices.addAll(bottomVertices)
     }
 
-    private fun updateConnectingPoints(
-        vertices: MutableList<Vertex>,
-        points: List<Vector3>,
-        rotations: List<Quaternion>,
-        radius: Float,
-    ) {
+    private fun updateConnectingPoints(vertices: MutableList<Vertex>, points: List<Vector3>, rotations: List<Quaternion>, radius: Float) {
         // Loop over each segment of cylinder, connecting the ends of this segment to start of the next.
         var currentSegmentVertexIndex = NUMBER_OF_SIDES + 1
         var nextSegmentVertexIndex = currentSegmentVertexIndex + NUMBER_OF_SIDES + 1
@@ -273,13 +256,7 @@ object ExtrudedCylinder {
         }
     }
 
-    private fun makeDisk(
-        vertices: MutableList<Vertex>,
-        triangleIndices: MutableList<Int>,
-        points: List<Vector3>,
-        centerPointIndex: Int,
-        direction: Direction,
-    ) {
+    private fun makeDisk(vertices: MutableList<Vertex>, triangleIndices: MutableList<Int>, points: List<Vector3>, centerPointIndex: Int, direction: Direction) {
         val centerPoint = points[centerPointIndex]
         val nextPoint = points[centerPointIndex + (if (direction == Direction.UP) 1 else -1)]
         val normal = Vector3.subtract(centerPoint, nextPoint).normalized()
