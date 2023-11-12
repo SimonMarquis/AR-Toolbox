@@ -541,7 +541,7 @@ class Augmented(
         private val references: MutableMap<AugmentedImage, Nodes> = mutableMapOf()
 
         fun target(context: Context) = try {
-            context.applicationContext.assets.open("augmented_image_target.png")
+            context.applicationContext.assets.open("augmented_image_target.jpg")
         } catch (e: Exception) {
             null
         }?.let { BitmapFactory.decodeStream(it) }
