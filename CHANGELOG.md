@@ -4,6 +4,8 @@
 
 <!-- MarkdownTOC autolink="true" -->
 
+- [1.14.0](#1140)
+- [1.13.0](#1130)
 - [1.12.0](#1120)
 - [1.11.0](#1110)
 - [1.10.0](#1100)
@@ -21,6 +23,13 @@
 
 <!-- /MarkdownTOC -->
 </details>
+
+## 1.14.0
+> 2023.11.12
+
+- 📦 Update arcore 1.40.0
+- 🩹 Fix runtime crash with unsupported augmented image target (#89)
+- 🤖 Support for Android 14
 
 ## 1.13.0
 > 2023.01.28
