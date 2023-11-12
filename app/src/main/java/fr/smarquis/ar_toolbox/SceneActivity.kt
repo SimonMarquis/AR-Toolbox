@@ -129,7 +129,9 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
         updateMode = UpdateMode.LATEST_CAMERA_IMAGE
         cloudAnchorMode = CloudAnchorMode.ENABLED
         augmentedImageDatabase = AugmentedImageDatabase(session).apply {
-            Augmented.target(this@SceneActivity)?.let { addImage("augmented", it) }
+            Augmented.target(this@SceneActivity)
+                ?.runCatching { addImage("augmented", this) }
+                ?.onFailure(Throwable::printStackTrace) // Might throw ImageInsufficientQualityException
         }
         augmentedFaceMode = AugmentedFaceMode.DISABLED
         focusMode = FocusMode.AUTO
