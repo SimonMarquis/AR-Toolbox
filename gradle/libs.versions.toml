@@ -17,7 +17,7 @@ google-oss = "17.0.1"
 google-oss-plugin = "0.10.6"
 junit = "4.13.2"
 kotlin = "1.9.22"
-spotless = "6.23.3"
+spotless = "6.24.0"
 
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
