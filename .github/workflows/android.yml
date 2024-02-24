@@ -9,7 +9,12 @@ on:
 jobs:
   build:
 
+    name: Android CI [useK2Uast=${{ matrix.useK2Uast }}]
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        useK2Uast: [true, false]
 
     steps:
     - uses: actions/checkout@v4
@@ -18,17 +23,15 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     - uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-    - name: Check
-      run: ./gradlew check --stacktrace
-    - name: Assemble
-      run: ./gradlew assembleDebug bundleDebug --stacktrace
+    - name: Check Assemble Lint
+      run: ./gradlew check assembleDebug bundleDebug lintDebug -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.4.0-alpha11 --stacktrace
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug.apk
+        name: app-debug-${{ matrix.useK2Uast }}.apk
         path: app/build/outputs/apk/debug/app-debug.apk
     - name: Upload AAB
       uses: actions/upload-artifact@v4
       with:
-        name: app-debug.aab
+        name: app-debug-${{ matrix.useK2Uast }}.aab
         path: app/build/outputs/bundle/debug/app-debug.aab
