@@ -26,7 +26,7 @@ jobs:
       with:
         validate-wrappers: true
     - name: Check Assemble Lint
-      run: ./gradlew check assembleDebug bundleDebug lintDebug -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.5.0-alpha07 --stacktrace
+      run: ./gradlew check assembleDebug bundleDebug lintDebug -Pandroid.lint.useK2Uast=${{ matrix.useK2Uast }} -Pandroid.experimental.lint.version=8.6.0-alpha01 --stacktrace
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
