@@ -2,7 +2,7 @@
 android-gradlePlugin = "8.7.1"
 androidx-appcompat = "1.7.0"
 androidx-browser = "1.8.0"
-androidx-constraintlayout = "2.1.4"
+androidx-constraintlayout = "2.2.0"
 androidx-coordinatorlayout = "1.2.0"
 androidx-core = "1.13.1"
 androidx-fragment = "1.8.4"
