@@ -2,7 +2,7 @@
   <img src="art/ic_launcher-web.png" alt="" width="96px" height="96px">
 </div>
 
-<p align="center"><img src="https://github.com/SimonMarquis/AR-Toolbox/workflows/Android CI/badge.svg" alt="Android CI"></p>
+<p align="center"><img src="https://github.com/SimonMarquis/AR-Toolbox/actions/workflows/android.yml/badge.svg" alt="Android CI"></p>
 <h3 align="center">AR Toolbox</h3>
 <p align="center">
   ARCore & Sceneform Playground<br>
