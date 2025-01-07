@@ -151,15 +151,13 @@ fun Pose.translation() = Vector3(tx(), ty(), tz())
 
 fun Pose.rotation() = Quaternion(qx(), qy(), qz(), qw())
 
-fun UnavailableException?.message(): Int {
-    return when (this) {
-        is UnavailableArcoreNotInstalledException -> R.string.exception_arcore_not_installed
-        is UnavailableApkTooOldException -> R.string.exception_apk_too_old
-        is UnavailableSdkTooOldException -> R.string.exception_sdk_too_old
-        is UnavailableDeviceNotCompatibleException -> R.string.exception_device_not_compatible
-        is UnavailableUserDeclinedInstallationException -> R.string.exception_user_declined_installation
-        else -> R.string.exception_unknown
-    }
+fun UnavailableException?.message(): Int = when (this) {
+    is UnavailableArcoreNotInstalledException -> R.string.exception_arcore_not_installed
+    is UnavailableApkTooOldException -> R.string.exception_apk_too_old
+    is UnavailableSdkTooOldException -> R.string.exception_sdk_too_old
+    is UnavailableDeviceNotCompatibleException -> R.string.exception_device_not_compatible
+    is UnavailableUserDeclinedInstallationException -> R.string.exception_user_declined_installation
+    else -> R.string.exception_unknown
 }
 
 fun ViewBinding.behavior(): BottomSheetBehavior<out View> = root.behavior()

@@ -30,9 +30,7 @@ class Coordinator(
         },
     )
 
-    override fun getSelectionVisualizer(): Footprint {
-        return super.getSelectionVisualizer() as Footprint
-    }
+    override fun getSelectionVisualizer(): Footprint = super.getSelectionVisualizer() as Footprint
 
     override fun setSelectionVisualizer(selectionVisualizer: SelectionVisualizer?) {
         // Prevent changing the selection visualizer

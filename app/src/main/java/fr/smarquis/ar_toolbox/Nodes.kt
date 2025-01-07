@@ -363,7 +363,9 @@ class Layout(
     context: Context,
     coordinator: Coordinator,
     settings: Settings,
-) : Nodes("Layout", coordinator, settings), Footprint.Invisible, Nodes.FacingCamera {
+) : Nodes("Layout", coordinator, settings),
+    Footprint.Invisible,
+    Nodes.FacingCamera {
 
     companion object {
         private const val HEIGHT = 0.3F
@@ -415,10 +417,8 @@ class Drawing(
         private const val PLANE_ANCHORING_DISTANCE = 2F
         private const val DEFAULT_DRAWING_DISTANCE = 0.5F
 
-        private fun hit(frame: Frame, x: Float, y: Float): HitResult? {
-            return frame.hitTest(x, y).firstOrNull {
-                (it.trackable as? Plane)?.isPoseInPolygon(it.hitPose) == true && it.distance <= PLANE_ANCHORING_DISTANCE
-            }
+        private fun hit(frame: Frame, x: Float, y: Float): HitResult? = frame.hitTest(x, y).firstOrNull {
+            (it.trackable as? Plane)?.isPoseInPolygon(it.hitPose) == true && it.distance <= PLANE_ANCHORING_DISTANCE
         }
 
         private fun pose(camera: Camera, x: Float, y: Float): Pose {
@@ -427,12 +427,10 @@ class Drawing(
             return Pose.makeTranslation(point.x, point.y, point.z)
         }
 
-        private fun plane(hitResult: HitResult?): CollisionPlane? {
-            return (hitResult?.trackable as? Plane)?.let {
-                val pose = it.centerPose
-                val normal = Quaternion.rotateVector(pose.rotation(), Vector3.up())
-                CollisionPlane(pose.translation(), normal)
-            }
+        private fun plane(hitResult: HitResult?): CollisionPlane? = (hitResult?.trackable as? Plane)?.let {
+            val pose = it.centerPose
+            val normal = Quaternion.rotateVector(pose.rotation(), Vector3.up())
+            CollisionPlane(pose.translation(), normal)
         }
 
         fun create(x: Float, y: Float, fromTouch: Boolean, properties: MaterialProperties, ar: ArSceneView, coordinator: Coordinator, settings: Settings): Drawing? {
@@ -679,7 +677,8 @@ class Video(
     val context: Context,
     coordinator: Coordinator,
     settings: Settings,
-) : Nodes("Video", coordinator, settings), MediaPlayer.OnVideoSizeChangedListener {
+) : Nodes("Video", coordinator, settings),
+    MediaPlayer.OnVideoSizeChangedListener {
 
     private var mediaPlayer: MediaPlayer? = null
     private val texture = ExternalTexture()
