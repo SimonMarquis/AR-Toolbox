@@ -31,7 +31,11 @@ class Settings(context: Context) {
     val faceRegions = FaceRegions(true, "faceRegions", prefs)
     val faceMesh = FaceMesh(true, "faceMesh", prefs)
 
-    open class AtomicBooleanPref(defaultValue: Boolean, private val key: String, private val prefs: SharedPreferences) {
+    open class AtomicBooleanPref(
+        defaultValue: Boolean,
+        private val key: String,
+        private val prefs: SharedPreferences,
+    ) {
 
         private val value: AtomicBoolean = AtomicBoolean(prefs.getBoolean(key, defaultValue))
 
@@ -44,7 +48,11 @@ class Settings(context: Context) {
         }
     }
 
-    class Sunlight(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class Sunlight(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
@@ -61,7 +69,11 @@ class Settings(context: Context) {
         }
     }
 
-    class Shadows(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class Shadows(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
@@ -84,7 +96,11 @@ class Settings(context: Context) {
         }
     }
 
-    class Planes(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class Planes(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
@@ -101,7 +117,11 @@ class Settings(context: Context) {
         }
     }
 
-    class Selection(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class Selection(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, selectionVisualizer: Footprint) {
             toggle()
@@ -118,7 +138,11 @@ class Settings(context: Context) {
         }
     }
 
-    class Reticle(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class Reticle(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         class Node(context: Context) : com.google.ar.sceneform.Node() {
 
@@ -197,7 +221,11 @@ class Settings(context: Context) {
         }
     }
 
-    class PointCloud(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class PointCloud(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         class Node(context: Context) : com.google.ar.sceneform.Node() {
 
@@ -272,7 +300,11 @@ class Settings(context: Context) {
         }
     }
 
-    class FaceRegions(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class FaceRegions(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
@@ -291,7 +323,11 @@ class Settings(context: Context) {
         }
     }
 
-    class FaceMesh(defaultValue: Boolean, key: String, prefs: SharedPreferences) : AtomicBooleanPref(defaultValue, key, prefs) {
+    class FaceMesh(
+        defaultValue: Boolean,
+        key: String,
+        prefs: SharedPreferences,
+    ) : AtomicBooleanPref(defaultValue, key, prefs) {
 
         fun toggle(menuItem: MenuItem, arSceneView: ArSceneView) {
             toggle()
