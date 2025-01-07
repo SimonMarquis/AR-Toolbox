@@ -296,20 +296,14 @@ object ExtrudedCylinder {
     }
 
     /** The dot product of two Quaternions.  */
-    private fun dot(lhs: Quaternion, rhs: Quaternion): Float {
-        return lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w
-    }
+    private fun dot(lhs: Quaternion, rhs: Quaternion): Float = lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z + lhs.w * rhs.w
 
-    private fun negated(quat: Quaternion): Quaternion {
-        return Quaternion(-quat.x, -quat.y, -quat.z, -quat.w)
-    }
+    private fun negated(quat: Quaternion): Quaternion = Quaternion(-quat.x, -quat.y, -quat.z, -quat.w)
 
-    private fun lerp(a: Quaternion, b: Quaternion, ratio: Float): Quaternion {
-        return Quaternion(
-            MathHelper.lerp(a.x, b.x, ratio),
-            MathHelper.lerp(a.y, b.y, ratio),
-            MathHelper.lerp(a.z, b.z, ratio),
-            MathHelper.lerp(a.w, b.w, ratio),
-        )
-    }
+    private fun lerp(a: Quaternion, b: Quaternion, ratio: Float): Quaternion = Quaternion(
+        MathHelper.lerp(a.x, b.x, ratio),
+        MathHelper.lerp(a.y, b.y, ratio),
+        MathHelper.lerp(a.z, b.z, ratio),
+        MathHelper.lerp(a.w, b.w, ratio),
+    )
 }

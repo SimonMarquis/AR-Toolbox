@@ -144,9 +144,7 @@ class ColorSeekBar(context: Context, attributeSet: AttributeSet) : View(context,
         }
     }
 
-    private fun mix(start: Int, end: Int, position: Float): Int {
-        return start + (position * (end - start)).roundToInt()
-    }
+    private fun mix(start: Int, end: Int, position: Float): Int = start + (position * (end - start)).roundToInt()
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
