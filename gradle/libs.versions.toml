@@ -16,7 +16,7 @@ google-ar-sceneform = "1.17.1"
 google-oss = "17.1.0"
 google-oss-plugin = "0.10.6"
 junit = "4.13.2"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 spotless = "7.0.2"
 
 [libraries]
