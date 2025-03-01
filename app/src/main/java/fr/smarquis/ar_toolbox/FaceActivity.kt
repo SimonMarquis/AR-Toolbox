@@ -36,7 +36,11 @@ class FaceActivity : ArActivity<ActivityFaceBinding>(ActivityFaceBinding::inflat
         arSceneView.scene.addOnUpdateListener { onArUpdate() }
         settings.faceRegions.applyTo(arSceneView)
         settings.faceMesh.applyTo(arSceneView)
-        bottomSheet.behavior().state = STATE_HIDDEN
+        bottomSheet.behavior().apply {
+            state = STATE_HIDDEN
+            configureBottomSheetAnimatedForegroundMask(bottomSheet.body)
+            configureBottomSheetInset(bottomSheet.inset)
+        }
         bottomSheet.header.root.setOnClickListener { bottomSheet.behavior().toggle() }
         initPopupMenu(
             anchor = bottomSheet.header.more,

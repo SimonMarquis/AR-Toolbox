@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/colorBackground"
+    android:foreground="@drawable/bottom_sheet_body_foreground_mask"
     android:clickable="true"
     android:paddingLeft="@dimen/bottom_sheet_horizontal_padding"
     android:paddingRight="@dimen/bottom_sheet_horizontal_padding"

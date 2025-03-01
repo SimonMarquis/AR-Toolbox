@@ -7,7 +7,7 @@
     android:layout_gravity="center_horizontal"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.MaterialComponents.Light"
-    app:behavior_hideable="true"
+    app:behavior_hideable="false"
     app:behavior_peekHeight="@dimen/bottom_sheet_peek_height"
     app:behavior_skipCollapsed="false"
     app:gestureInsetBottomIgnored="true"
@@ -21,5 +21,9 @@
     <include
         android:id="@+id/body"
         layout="@layout/bottom_sheet_scene_body" />
+
+    <include
+        android:id="@+id/inset"
+        layout="@layout/bottom_sheet_inset" />
 
 </LinearLayout>

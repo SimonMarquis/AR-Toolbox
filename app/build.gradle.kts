@@ -13,11 +13,11 @@ val versionBuild = 0
 
 android {
     namespace = "fr.smarquis.ar_toolbox"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "fr.smarquis.ar_toolbox"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = versionMajor * 1000000 + versionMinor * 10000 + versionPatch * 100 + versionBuild
         versionName = "$versionMajor.$versionMinor.$versionPatch"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

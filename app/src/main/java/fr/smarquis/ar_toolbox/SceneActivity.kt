@@ -155,7 +155,11 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
     }
 
     private fun initSceneBottomSheet() = with(bottomSheetScene) {
-        behavior().state = STATE_HIDDEN
+        behavior().apply {
+            state = STATE_HIDDEN
+            configureBottomSheetAnimatedForegroundMask(body)
+            configureBottomSheetInset(inset)
+        }
         header.root.setOnClickListener { behavior().toggle() }
         header.add.setOnClickListener {
             val session = arSceneView.session
@@ -247,6 +251,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
                 }
             })
             state = STATE_HIDDEN
+            configureBottomSheetInset(inset)
         }
         header.apply {
             root.setOnClickListener { coordinator.selectNode(null) }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:enterFadeDuration="@android:integer/config_shortAnimTime"
+    android:exitFadeDuration="@android:integer/config_shortAnimTime">
+    <item
+        android:drawable="@android:color/transparent"
+        android:state_enabled="true" />
+    <item
+        android:drawable="@color/colorBackground"
+        android:state_enabled="false" />
+</animated-selector>

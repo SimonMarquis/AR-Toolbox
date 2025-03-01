@@ -21,4 +21,8 @@
         android:id="@+id/body"
         layout="@layout/bottom_sheet_node_body" />
 
+    <include
+        android:id="@+id/inset"
+        layout="@layout/bottom_sheet_inset" />
+
 </LinearLayout>

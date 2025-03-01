@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.App" parent="Base.Theme.App" />
 
@@ -11,5 +11,10 @@
     </style>
 
     <style name="Base.Theme.App" parent="Base.V1.Theme.App" />
+
+    <style name="Theme.OssLicenses" parent="@style/Theme.AppCompat.DayNight">
+        <!-- Opt-out of edge-to-edge https://github.com/google/play-services-plugins/issues/296 -->
+        <item name="android:windowOptOutEdgeToEdgeEnforcement" tools:targetApi="35">true</item>
+    </style>
 
 </resources>

@@ -27,8 +27,14 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.core.view.MenuCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat.Type.navigationBars
+import androidx.core.view.updatePadding
 import androidx.viewbinding.ViewBinding
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.Config
 import com.google.ar.core.Session
@@ -232,4 +238,26 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
         }
         return popupMenu
     }
+
+    internal fun BottomSheetBehavior<out View>.configureBottomSheetInset(binding: ViewBinding) {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val navigationBarsInsets = insets.getInsets(navigationBars())
+            view.updatePadding(bottom = navigationBarsInsets.bottom)
+            peekHeight = resources.getDimensionPixelSize(R.dimen.bottom_sheet_peek_height) + navigationBarsInsets.bottom
+            insets
+        }
+        ViewCompat.requestApplyInsets(binding.root)
+    }
+
+    internal fun BottomSheetBehavior<out View>.configureBottomSheetAnimatedForegroundMask(binding: ViewBinding) {
+        addBottomSheetCallback(
+            object : BottomSheetCallback() {
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    binding.root.isEnabled = newState != STATE_COLLAPSED
+                }
+            },
+        )
+    }
+
 }
