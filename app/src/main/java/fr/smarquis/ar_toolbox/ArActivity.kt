@@ -259,5 +259,4 @@ abstract class ArActivity<T : ViewBinding>(private val inflate: (LayoutInflater)
             },
         )
     }
-
 }
