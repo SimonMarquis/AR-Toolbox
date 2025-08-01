@@ -28,7 +28,8 @@
             android:name=".SceneActivity"
             android:launchMode="singleTop"
             android:screenOrientation="behind"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="DiscouragedApi">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,7 +63,8 @@
         <activity
             android:name=".FaceActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="behind" />
+            android:screenOrientation="behind"
+            tools:ignore="DiscouragedApi" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
