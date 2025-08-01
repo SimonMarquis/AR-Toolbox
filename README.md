@@ -9,7 +9,13 @@
   <a href='https://play.google.com/store/apps/details?id=fr.smarquis.ar_toolbox'><img alt='Get it on Google Play' src='art/google-play-badge.png'/></a>
 </p>
 
-<br>
+
+> [!IMPORTANT]
+> This repository has been archived since the [google-ar/sceneform-android-sdk](https://github.com/google-ar/sceneform-android-sdk) dependency is no longer maintained and contains native libraries that do not support 16 KB page size, which is now a requirement to update the app on Google Play...
+> 
+> > Starting November 1st, 2025, all new apps and updates to existing apps submitted to Google Play and targeting Android 15+ devices must support 16 KB page sizes.
+> > https://android-developers.googleblog.com/2025/05/prepare-play-apps-for-devices-with-16kb-page-size.html
+
 
 | Scene | Models | Options | Settings |
 |---|---|---|---|
