@@ -13,6 +13,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.view.ContextThemeWrapper
@@ -108,6 +109,7 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
         initNodeBottomSheet()
         initAr()
         initWithIntent(intent)
+        initOnBackPressed()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -115,11 +117,14 @@ class SceneActivity : ArActivity<ActivitySceneBinding>(ActivitySceneBinding::inf
         initWithIntent(intent)
     }
 
-    override fun onBackPressed() {
-        if (coordinator.selectedNode != null) {
-            coordinator.selectNode(null)
-        } else {
-            super.onBackPressed()
+    private fun initOnBackPressed() = with(onBackPressedDispatcher) {
+        addCallback(owner = this@SceneActivity) {
+            if (coordinator.selectedNode != null) {
+                coordinator.selectNode(null)
+            } else {
+                isEnabled = false
+                onBackPressed()
+            }
         }
     }
 
